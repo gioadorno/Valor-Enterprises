@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "paths": {
+    "/dispo": {
+      "name": "/dispo",
+      "lambdaFunction": "propertyfunction",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/employees": {
+      "name": "/employees",
+      "lambdaFunction": "propertyfunction",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/events": {
+      "name": "/events",
+      "lambdaFunction": "propertyfunction",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/careers": {
+      "name": "/careers",
+      "lambdaFunction": "propertyfunction",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/applications": {
+      "name": "/applications",
+      "lambdaFunction": "propertyfunction",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/payouts": {
+      "name": "/payouts",
+      "lambdaFunction": "propertyfunction",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/dispoemployees": {
+      "name": "/dispoemployees",
+      "lambdaFunction": "propertyfunction",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/properties": {
+      "name": "/properties",
+      "lambdaFunction": "propertyfunction",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/inventory": {
+      "name": "/inventory",
+      "lambdaFunction": "propertyfunction",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/sendgrid": {
+      "name": "/sendgrid",
+      "lambdaFunction": "propertyfunction",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/photos": {
+      "name": "/photos",
+      "lambdaFunction": "propertyfunction",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

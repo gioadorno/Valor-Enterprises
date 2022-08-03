@@ -1,0 +1,24 @@
+.MuiInput-underline.Mui-error:after {
+    border-bottom-color: #7c7c7c12 !important
+}
+
+.MuiFormLabel-root.Mui-error, .MuiFormLabel-root, .MuiInputLabel-root, .MuiInputLabel-formControl, .MuiInputLabel-animated, .MuiInputLabel-outlined {
+    color: rgba(0, 95, 162, 0.878) !important
+}
+
+.MuiInputBase-root, .MuiOutlinedInput-input, .MuiInputBase-input, .MuiInputBase-inputAdornedEnd, .MuiAutocomplete-input, .MuiAutocomplete-inputFocused, .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
+    color: black;
+    font-weight: 700 !important;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important
+  }
+
+  #mui-40, #mui-41, #mui-42, #mui-43 {
+    color: black!important;
+    border-color: #0055a1bf !important
+  }
+
+  /* .MuiOutlinedInput-root, .MuiInputBase-colorPrimary, .MuiInputBase-formControl, .MuiInputBase-adornedEnd, .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root, .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root.Mui-error, .MuiOutlinedInput-notchedOutline {
+    color: black!important;
+    border-color: #0055a1bf !important
+  } */
+

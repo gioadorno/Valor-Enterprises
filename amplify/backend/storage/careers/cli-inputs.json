@@ -1,0 +1,12 @@
+{
+  "resourceName": "careers",
+  "tableName": "careers",
+  "partitionKey": {
+    "fieldName": "id",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": [
+    "propertyfunction"
+  ]
+}

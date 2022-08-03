@@ -1,0 +1,35 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-valorant-dev-141128-authRole",
+      "UnauthRoleArn": "arn:aws:iam::122614082606:role/amplify-valorant-dev-141128-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::122614082606:role/amplify-valorant-dev-141128-authRole",
+      "Region": "us-west-1",
+      "DeploymentBucketName": "amplify-valorant-dev-141128-deployment",
+      "UnauthRoleName": "amplify-valorant-dev-141128-unauthRole",
+      "StackName": "amplify-valorant-dev-141128",
+      "StackId": "arn:aws:cloudformation:us-west-1:122614082606:stack/amplify-valorant-dev-141128/34ad2650-fd70-11ec-bc45-02774801bb85",
+      "AmplifyAppId": "d37nji3sffibou",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-valorant-dev-141128-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    },
+    "categories": {
+      "auth": {
+        "valorantbbb3a27c": {},
+        "true": {}
+      },
+      "function": {
+        "propertyfunction": {
+          "deploymentBucketName": "amplify-valorant-dev-141128-deployment",
+          "s3Key": "amplify-builds/propertyfunction-724d562b783363416a38-build.zip",
+          "inventory": "properties-dev",
+          "database": "properties-dev",
+          "emailblast": "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",
+          "emailBlast": "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",
+          "reactAppAcqOptions": "'https://hooks.slack.com/services/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'",
+          "reactAppAcqPaperwork": "'https://hooks.slack.com/services/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'",
+          "reactAppDispoPaperwork": "'https://hooks.slack.com/services/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'"
+        }
+      }
+    }
+  }
+}

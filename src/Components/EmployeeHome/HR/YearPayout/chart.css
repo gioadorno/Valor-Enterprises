@@ -1,0 +1,27 @@
+/* @media only screen and (max-width: 600px) {
+    .recharts-wrapper {
+        height: 300px !important;
+        width: 400px !important
+    }
+  };
+
+  @media only screen and (min-width: 600px) {
+    .recharts-wrapper {
+        height: 400px !important;
+        width: 450px !important
+    }
+  }
+
+  @media only screen and (min-width: 992px) {
+    .recharts-wrapper {
+        height: 800px !important;
+        width: 550px !important
+    }
+  }
+
+  @media only screen and (min-width: 1200px) {
+    .recharts-wrapper {
+        height: 1200px !important;
+        width: 650px !important
+    }
+} */

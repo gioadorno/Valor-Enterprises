@@ -1,0 +1,46 @@
+.MuiSwitch-track {
+  opacity: 0.3;
+  z-index: -1;
+  border-radius: 7px;
+  background-color: #a6b6bf;
+  }
+
+  .MuiSelect-select, .MuiSelect-outlined, .MuiOutlinedInput-input, .MuiInputBase-input, .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+    border-color: #0055a1bf !important;
+  }
+
+  .MuiInputBase-root {
+    color: black;
+    font-weight: 700;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+  }
+
+  .MuiFormLabel-root, .MuiInputLabel-root, .MuiInputLabel-formControl, .MuiInputLabel-animated, .MuiInputLabel-shrink {
+    color: #0453b4;
+  };
+
+  .MuiOutlinedInput-input, .MuiInputBase-input, .MuiInputBase-inputAdornedEnd, .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
+    color: #2285ffde !important;
+  }
+
+  
+
+  #mui-27, #mui-28, #mui-29, #mui-30 {
+    color: black!important;
+    border-color: #0055a1bf !important
+  }
+  
+
+  #standard-read-only-input {
+    color: black;
+    border-color: #0055a1bf !important;
+  }
+
+  .inputBorder {
+    border-color: #0055a1bf !important;
+  }
+
+  .MuiOutlinedInput-notchedOutline {
+    border-color: #0055a1bf;
+  }
+  
