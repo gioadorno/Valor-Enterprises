@@ -25,9 +25,9 @@
           "database": "properties-dev",
           "emailblast": "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",
           "emailBlast": "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",
-          "reactAppAcqOptions": "'https://hooks.slack.com/services/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'",
-          "reactAppAcqPaperwork": "'https://hooks.slack.com/services/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'",
-          "reactAppDispoPaperwork": "'https://hooks.slack.com/services/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'"
+          "reactAppAcqOptions": "'https://hooks.slack.com/services/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'",
+          "reactAppAcqPaperwork": "'https://hooks.slack.com/services/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'",
+          "reactAppDispoPaperwork": "'https://hooks.slack.com/services/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'"
         }
       }
     }
