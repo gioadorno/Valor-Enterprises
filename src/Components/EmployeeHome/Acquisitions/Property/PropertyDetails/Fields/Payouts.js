@@ -20,13 +20,14 @@ const Payouts = ({ prop, id, setOpenUpdate, employee }) => {
 
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? 
-    <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-        <TextField label='Payouts' variant='outlined' defaultValue={prop.payouts} onChange={handlePayouts} />
+    <FormControl style={{ width: '100%' }}>
+        <TextField InputProps={{ disableUnderline: true }} label='Payouts' variant='standard' defaultValue={prop.payouts} onChange={handlePayouts} />
     </FormControl>
     :
-        <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-            <TextField label='Payouts' variant='outlined' InputProps={{
+        <FormControl style={{ width: '100%' }}>
+            <TextField label='Payouts' variant='standard' InputProps={{
             readOnly: true,
+            disableUnderline: true
         }} value={prop.payouts} />
         </FormControl>
   )

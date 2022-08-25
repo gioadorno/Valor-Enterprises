@@ -20,8 +20,8 @@ const CommitRelation = ({ prop, setOpenUpdate }) => {
     };
 
   return (
-    <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-        <TextField onChange={handleCommitRelation} id="standard-read-only-input" label="Commitments & Purchases Relationship" defaultValue={prop.commitRelation} variant="outlined"/>
+    <FormControl style={{ width: '100%' }}>
+        <TextField InputProps={{ disableUnderline: true }} onChange={handleCommitRelation} id="standard-read-only-input" label="Commitments & Purchases Relationship" defaultValue={prop.commitRelation} variant="standard"/>
     </FormControl>
   )
 }

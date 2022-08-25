@@ -1,5 +1,6 @@
 import { ToggleButtonGroup, ToggleButton } from "@mui/material";
 import { API } from 'aws-amplify';
+import { useState } from "react";
 
 const StatusPayouts = ({ prop, id, setOpenUpdate, employee }) => {
         // Props API
@@ -7,6 +8,7 @@ const StatusPayouts = ({ prop, id, setOpenUpdate, employee }) => {
         const path = `/properties/${prop.id}/statuspayouts`;
         // 
 
+        const [ statusPayouts, setStatusPayouts ] = useState(prop.statusPayouts)
     const handleStatusPayouts = async (e) => {
         API.put(apiName, path, {
             body: {
@@ -16,13 +18,13 @@ const StatusPayouts = ({ prop, id, setOpenUpdate, employee }) => {
             })
             .then(() => {
             setOpenUpdate(true)
-            window.location.reload(false)
+            setStatusPayouts(e.target.value)
             })
     };
 
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? (
-        <ToggleButtonGroup color='error' aria-label="Status of Payouts" exclusive onChange={handleStatusPayouts} fullWidth value={prop.statusPayouts} sx={{ mb: 2, alignItems: 'center' }} variant='outlined'>
+        <ToggleButtonGroup color='error' aria-label="Status of Payouts" exclusive onChange={handleStatusPayouts} fullWidth value={statusPayouts} sx={{ alignItems: 'center' }} variant='outlined'>
             <ToggleButton style={{ height: '100%' }} value='Payouts (If Any) need to be Sent'>
             Payouts (If Any) need to be Sent
             </ToggleButton>
@@ -34,7 +36,7 @@ const StatusPayouts = ({ prop, id, setOpenUpdate, employee }) => {
             </ToggleButton>
         </ToggleButtonGroup>
         ) :
-        <ToggleButtonGroup color='error' disabled exclusive fullWidth value={prop.statusPayouts} sx={{ mb: 2 }} variant='outlined'>
+        <ToggleButtonGroup color='error' disabled exclusive fullWidth value={prop.statusPayouts} variant='outlined'>
             <ToggleButton style={{ height: '100%' }} value='Payouts (If Any) need to be Sent'>
             Payouts (If Any) need to be Sent
             </ToggleButton>

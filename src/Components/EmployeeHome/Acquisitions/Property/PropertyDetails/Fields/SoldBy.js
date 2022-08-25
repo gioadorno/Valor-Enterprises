@@ -20,9 +20,9 @@ const SoldBy = ({ prop, id, setOpenUpdate, employee }) => {
 
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? (
-      <FormControl style={{ marginBottom: '1em' }} sx={{ width: '100%', mb: 3 }} variant='outlined'>
+      <FormControl sx={{ width: '100%'}} variant='outlined'>
           <InputLabel variant='outlined'>Sold By</InputLabel>
-          <Select variant='outlined' label='Sold By' labelId="Sold By" defualtValue={prop.soldBy} onChange={handleSoldBy}>
+          <Select variant='standard' label='Sold By' labelId="Sold By" defualtValue={prop.soldBy} onChange={handleSoldBy}>
           <MenuItem value=''>
               
           </MenuItem>
@@ -33,9 +33,9 @@ const SoldBy = ({ prop, id, setOpenUpdate, employee }) => {
           </Select>
       </FormControl>
       ) :
-      <FormControl sx={{ width: '100%', mb: 2 }} variant='outlined'>
+      <FormControl sx={{ width: '100%' }} variant='outlined'>
       <InputLabel variant='outlined'>Sold By</InputLabel>
-      <Select label='Sold By' variant='outlined' disabled defaultValue={prop.soldBy} />
+      <Select label='Sold By' variant='standard' disabled defaultValue={prop.soldBy} />
       </FormControl>
   )
 }

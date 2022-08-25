@@ -21,13 +21,13 @@ const FileNotes = ({ prop, setOpenUpdate, employee }) => {
 
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? 
-        <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-            <TextField id='standard-search' label='File Notes' variant='outlined' defaultValue={prop.fileNotes} onChange={handleFileNotes} />
+        <FormControl style={{ width: '100%' }}>
+            <TextField InputProps={{ disableUnderline: true }} id='standard-search' label='File Notes' variant='standard' defaultValue={prop.fileNotes} onChange={handleFileNotes} />
         </FormControl>
         :
-            <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-                <TextField id='standard-search' label='File Notes' variant='outlined' InputProps={{
-                readOnly: true,
+            <FormControl style={{ width: '100%' }}>
+                <TextField id='standard-search' label='File Notes' variant='standard' InputProps={{
+                readOnly: true, disableUnderline: true
             }} value={prop.fileNotes} />
             </FormControl>
   )

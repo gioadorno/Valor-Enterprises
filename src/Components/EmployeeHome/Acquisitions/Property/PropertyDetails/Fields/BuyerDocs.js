@@ -1,5 +1,6 @@
 import { ToggleButtonGroup, ToggleButton } from "@mui/material";
 import { API } from 'aws-amplify';
+import { useState } from "react";
 
 const BuyerDocs = ({ prop, employee, setOpenUpdate }) => {
         // Props API
@@ -7,6 +8,7 @@ const BuyerDocs = ({ prop, employee, setOpenUpdate }) => {
         const path = `/properties/${prop.id}/buyerdocs`;
         // 
 
+        const [ buyerDocs, setBuyerDocs ] = useState(prop.buyerDocs)
     const handleBuyerDocs = async (e) => {
         API.put(apiName, path, {
         body: {
@@ -16,12 +18,13 @@ const BuyerDocs = ({ prop, employee, setOpenUpdate }) => {
         })
         .then(() => {
         setOpenUpdate(true)
+        setBuyerDocs(e.target.value)
         })
     };
 
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? (
-        <ToggleButtonGroup color="error" aria-label="Status of Cash Buyer's Docs" exclusive size="small" onChange={handleBuyerDocs} fullWidth  value={prop.buyerDocs} sx={{ mb: 2, alignItems: 'center' }} variant='outlined'>
+        <ToggleButtonGroup color="error" aria-label="Status of Cash Buyer's Docs" exclusive size="small" onChange={handleBuyerDocs} fullWidth  value={buyerDocs} sx={{ alignItems: 'center' }} variant='outlined'>
             <ToggleButton value='Executed Contract Received from Buyer (Open Escrow)'>
             Executed Contract Received from Buyer (Open Escrow)
             </ToggleButton>
@@ -33,7 +36,7 @@ const BuyerDocs = ({ prop, employee, setOpenUpdate }) => {
             </ToggleButton>
         </ToggleButtonGroup>
         ) :
-        <ToggleButtonGroup color="error" disabled exclusive fullWidth value={prop.buyerDocs} sx={{ mb: 2 }} variant='outlined'>
+        <ToggleButtonGroup color="error" disabled exclusive fullWidth value={prop.buyerDocs} variant='outlined'>
             <ToggleButton value='Executed Contract Received from Buyer (Open Escrow)'>
             Executed Contract Received from Buyer (Open Escrow)
             </ToggleButton>

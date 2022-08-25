@@ -118,7 +118,7 @@ const EmailBlast = () => {
     const [ activeTemplate, setActiveTemplate ] = useState(null);
     const [ dispoReps, setDispoReps ] = useState([]);
     const [ open, setOpen ] = useState(false);
-    const [ photo, setPhoto ] = useState('');
+    const [ photo, setPhoto ] = useState(emptyPhoto);
     const [ employee, setEmployee ] = useState('');
     const [ propertyImage, setPropertyImage ] = useState('');
     const [ sendgrid, setSendgrid ] = useState(false);
@@ -280,10 +280,10 @@ const EmailBlast = () => {
 
     
   return (
-    <div className="flex flex-col w-full h-full overflow-y-auto bg-slate-300">
+    <div className="flex flex-col w-full h-full overflow-y-auto bg-gradient-to-r from-blue-100 to-cyan-100">
         <Snackbar open={open} autoHideDuration={10000} onClose={handleClose} message='Email has been sent to Sendgrid' action={propertyAction} />
         <Header prop={prop} />
-        <div className="flex fixed right-0 z-50 top-0 items-center justify-center w-auto h-auto">
+        <div className="flex fixed right-0 z-50 bottom-0 items-center justify-center w-auto h-auto">
         <Stepper sx={{ py: 2 }} alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
         {steps.map((label) => (
           <Step key={label}>
@@ -292,9 +292,132 @@ const EmailBlast = () => {
         ))}
       </Stepper>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 w-full h-full">
-            <div className="w-full md:w-full h-full flex flex-col p-2 border-r-2 border-black items-center">
-                <div style={{ backgroundImage: `${`url(${propertyImage})` || `url(${photo})`}`, backgroundSize: '90% 100%' }} className={`w-full h-[550px] bg-no-repeat bg-center`} />
+        <div className="grid grid-cols-1 w-full h-full">
+        <div className="h-[170px] w-full items-center py-3">
+                    <label className="font-semibold pl-2 py-3">Select Dispo Employee</label>
+                    <select value={dispoEmployee.name} size={dispoReps.length} className="w-full h-4/5 bg-gradient-to-r from-blue-100 to-cyan-100" placeholder="Select Dispo Employee">
+                        {dispoReps?.map((dispo) => 
+                            <option className="bg-inherit" onClick={() => {
+                                setActiveStep(0)
+                                setDispoEmployee({ ...dispoEmployee,
+                                    name: dispo.name,
+                                    phone: dispo.phone,
+                                    email: dispo.email,
+                                    senderID: dispo.senderID,
+                                    segmentID: dispo.segmentID
+                                 });
+                            }} key={dispo.id} value={dispo.name}>
+                                {dispo.name}
+                            </option>
+                        )}
+                    </select>
+                </div>
+            <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 border-t-2 border-b-2 border-black">
+                <div className={`border-r-2 border-black flex-1 w-full px-10 py-4 hover:opacity-95  ${activeTemplate === 1 && 'bg-gradient-to-r from-green-100 to-green-300'}`}>
+                    <h1 className='font-semibold text-xl'>{prop?.address?.replace(', USA', '')}</h1>
+                    {prop?.pictureLink != '' &&
+                    <a className="text-blue-500 pt-7 pl-2 underline" href={prop?.pictureLink}>Link to More Pictures!</a>
+                    }
+                    <ul className="pt-4">
+                        <li>
+                            {`${prop.beds} Beds / ${prop.baths} Baths ${prop.parking != '' && prop.parking != 'No Parking' && '/ ' + prop.parking}`}
+                        </li>
+                        <li>
+                            {`${prop.livingArea}sf Living Area`}
+                        </li>
+                        <li>
+                            {`${prop?.lotSize}sf Lot Size`}
+                        </li>
+                        <li>
+                            {`${prop?.year} Year Build`}
+                        </li>
+                        <input className={`w-4/5 h-full py-3 border-b-2 bg-inherit border-gray-500 placeholder-black text-center focus:border-0 focus:border-b-2 ${activeTemplate === 1 && 'bg-gradient-to-r from-green-100 to-green-300'}`} onChange={e => setLine5({ ...line5, line5: e.target.value })} value={line5} placeholder="Add a 5th line or leave blank" />
+                    </ul>
+                    <p className='text-xl text-green-600 pt-6'>
+                        Wholesale Price: {prop?.netPrice}
+                    </p>
+                    <p className='text-xl text-green-600'>
+                        After Repair Value: {prop?.arv}
+                    </p>
+                    <p className='text-xl text-orange-700 pt-4'>
+                        Call/Text {dispoEmployee.name} at {dispoEmployee.phone}
+                    </p>
+                    <div className='flex items-center justify-start w-full pt-5 pl-5'>
+                        <button onClick={async () => {
+                            setActiveTemplate(1);
+                            setBlastDetails({ ...blastDetails, 
+                                address: prop.address,
+                                line1: `${prop.beds} Beds / ${prop.baths} Baths ${prop.parking != '' && prop.parking != 'No Parking' && '/ ' + prop.parking}`,
+                                line2:`${prop.livingArea}sf Living Area`,
+                                line3:`${prop?.lotSize}sf Lot Size`,
+                                line4:`${prop?.year} Year Build`,
+                                line5: line5,
+                                pictureLink: prop.pictureLink,
+                                netPrice: prop.netPrice,
+                                arv: prop.arv,
+                                dispo: `Call/Text ${dispoEmployee.name} at ${dispoEmployee.phone}`,
+                                sender: dispoEmployee.email,
+                                senderID: dispoEmployee.senderID,
+                                segmentID: dispoEmployee.segmentID,
+                                market: prop.market,
+                                propPhoto: prop.propPhoto
+                        })
+                        }} 
+                        className={`px-3 py-1 border-2 border-black rounded-md transform duration-200 ease-in hover:scale-105 hover:text-cyan-900 font-semibold ${activeTemplate === 1 && 'bg-white'}`}>
+                            Select/Update Template
+                        </button>
+                    </div>
+                </div>
+                    <div className={`border-black flex-1 w-full px-10 py-5 hover:opacity-95  ${activeTemplate === 2 && 'bg-gradient-to-r from-green-100 to-green-300'}`}>
+                    <h1 className='font-semibold text-xl'>{prop?.address?.replace(', USA', '')}</h1>
+                    {prop?.pictureLink != '' &&
+                    <a className="text-blue-500 pt-7 pl-2 underline" href={prop?.pictureLink}>Link to More Pictures!</a>
+                    }
+                    <ul className="pt-4">
+                        <input className={`w-4/5 h-full bg-inherit py-3 border-b-2 border-gray-500 placeholder-black text-center focus:border-0 focus:border-b-2 ${activeTemplate === 2 && 'bg-gradient-to-r from-green-100 to-green-300'}`} onChange={e => setSecondTemplate({ ...secondTemplate, line1: e.target.value })} value={secondTemplate.line1} placeholder="Add 1st line or leave blank" />
+                        <input className={`w-4/5 h-full bg-inherit py-3 border-b-2 border-gray-500 placeholder-black text-center focus:border-0 focus:border-b-2 ${activeTemplate === 2 && 'bg-gradient-to-r from-green-100 to-green-300'}`} onChange={e => setSecondTemplate({ ...secondTemplate, line2: e.target.value })} value={secondTemplate.line2} placeholder="Add a 2nd line or leave blank" />
+                        <input className={`w-4/5 h-full bg-inherit py-3 border-b-2 border-gray-500 placeholder-black text-center focus:border-0 focus:border-b-2 ${activeTemplate === 2 && 'bg-gradient-to-r from-green-100 to-green-300'}`} onChange={e => setSecondTemplate({ ...secondTemplate, line3: e.target.value })} value={secondTemplate.line3} placeholder="Add a 3rd line or leave blank" />
+                        <input className={`w-4/5 h-full bg-inherit py-3 border-b-2 border-gray-500 placeholder-black text-center focus:border-0 focus:border-b-2 ${activeTemplate === 2 && 'bg-gradient-to-r from-green-100 to-green-300'}`} onChange={e => setSecondTemplate({ ...secondTemplate, line4: e.target.value })} value={secondTemplate.line4} placeholder="Add a 4th line or leave blank" />
+                        <input className={`w-4/5 h-full bg-inherit py-3 border-b-2 border-gray-500 placeholder-black text-center focus:border-0 focus:border-b-2 ${activeTemplate === 2 && 'bg-gradient-to-r from-green-100 to-green-300'}`} onChange={e => setSecondTemplate({ ...secondTemplate, line5: e.target.value })} value={secondTemplate.line5} placeholder="Add a 5th line or leave blank" />
+                    </ul>
+                    <p className='text-xl text-green-600 pt-6'>
+                        Wholesale Price: {prop?.netPrice}
+                    </p>
+                    <p className='text-xl text-green-600'>
+                        After Repair Value: {prop?.arv}
+                    </p>
+                    <p className='text-xl text-orange-700 pt-4'>
+                        Call/Text {dispoEmployee.name} at {dispoEmployee.phone}
+                    </p>
+                    <div className='flex items-center justify-start w-full pt-5 pl-5'>
+                        <button onClick={async () => {
+                            setActiveTemplate(2)
+                            setBlastDetails({ ...blastDetails, 
+                                address: prop.address,
+                                line1: secondTemplate.line1,
+                                line2: secondTemplate.line2,
+                                line3: secondTemplate.line3,
+                                line4: secondTemplate.line4,
+                                line5: secondTemplate.line5,
+                                pictureLink: prop.pictureLink,
+                                netPrice: prop.netPrice,
+                                arv: prop.arv,
+                                dispo: `Call/Text ${dispoEmployee.name} at ${dispoEmployee.phone}`,
+                                sender: dispoEmployee.email,
+                                senderID: dispoEmployee.senderID,
+                                segmentID: dispoEmployee.segmentID,
+                                market: prop.market,
+                                propPhoto: prop.propPhoto
+                        })
+                        }} 
+                        className={`px-3 py-1 border-2 border-black rounded-md transform duration-200 ease-in hover:scale-105 hover:text-cyan-900 font-semibold ${activeTemplate === 2 && 'bg-white'}`}>
+                            Select/Update Template
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div className="w-full md:w-full h-full flex flex-col p-2 border-b-[1px] border-black items-center">
+                <img src={propertyImage || photo} className={`w-auto h-[550px] bg-no-repeat bg-center`} />
                 <div className="w-full h-[60px] flex items-center justify-center">
                     <label className="pr-3 font-semibold">Add/Change Photo:</label>
                         <input onChange={onChange} type='file' />
@@ -332,142 +455,26 @@ const EmailBlast = () => {
                         {blastDetails.dispo}
                     </p>
                     <div className='flex flex-col items-center justify-center w-full h-[100px]'>
-                        <input className="w-4/5 h-[30px] border-b-2 border-black bg-slate-300 placeholder-black text-center focus:border-0 focus:border-b-2" onChange={e => setBlastDetails({ ...blastDetails, subjectLine: e.target.value })} value={blastDetails.subjectLine} placeholder="Add a subject line..." />
+                        <input className="w-1/2 h-[30px] border-b-2 border-black bg-inherit placeholder-black text-center focus:border-0 focus:border-b-2" onChange={e => setBlastDetails({ ...blastDetails, subjectLine: e.target.value })} value={blastDetails.subjectLine} placeholder="Add a subject line..." />
                     </div>
                     <div className="pb-4">
                         {open === true ?
                             <button disabled={true} className='py-1 px-3 rounded-md font-semibold text-gray-800 border-2 border-gray-800 hover:scale-105 '>
                             Pushed
                         </button>
-                        :
-                        <button onClick={submitToSendgrid} className='py-1 px-3 rounded-md font-semibold text-slate-600 border-2 border-slate-600 hover:scale-105 hover:text-orange-500 hover:border-orange-500 transform duration-200 ease-in'>
-                            Push to Sendgrid
-                        </button>
+                        : ( activeStep === 2 ?
+                            <button onClick={submitToSendgrid} className='py-1 px-3 rounded-md font-semibold text-green-600 border-2 border-green-600 hover:scale-105 hover:text-orange-500 hover:border-orange-500 transform duration-200 ease-in'>
+                                Push to Sendgrid
+                            </button>
+                            :
+                            <button disabled className='py-1 px-3 rounded-md font-semibold text-slate-600 border-2 border-slate-600 cursor-default '>
+                            Complete All Steps
+                            </button>
+
+                        )
                         }
                     </div>
-            </div>
-            <div className="w-full md:w-full h-full flex flex-col">
-                <div className="h-[170px] w-full border-b-2 border-black items-center py-3">
-                    <label className="font-semibold pl-2 py-3">Select Dispo Employee</label>
-                    <select value={dispoEmployee.name} size={dispoReps.length} className="w-full h-4/5 bg-slate-300" placeholder="Select Dispo Employee">
-                        {dispoReps?.map((dispo) => 
-                            <option className="bg-slate-200" onClick={() => {
-                                setActiveStep(0)
-                                setDispoEmployee({ ...dispoEmployee,
-                                    name: dispo.name,
-                                    phone: dispo.phone,
-                                    email: dispo.email,
-                                    senderID: dispo.senderID,
-                                    segmentID: dispo.segmentID
-                                 });
-                            }} key={dispo.id} value={dispo.name}>
-                                {dispo.name}
-                            </option>
-                        )}
-                    </select>
-                </div>
-                <div className={`border-b-2 border-black flex-1 w-full px-10 py-4 hover:opacity-95  ${activeTemplate === 1 && 'bg-green-200'}`}>
-                    <h1 className='font-semibold text-xl'>{prop?.address?.replace(', USA', '')}</h1>
-                    {prop?.pictureLink != '' &&
-                    <a className="text-blue-500 pt-7 pl-2 underline" href={prop?.pictureLink}>Link to More Pictures!</a>
-                    }
-                    <ul className="pt-4">
-                        <li>
-                            {`${prop.beds} Beds / ${prop.baths} Baths ${prop.parking != '' && prop.parking != 'No Parking' && '/ ' + prop.parking}`}
-                        </li>
-                        <li>
-                            {`${prop.livingArea}sf Living Area`}
-                        </li>
-                        <li>
-                            {`${prop?.lotSize}sf Lot Size`}
-                        </li>
-                        <li>
-                            {`${prop?.year} Year Build`}
-                        </li>
-                        <input className={`w-4/5 h-full bg-slate-300 py-3 border-b-2 border-gray-500 placeholder-black text-center focus:border-0 focus:border-b-2 ${activeTemplate === 1 && 'bg-green-200'}`} onChange={e => setLine5({ ...line5, line5: e.target.value })} value={line5} placeholder="Add a 5th line or leave blank" />
-                    </ul>
-                    <p className='text-xl text-green-600 pt-6'>
-                        Wholesale Price: {prop?.netPrice}
-                    </p>
-                    <p className='text-xl text-green-600'>
-                        After Repair Value: {prop?.arv}
-                    </p>
-                    <p className='text-xl text-orange-700 pt-4'>
-                        Call/Text {dispoEmployee.name} at {dispoEmployee.phone}
-                    </p>
-                    <div className='flex items-center justify-start w-full pt-5 pl-5'>
-                        <button onClick={async () => {
-                            setActiveTemplate(1);
-                            setBlastDetails({ ...blastDetails, 
-                                address: prop.address,
-                                line1: `${prop.beds} Beds / ${prop.baths} Baths ${prop.parking != '' && prop.parking != 'No Parking' && '/ ' + prop.parking}`,
-                                line2:`${prop.livingArea}sf Living Area`,
-                                line3:`${prop?.lotSize}sf Lot Size`,
-                                line4:`${prop?.year} Year Build`,
-                                line5: line5,
-                                pictureLink: prop.pictureLink,
-                                netPrice: prop.netPrice,
-                                arv: prop.arv,
-                                dispo: `Call/Text ${dispoEmployee.name} at ${dispoEmployee.phone}`,
-                                sender: dispoEmployee.email,
-                                senderID: dispoEmployee.senderID,
-                                segmentID: dispoEmployee.segmentID,
-                                market: prop.market,
-                                propPhoto: prop.propPhoto
-                        })
-                        }} 
-                        className={`px-3 py-1 border-2 border-black rounded-md transform duration-200 ease-in hover:scale-105 hover:text-cyan-900 font-semibold ${activeTemplate === 1 && 'bg-white'}`}>
-                            Select/Update Template
-                        </button>
-                    </div>
-                </div>
-                    <div className={`border-black flex-1 w-full px-10 py-5 hover:opacity-95  ${activeTemplate === 2 && 'bg-green-200'}`}>
-                    <h1 className='font-semibold text-xl'>{prop?.address?.replace(', USA', '')}</h1>
-                    {prop?.pictureLink != '' &&
-                    <a className="text-blue-500 pt-7 pl-2 underline" href={prop?.pictureLink}>Link to More Pictures!</a>
-                    }
-                    <ul className="pt-4">
-                    <input className={`w-4/5 h-full bg-slate-300 py-3 border-b-2 border-gray-500 placeholder-black text-center focus:border-0 focus:border-b-2 ${activeTemplate === 2 && 'bg-green-200'}`} onChange={e => setSecondTemplate({ ...secondTemplate, line1: e.target.value })} value={secondTemplate.line1} placeholder="Add 1st line or leave blank" />
-                        <input className={`w-4/5 h-full bg-slate-300 py-3 border-b-2 border-gray-500 placeholder-black text-center focus:border-0 focus:border-b-2 ${activeTemplate === 2 && 'bg-green-200'}`} onChange={e => setSecondTemplate({ ...secondTemplate, line2: e.target.value })} value={secondTemplate.line2} placeholder="Add a 2nd line or leave blank" />
-                        <input className={`w-4/5 h-full bg-slate-300 py-3 border-b-2 border-gray-500 placeholder-black text-center focus:border-0 focus:border-b-2 ${activeTemplate === 2 && 'bg-green-200'}`} onChange={e => setSecondTemplate({ ...secondTemplate, line3: e.target.value })} value={secondTemplate.line3} placeholder="Add a 3rd line or leave blank" />
-                        <input className={`w-4/5 h-full bg-slate-300 py-3 border-b-2 border-gray-500 placeholder-black text-center focus:border-0 focus:border-b-2 ${activeTemplate === 2 && 'bg-green-200'}`} onChange={e => setSecondTemplate({ ...secondTemplate, line4: e.target.value })} value={secondTemplate.line4} placeholder="Add a 4th line or leave blank" />
-                        <input className={`w-4/5 h-full bg-slate-300 py-3 border-b-2 border-gray-500 placeholder-black text-center focus:border-0 focus:border-b-2 ${activeTemplate === 2 && 'bg-green-200'}`} onChange={e => setSecondTemplate({ ...secondTemplate, line5: e.target.value })} value={secondTemplate.line5} placeholder="Add a 5th line or leave blank" />
-                    </ul>
-                    <p className='text-xl text-green-600 pt-6'>
-                        Wholesale Price: {prop?.netPrice}
-                    </p>
-                    <p className='text-xl text-green-600'>
-                        After Repair Value: {prop?.arv}
-                    </p>
-                    <p className='text-xl text-orange-700 pt-4'>
-                        Call/Text {dispoEmployee.name} at {dispoEmployee.phone}
-                    </p>
-                    <div className='flex items-center justify-start w-full pt-5 pl-5'>
-                        <button onClick={async () => {
-                            setActiveTemplate(2)
-                            setBlastDetails({ ...blastDetails, 
-                                address: prop.address,
-                                line1: secondTemplate.line1,
-                                line2: secondTemplate.line2,
-                                line3: secondTemplate.line3,
-                                line4: secondTemplate.line4,
-                                line5: secondTemplate.line5,
-                                pictureLink: prop.pictureLink,
-                                netPrice: prop.netPrice,
-                                arv: prop.arv,
-                                dispo: `Call/Text ${dispoEmployee.name} at ${dispoEmployee.phone}`,
-                                sender: dispoEmployee.email,
-                                senderID: dispoEmployee.senderID,
-                                segmentID: dispoEmployee.segmentID,
-                                market: prop.market,
-                                propPhoto: prop.propPhoto
-                        })
-                        }} 
-                        className={`px-3 py-1 border-2 border-black rounded-md transform duration-200 ease-in hover:scale-105 hover:text-cyan-900 font-semibold ${activeTemplate === 2 && 'bg-white'}`}>
-                            Select/Update Template
-                        </button>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>

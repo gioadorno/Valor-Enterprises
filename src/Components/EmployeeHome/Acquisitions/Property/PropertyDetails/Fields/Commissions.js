@@ -21,13 +21,14 @@ const Commissions = ({ prop, setOpenUpdate, employee }) => {
 
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? 
-    <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-        <TextField label='Commissions' variant='outlined' defaultValue={prop.commissions} onChange={handleCommissions}/>
+    <FormControl style={{ width: '100%' }}>
+        <TextField InputProps={{ disableUnderline: true }} label='Commissions' variant='standard' defaultValue={prop.commissions} onChange={handleCommissions}/>
     </FormControl>
     :
-        <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-            <TextField label='Commissions' variant='outlined' InputProps={{
+        <FormControl style={{ width: '100%' }}>
+            <TextField label='Commissions' variant='standard' InputProps={{
             readOnly: true,
+            disableUnderline: true
         }} value={prop.commissions} />
         </FormControl>
   )

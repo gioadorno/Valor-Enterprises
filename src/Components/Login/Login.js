@@ -39,6 +39,7 @@ const Login = () => {
   return (
     userChangePassword === false ?
       <div className='flex flex-col relative h-[800px] xl:h-full w-full items-center justify-center'>
+        <h1 onClick={() => navigate('/careers')} className='absolute left-5 font-sans bottom-4 text-white text-md cursor-pointer hover:animate-pulse hover:scale-105 transform duration-200 ease-in drop-shadow-md z-[500] whitespace-nowrap'>Careers Page</h1>
         <div className='w-full h-screen flex items-center justify-center bg-[#00000025] z-[100] overflow-y-auto'>
         <form onSubmit={login} className='flex flex-col items-center w-full sm:w-3/4 lg:w-2/4 2xl:w-1/3 h-3/4'>
         <Box sx={{ width: '100%', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 40, pt: 5, pb: 5 }}>
@@ -56,10 +57,10 @@ const Login = () => {
             </div>
             <div className="relative z-0 focus-within:shadow-lg w-full group pt-8">
                 <i className='absolute left-4 top-12 z-50 '>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-7" viewBox="0 0 20 20" fill="#2ca1db">
-                <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-            </svg>
-            </i>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-7" viewBox="0 0 20 20" fill="#2ca1db">
+                      <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                  </svg>
+                </i>
             <input type='password' name='password' placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} className='block text-md placeholder-black peer border-[1px] bg-[#f3f1f1d9] h-14 shadow-sm focus:outline-none pl-14 text-black text-md focus:border-blue-300 border-gray-700 transform duration-150 ease-in-out w-full rounded-full' />
             <label htmlFor='email' className="absolute text-md text-[#90868600] duration-300 transform -translate-y-8 scale-100 top-10 -z-10 origin-[0] peer-focus:left-8 font-bold peer-focus:text-white peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-8 peer-focus:scale-100 peer-focus:-translate-y-8 ">Password</label>
             </div>

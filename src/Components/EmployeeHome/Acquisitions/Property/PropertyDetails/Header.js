@@ -65,6 +65,9 @@ const Header = ({ prop }) => {
                         <Button onClick={() => navigate(`/acquisitions/${prop?.id}`)} sx={{ fontSize: 13, letterSpacing: 1, px: 2, "&:hover": { transform: 'scale(1.05)' }, color: `${pathname === `/acquisitions/${prop?.id}` ? 'red' : '#1976d2'}`  }} variant='text'>
                             Property Details
                         </Button>
+                        <Button onClick={() => navigate(`/dealtext/${prop?.id}`)} sx={{ fontSize: 13, letterSpacing: 1, px: 2, "&:hover": { transform: 'scale(1.05)' }, color: `${pathname === `/dealtext/${prop?.id}` ? 'red' : '#1976d2'}`  }} variant='text'>
+                            Deal Text
+                        </Button>
                         {employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 &&
                         <Button onClick={() => navigate(`/emailblast/${prop?.id}`)} sx={{ fontSize: 13, letterSpacing: 1, px: 2, "&:hover": { transform: 'scale(1.05)' }, color: `${pathname === `/emailblast/${prop?.id}` ? 'red' : '#1976d2'}` }} variant='text'>
                             Email Blast

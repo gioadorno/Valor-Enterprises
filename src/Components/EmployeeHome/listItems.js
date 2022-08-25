@@ -177,7 +177,7 @@ export const shortcutItems = (
       <ListSubheader sx={{ color: 'black' }} component="div" inset>
           Shortcuts
       </ListSubheader>
-      <ListItemLink style={{ width: '100%' }} placement='right' title='IT Help' primary="IT Help" to='/itdashboard' icon={<BookOnlineIcon />} />
+      {/* <ListItemLink style={{ width: '100%' }} placement='right' title='IT Help' primary="IT Help" to='/itdashboard' icon={<BookOnlineIcon />} /> */}
       <ReferenceLink style={{ width: '100%' }} placement='right' title='Zillow' primary="Zillow" to='https://www.zillow.com/' icon={<CabinIcon />} />
       <ReferenceLink style={{ width: '100%' }} placement='right' title='Time Off Requests' primary="Time Off Requests" to='https://327291.tcplusondemand.com/app/webclock/#/EmployeeLogOn/137-04018/4018' icon={<AccessTimeIcon />} />
       <ReferenceLink style={{ width: '100%' }} placement='right' title='GMS' primary="GMS" to='https://gms.prismhr.com/gms/auth/#/login?lang=en' icon={<BadgeIcon />} />

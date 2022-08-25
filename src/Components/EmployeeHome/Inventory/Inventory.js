@@ -20,10 +20,10 @@ const label = { inputProps: { 'aria-label': 'Audited' } }
 const Inventory = () => {
     // API
     const apiName = 'valproperties';
-    const path = '/inventory';
+    const path = '/properties';
     // 
     const [ properties, setProps ] = useState([]);
-    const props = properties.sort((a, b) => a.date.localeCompare(b.date))
+    const props = properties.sort((a, b) => new Date(b.date) - new Date(a.date))
     
     useEffect(() => {
     API.get(apiName, path)
@@ -157,7 +157,7 @@ const Inventory = () => {
           },
           {
             field: 'netPrice',
-            headerName: `Net Price`,
+            headerName: `Contract Price`,
             width: 125,
             editable: false,
             sortable: true,
@@ -169,7 +169,7 @@ const Inventory = () => {
           },
           {
             field: 'salePrice',
-            headerName: `Sale Price`,
+            headerName: `Wholesale Price`,
             width: 125,
             editable: false,
             sortable: true,

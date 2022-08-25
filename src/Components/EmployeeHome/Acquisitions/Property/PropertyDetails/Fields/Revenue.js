@@ -6,9 +6,10 @@ import { TextField, FormControl, Divider, InputLabel } from '@mui/material';
 const Revenue = ({ prop, id, dispatch, revenueFinal }) => {
 
   return (
-        <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-            <TextField variant='outlined' label='Revenue' InputProps={{
+        <FormControl style={{ width: '100%' }}>
+            <TextField variant='standard' label='Revenue' InputProps={{
             readOnly: true,
+            disableUnderline: true
         }} value={revenueFinal} />
         </FormControl>
   )

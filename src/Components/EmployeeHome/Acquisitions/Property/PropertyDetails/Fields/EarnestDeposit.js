@@ -22,8 +22,8 @@ const EarnestDeposit = ({ prop, setOpenUpdate, earnestStatus, employee }) => {
 
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? (
-        <FormControl sx={{ width: '100%', mb: 2 }} variant='outlined'>
-            <InputLabel variant='outlined'>Status of Our Earnest Deposit</InputLabel>
+        <FormControl sx={{ width: '100%' }} variant='standard'>
+            <InputLabel variant='standard'>Status of Our Earnest Deposit</InputLabel>
             <Select labelId="Status of Our Earnest Deposit" defaultValue={prop.statusEarnest} onChange={handleStatusEarnest}>
             <MenuItem value={earnestStatus.notRequired}>
                 {earnestStatus.notRequired}
@@ -49,8 +49,8 @@ const EarnestDeposit = ({ prop, setOpenUpdate, earnestStatus, employee }) => {
             </Select>
         </FormControl>
         ) :
-        <FormControl sx={{ width: '100%', mb: 2 }} variant='outlined'>
-        <InputLabel variant='outlined'>Status of Our Earnest Deposit</InputLabel>
+        <FormControl sx={{ width: '100%', mb: 2 }} variant='standard'>
+        <InputLabel variant='standard'>Status of Our Earnest Deposit</InputLabel>
         <Select disabled defaultValue={prop.statusEarnest} />
         </FormControl>
   )

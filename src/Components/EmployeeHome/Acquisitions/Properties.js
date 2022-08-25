@@ -41,7 +41,6 @@ const Properties = ({ setOpen }) => {
       const getPageProps = async () => {
         const key = keys.at(-1)
         // const key = keys.pop();
-        console.log(key)
         await API.get(apiName, queryPath, {
           queryStringParameters: {
             id: key
@@ -69,8 +68,6 @@ const Properties = ({ setOpen }) => {
         .then(() => {
           setIsLoading(false)})
       },[])
-      console.log(keys)
-      console.log(count)
       
       const properties = props?.sort((a,b) => {
         return new Date(b.date) - new Date(a.date)
@@ -80,7 +77,7 @@ const Properties = ({ setOpen }) => {
     <>
         {isLoading ? <Stack sx={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', p: 10 }}><p>Properties Loading...</p><LinearProgress sx={{ pt: 5 }} color='success' /></Stack> :
         <InfiniteScroll
-        style={{ width: '100%', paddingLeft: '2em', height: '100%', display: 'flex', flexDirection: 'column' }}
+        style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '3em' }}
         pageStart={0}
         loadMore={getPageProps}
         hasMore={true || false}

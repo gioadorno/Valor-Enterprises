@@ -2,7 +2,7 @@ import { createTheme, ThemeProvider} from '@mui/material/styles';
 import OuterBar from '../OuterBar';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
-import { Button, ButtonGroup, Divider, FormControl, FormHelperText, InputLabel, Menu, MenuItem, Select, Slide, Snackbar, IconButton } from '@mui/material';
+import { Button, ButtonGroup, Divider, FormControl, FormHelperText, InputLabel, Menu, MenuItem, Select, Slide, Snackbar, IconButton, Autocomplete, FormLabel, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Grow from '@mui/material/Grow';
 import Box from '@mui/material/Box';
@@ -12,7 +12,6 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import AodIcon from '@mui/icons-material/Aod';
 import ArticleIcon from '@mui/icons-material/Article';
-import { useDispatch } from "react-redux";
 import { useState, Fragment, useContext, useEffect } from "react";
 import { AccountContext } from '../../Login/Account';
 import { getPropsBySearch } from '../../../actions/properties';
@@ -39,10 +38,16 @@ function useQuery() {
 const Acquisitions = (anchor) => {
     const { getSession } = useContext(AccountContext);
     const [ closeSide, setCloseSide ] = useState(false);
+    const [ addressFilter, setAddressFilter ] = useState('');
     const [ props, setProps ] = useState([]);
+    const [ allProps, setAllProps ] = useState([]);
     useEffect(() => {
         API.get(apiName, path)
         .then(res => setProps(res.Items))
+    },[])
+    useEffect(() => {
+        API.get(apiName, '/properties')
+        .then(res => setAllProps(res.Items))
     },[])
     const [ open, setOpen ] = useState(false);
         // Get logged in user info
@@ -58,7 +63,6 @@ const Acquisitions = (anchor) => {
     const query = useQuery();
     const page = query.get('page') || 1;
 
-    const dispatch = useDispatch();
     // Receiving properties from Database
 
     const classes = useStyles();
@@ -66,15 +70,6 @@ const Acquisitions = (anchor) => {
     const [ openFilter, setOpenFilter ] = useState(false);
     const [ filter, setFilter ] = useState([]);
 
-    const searchProperty = () => {
-        if(filter) {
-            dispatch(getPropsBySearch({ tags: filter.join(',') })); //search = usestate variable [arizona, alabamba] => (arizona,alabamba)
-            navigate(`/acquisitions/search?searchQuery=&tags=${filter.join(',')}`);
-            setOpenFilter(false);
-        } else {
-            navigate('/acquisitions');
-        }
-    };
 
     useEffect(() => {
         getSession()
@@ -108,9 +103,9 @@ const Acquisitions = (anchor) => {
 
 
             // Removes Duplicates of Supplier Names
-            const acqNames = props?.filter((value, index, self) => 
+            const address = props?.filter((value, index, self) => 
             index === self.findIndex((t) => (
-                t.name === value.name
+                t.address === value.address
             ))
             );
 
@@ -126,11 +121,28 @@ const Acquisitions = (anchor) => {
             index === self.findIndex((t) =>
             t.audited === value.audited));
 
+            // Sort latest properties first
+            const sortedProps = allProps.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            const selectProperty = (e, value) => {
+                allProps.map(prop => {
+                    console.log(prop)
+                    if (value === prop.address.replace(', USA', '')) {
+                        navigate(`/acquisitions/${prop.id}`)
+                    }
+                })
+            }
+
+            console.log(sortedProps)
+
   return (
     <ThemeProvider theme={mdTheme}>
         <Box ref={containerRef} sx={{ display: 'flex', width: '100%', position: 'relative', overflowx: 'hidden' }}>
             <OuterBar closeSide={closeSide} />
-            <Grid mt={2} className={classes.propertyContainer} sx={{ padding: 2, paddingTop: 10, width: '100%' }} container justify='space-between' alignItems='center' spacing={4} >
+            <Grid mt={2} className={classes.propertyContainer} sx={{ padding: 2, paddingTop: 8, width: '100%' }} container justify='space-between' alignItems='center' spacing={4} >
+            <FormControl sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '90%' }} >
+                <Autocomplete sx={{ width: '90%' }} onInputChange={selectProperty} disablePortal options={sortedProps.map(prop => prop.address.replace(', USA', ''))} renderInput={(params) => <TextField {...params} label='Properties' />} />
+            </FormControl>
             <Snackbar open={open} autoHideDuration={6000} onClose={closeSnackBar} message='Property has been deleted' action={deleteAction} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} />
             <Properties setOpen={setOpen} />
                     {/* <Button  onClick={() => setOpenFilter(!openFilter)} size='large' variant='outlined' sx={{ display: { xs: 'none', sm: 'inline-flex' } ,position: 'absolute', top: '1em', left: 1 }}>

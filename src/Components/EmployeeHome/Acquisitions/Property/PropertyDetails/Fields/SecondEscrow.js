@@ -20,13 +20,14 @@ const SecondEscrow = ({ prop, id, setOpenUpdate, employee }) => {
 
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? 
-    <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-        <TextField id='standard-search' label='Escrow Officer (Second Leg)' variant='outlined' defaultValue={prop.secondEscrow} onChange={handleSecondEscrow} />
+    <FormControl style={{ width: '100%' }}>
+        <TextField InputProps={{ disableUnderline: true }} id='standard-search' label='Escrow Officer (Second Leg)' variant='standard' defaultValue={prop.secondEscrow} onChange={handleSecondEscrow} />
     </FormControl>
     :
-        <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-            <TextField id='standard-search' label='Escrow Officer (Second Leg)' variant='outlined' InputProps={{
+        <FormControl style={{ width: '100%' }}>
+            <TextField id='standard-search' label='Escrow Officer (Second Leg)' variant='standard' InputProps={{
             readOnly: true,
+            disableUnderline: true
         }} value={prop.secondEscrow} />
         </FormControl>
   )

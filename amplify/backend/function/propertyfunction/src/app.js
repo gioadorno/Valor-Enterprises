@@ -75,7 +75,7 @@ app.get('/photos', function(req, res) {
   const s3 = new AWS.S3();
   let params = {
     Bucket: 'photos141128-dev',
-    Key: `protected/us-west-1:6981d95d-6192-4f17-9fcb-116abc5d75c9/${req.query.propPhoto}`
+    Key: `protected/us-west-1:cb17aa96-b9c7-4573-881d-3365824080b7/${req.query.propPhoto}`
   };
   let promise = s3.getSignedUrlPromise('getObject', params);
   promise.then((url) => 
@@ -87,6 +87,19 @@ app.get('/inventory', function(req, res) {
   let params = {
     TableName: "inventory-dev",
     Limit: 10,
+    
+  }
+  const result = docClient.scan(params, (err, data) => {
+    if (err) res.json({ err })
+    else res.json(data)
+  })
+  
+  return result;
+});
+
+app.get('/properties', function(req, res) {
+  let params = {
+    TableName: "inventory-dev",
     
   }
   const result = docClient.scan(params, (err, data) => {
@@ -224,7 +237,7 @@ app.post('/sendgrid', async (req, res) => {
   const s3 = new AWS.S3();
   let params = {
     Bucket: 'photos141128-dev',
-    Key: `protected/us-west-1:6981d95d-6192-4f17-9fcb-116abc5d75c9/${propPhoto}`
+    Key: `protected/us-west-1:cb17aa96-b9c7-4573-881d-3365824080b7/${propPhoto}`
   };
   let promise = s3.getSignedUrlPromise('getObject', params);
   const blastPhoto = await promise.then(url => {
@@ -247,754 +260,793 @@ app.post('/sendgrid', async (req, res) => {
         suppression_group_id: 16468,
         editor: 'design',
         "html_content": `
-        <!DOCTYPE html>
-<html
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:v="urn:schemas-microsoft-com:vml"
-  xmlns:o="urn:schemas-microsoft-com:office:office"
->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html data-editor-version="2" class="sg-campaigns" xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <!-- NAME: SIMPLE TEXT -->
-    <!--[if gte mso 15]>
-      <xml>
-        <o:OfficeDocumentSettings>
-          <o:AllowPNG />
-          <o:PixelsPerInch>96</o:PixelsPerInch>
-        </o:OfficeDocumentSettings>
-      </xml>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" /><!--[if !mso]><!-->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" /><!--<![endif]-->
+    <!--[if (gte mso 9)|(IE)]>
+    <xml>
+    <o:OfficeDocumentSettings>
+    <o:AllowPNG/>
+    <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+    </xml>
     <![endif]-->
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>*|MC:SUBJECT|*</title>
+    <!--[if (gte mso 9)|(IE)]>
+    <style type="text/css">
+      body {width: 800px;margin: 0 auto;}
+      table {border-collapse: collapse;}
+      table, td {mso-table-lspace: 0pt;mso-table-rspace: 0pt;}
+      img {-ms-interpolation-mode: bicubic;}
+    </style>
+    <![endif]-->
 
     <style type="text/css">
-      p {
-        margin: 10px 0;
-        padding: 0;
-      }
-      table {
-        border-collapse: collapse;
-      }
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6 {
-        display: block;
-        margin: 0;
-        padding: 0;
-      }
-      img,
-      a img {
-        border: 0;
-        height: auto;
-        outline: none;
-        text-decoration: none;
-      }
-      body,
-      #bodyTable,
-      #bodyCell {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-      }
-      .mcnPreviewText {
-        display: none !important;
-      }
-      #outlook a {
-        padding: 0;
-      }
-      img {
-        -ms-interpolation-mode: bicubic;
-      }
-      table {
-        mso-table-lspace: 0pt;
-        mso-table-rspace: 0pt;
-      }
-      .ReadMsgBody {
-        width: 100%;
-      }
-      .ExternalClass {
-        width: 100%;
-      }
-      p,
-      a,
-      li,
-      td,
-      blockquote {
-        mso-line-height-rule: exactly;
-      }
-      a[href^='tel'],
-      a[href^='sms'] {
-        color: inherit;
-        cursor: default;
-        text-decoration: none;
-      }
-      p,
-      a,
-      li,
-      td,
-      body,
-      table,
-      blockquote {
-        -ms-text-size-adjust: 100%;
-        -webkit-text-size-adjust: 100%;
-      }
-      .ExternalClass,
-      .ExternalClass p,
-      .ExternalClass td,
-      .ExternalClass div,
-      .ExternalClass span,
-      .ExternalClass font {
-        line-height: 100%;
-      }
-      a[x-apple-data-detectors] {
-        color: inherit !important;
-        text-decoration: none !important;
-        font-size: inherit !important;
-        font-family: inherit !important;
-        font-weight: inherit !important;
-        line-height: inherit !important;
-      }
-      #bodyCell {
-        padding: 10px;
-      }
-      .templateContainer {
-        max-width: 600px !important;
-      }
-      a.mcnButton {
-        display: block;
-      }
-      .mcnImage,
-      .mcnRetinaImage {
-        vertical-align: bottom;
-      }
-      .mcnTextContent {
-        word-break: break-word;
-      }
-      .mcnTextContent img {
-        height: auto !important;
-      }
-      .mcnDividerBlock {
-        table-layout: fixed !important;
-      }
-      body,
-      #bodyTable {
-        /*@editable*/
-        background-color: #ffffff;
-        /*@editable*/
-        background-image: none;
-        /*@editable*/
-        background-repeat: no-repeat;
-        /*@editable*/
-        background-position: center;
-        /*@editable*/
-        background-size: cover;
-      }
-      #bodyCell {
-        /*@editable*/
-        border-top: 0;
-      }
-      .templateContainer {
-        /*@editable*/
-        border: 0;
-      }
-      h1 {
-        /*@editable*/
-        color: #202020;
-        /*@editable*/
-        font-family: Helvetica;
-        /*@editable*/
-        font-size: 26px;
-        /*@editable*/
-        font-style: normal;
-        /*@editable*/
-        font-weight: bold;
-        /*@editable*/
-        line-height: 125%;
-        /*@editable*/
-        letter-spacing: normal;
-        /*@editable*/
-        text-align: left;
-      }
-      h2 {
-        /*@editable*/
-        color: #202020;
-        /*@editable*/
-        font-family: Helvetica;
-        /*@editable*/
+      body, p, div {
+        font-family: helvetica,arial,sans-serif;
         font-size: 22px;
-        /*@editable*/
-        font-style: normal;
-        /*@editable*/
-        font-weight: bold;
-        /*@editable*/
-        line-height: 125%;
-        /*@editable*/
-        letter-spacing: normal;
-        /*@editable*/
-        text-align: left;
       }
-      h3 {
-        /*@editable*/
-        color: #202020;
-        /*@editable*/
-        font-family: Helvetica;
-        /*@editable*/
-        font-size: 20px;
-        /*@editable*/
-        font-style: normal;
-        /*@editable*/
-        font-weight: bold;
-        /*@editable*/
-        line-height: 125%;
-        /*@editable*/
-        letter-spacing: normal;
-        /*@editable*/
-        text-align: left;
+      body {
+        color: #ffffff;
       }
-      h4 {
-        /*@editable*/
-        color: #202020;
-        /*@editable*/
-        font-family: Helvetica;
-        /*@editable*/
-        font-size: 18px;
-        /*@editable*/
-        font-style: normal;
-        /*@editable*/
-        font-weight: bold;
-        /*@editable*/
-        line-height: 125%;
-        /*@editable*/
-        letter-spacing: normal;
-        /*@editable*/
-        text-align: left;
+      body a {
+        color: #5dfee8;
+        text-decoration: none;
       }
-      #templateHeader {
-        /*@editable*/
-        border-top: 0;
-        /*@editable*/
-        border-bottom: 0;
+      p { margin: 0; padding: 0; }
+      table.wrapper {
+        width:100% !important;
+        table-layout: fixed;
+        -webkit-font-smoothing: antialiased;
+        -webkit-text-size-adjust: 100%;
+        -moz-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
       }
-      #templateHeader .mcnTextContent,
-      #templateHeader .mcnTextContent p {
-        /*@editable*/
-        color: #202020;
-        /*@editable*/
-        font-family: Helvetica;
-        /*@editable*/
-        font-size: 16px;
-        /*@editable*/
-        line-height: 150%;
-        /*@editable*/
-        text-align: left;
+      img.max-width {
+        max-width: 100% !important;
       }
-      #templateHeader .mcnTextContent a,
-      #templateHeader .mcnTextContent p a {
-        /*@editable*/
-        color: #007c89;
-        /*@editable*/
-        font-weight: normal;
-        /*@editable*/
-        text-decoration: underline;
+      .column.of-2 {
+        width: 50%;
       }
-      #templateBody {
-        /*@editable*/
-        border-top: 0;
-        /*@editable*/
-        border-bottom: 0;
+      .column.of-3 {
+        width: 33.333%;
       }
-      #templateBody .mcnTextContent,
-      #templateBody .mcnTextContent p {
-        /*@editable*/
-        color: #202020;
-        /*@editable*/
-        font-family: Helvetica;
-        /*@editable*/
-        font-size: 16px;
-        /*@editable*/
-        line-height: 150%;
-        /*@editable*/
-        text-align: left;
+      .column.of-4 {
+        width: 25%;
       }
-      #templateBody .mcnTextContent a,
-      #templateBody .mcnTextContent p a {
-        /*@editable*/
-        color: #007c89;
-        /*@editable*/
-        font-weight: normal;
-        /*@editable*/
-        text-decoration: underline;
-      }
-      #templateFooter {
-        /*@editable*/
-        border-top: 0;
-        /*@editable*/
-        border-bottom: 0;
-      }
-      #templateFooter .mcnTextContent,
-      #templateFooter .mcnTextContent p {
-        /*@editable*/
-        color: #202020;
-        /*@editable*/
-        font-family: Helvetica;
-        /*@editable*/
-        font-size: 12px;
-        /*@editable*/
-        line-height: 150%;
-        /*@editable*/
-        text-align: left;
-      }
-      #templateFooter .mcnTextContent a,
-      #templateFooter .mcnTextContent p a {
-        /*@editable*/
-        color: #202020;
-        /*@editable*/
-        font-weight: normal;
-        /*@editable*/
-        text-decoration: underline;
-      }
-      @media only screen and (min-width: 768px) {
-        .templateContainer {
-          width: 600px !important;
+      @media screen and (max-width:480px) {
+        .preheader .rightColumnContent,
+        .footer .rightColumnContent {
+            text-align: left !important;
         }
-      }
-      @media only screen and (max-width: 480px) {
-        body,
-        table,
-        td,
-        p,
-        a,
-        li,
-        blockquote {
-          -webkit-text-size-adjust: none !important;
+        .preheader .rightColumnContent div,
+        .preheader .rightColumnContent span,
+        .footer .rightColumnContent div,
+        .footer .rightColumnContent span {
+          text-align: left !important;
         }
-      }
-      @media only screen and (max-width: 480px) {
-        body {
+        .preheader .rightColumnContent,
+        .preheader .leftColumnContent {
+          font-size: 80% !important;
+          padding: 5px 0;
+        }
+        table.wrapper-mobile {
           width: 100% !important;
-          min-width: 100% !important;
+          table-layout: fixed;
         }
-      }
-      @media only screen and (max-width: 480px) {
-        #bodyCell {
-          padding-top: 10px !important;
+        img.max-width {
+          height: auto !important;
+          max-width: 480px !important;
         }
-      }
-      @media only screen and (max-width: 480px) {
-        .mcnRetinaImage {
-          max-width: 100% !important;
+        a.bulletproof-button {
+          display: block !important;
+          width: auto !important;
+          font-size: 80%;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
         }
-      }
-      @media only screen and (max-width: 480px) {
-        .mcnImage {
+        .columns {
           width: 100% !important;
         }
-      }
-      @media only screen and (max-width: 480px) {
-        .mcnCartContainer,
-        .mcnCaptionTopContent,
-        .mcnRecContentContainer,
-        .mcnCaptionBottomContent,
-        .mcnTextContentContainer,
-        .mcnBoxedTextContentContainer,
-        .mcnImageGroupContentContainer,
-        .mcnCaptionLeftTextContentContainer,
-        .mcnCaptionRightTextContentContainer,
-        .mcnCaptionLeftImageContentContainer,
-        .mcnCaptionRightImageContentContainer,
-        .mcnImageCardLeftTextContentContainer,
-        .mcnImageCardRightTextContentContainer,
-        .mcnImageCardLeftImageContentContainer,
-        .mcnImageCardRightImageContentContainer {
-          max-width: 100% !important;
+        .column {
+          display: block !important;
           width: 100% !important;
-        }
-      }
-      @media only screen and (max-width: 480px) {
-        .mcnBoxedTextContentContainer {
-          min-width: 100% !important;
-        }
-      }
-      @media only screen and (max-width: 480px) {
-        .mcnImageGroupContent {
-          padding: 9px !important;
-        }
-      }
-      @media only screen and (max-width: 480px) {
-        .mcnCaptionLeftContentOuter .mcnTextContent,
-        .mcnCaptionRightContentOuter .mcnTextContent {
-          padding-top: 9px !important;
-        }
-      }
-      @media only screen and (max-width: 480px) {
-        .mcnImageCardTopImageContent,
-        .mcnCaptionBottomContent:last-child .mcnCaptionBottomImageContent,
-        .mcnCaptionBlockInner .mcnCaptionTopContent:last-child .mcnTextContent {
-          padding-top: 18px !important;
-        }
-      }
-      @media only screen and (max-width: 480px) {
-        .mcnImageCardBottomImageContent {
-          padding-bottom: 9px !important;
-        }
-      }
-      @media only screen and (max-width: 480px) {
-        .mcnImageGroupBlockInner {
-          padding-top: 0 !important;
-          padding-bottom: 0 !important;
-        }
-      }
-      @media only screen and (max-width: 480px) {
-        .mcnImageGroupBlockOuter {
-          padding-top: 9px !important;
-          padding-bottom: 9px !important;
-        }
-      }
-      @media only screen and (max-width: 480px) {
-        .mcnTextContent,
-        .mcnBoxedTextContentColumn {
-          padding-right: 18px !important;
-          padding-left: 18px !important;
-        }
-      }
-      @media only screen and (max-width: 480px) {
-        .mcnImageCardLeftImageContent,
-        .mcnImageCardRightImageContent {
-          padding-right: 18px !important;
-          padding-bottom: 0 !important;
-          padding-left: 18px !important;
-        }
-      }
-      @media only screen and (max-width: 480px) {
-        .mcpreview-image-uploader {
-          display: none !important;
-          width: 100% !important;
-        }
-      }
-      @media only screen and (max-width: 480px) {
-        /*
-	@tab Mobile Styles
-	@section Heading 1
-	@tip Make the first-level headings larger in size for better readability on small screens.
-	*/
-        h1 {
-          /*@editable*/
-          font-size: 22px !important;
-          /*@editable*/
-          line-height: 125% !important;
-        }
-      }
-      @media only screen and (max-width: 480px) {
-        /*
-	@tab Mobile Styles
-	@section Heading 2
-	@tip Make the second-level headings larger in size for better readability on small screens.
-	*/
-        h2 {
-          /*@editable*/
-          font-size: 20px !important;
-          /*@editable*/
-          line-height: 125% !important;
-        }
-      }
-      @media only screen and (max-width: 480px) {
-        /*
-	@tab Mobile Styles
-	@section Heading 3
-	@tip Make the third-level headings larger in size for better readability on small screens.
-	*/
-        h3 {
-          /*@editable*/
-          font-size: 18px !important;
-          /*@editable*/
-          line-height: 125% !important;
-        }
-      }
-      @media only screen and (max-width: 480px) {
-        /*
-	@tab Mobile Styles
-	@section Heading 4
-	@tip Make the fourth-level headings larger in size for better readability on small screens.
-	*/
-        h4 {
-          /*@editable*/
-          font-size: 16px !important;
-          /*@editable*/
-          line-height: 150% !important;
-        }
-      }
-      @media only screen and (max-width: 480px) {
-        /*
-	@tab Mobile Styles
-	@section Boxed Text
-	@tip Make the boxed text larger in size for better readability on small screens. We recommend a font size of at least 16px.
-	*/
-        table.mcnBoxedTextContentContainer td.mcnTextContent,
-        td.mcnBoxedTextContentContainer td.mcnTextContent p {
-          /*@editable*/
-          font-size: 14px !important;
-          /*@editable*/
-          line-height: 150% !important;
-        }
-      }
-      @media only screen and (max-width: 480px) {
-        /*
-	@tab Mobile Styles
-	@section Header Text
-	@tip Make the header text larger in size for better readability on small screens.
-	*/
-        td#templateHeader td.mcnTextContent,
-        td#templateHeader td.mcnTextContent p {
-          /*@editable*/
-          font-size: 16px !important;
-          /*@editable*/
-          line-height: 150% !important;
-        }
-      }
-      @media only screen and (max-width: 480px) {
-        /*
-	@tab Mobile Styles
-	@section Body Text
-	@tip Make the body text larger in size for better readability on small screens. We recommend a font size of at least 16px.
-	*/
-        td#templateBody td.mcnTextContent,
-        td#templateBody td.mcnTextContent p {
-          /*@editable*/
-          font-size: 16px !important;
-          /*@editable*/
-          line-height: 150% !important;
-        }
-      }
-      @media only screen and (max-width: 480px) {
-        /*
-	@tab Mobile Styles
-	@section Footer Text
-	@tip Make the footer content text larger in size for better readability on small screens.
-	*/
-        td#templateFooter td.mcnTextContent,
-        td#templateFooter td.mcnTextContent p {
-          /*@editable*/
-          font-size: 14px !important;
-          /*@editable*/
-          line-height: 150% !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
         }
       }
     </style>
+    <!--user entered Head Start-->
+    
+     <!--End Head user entered-->
   </head>
   <body>
-    <!--*|IF:MC_PREVIEW_TEXT|*-->
+    <center class="wrapper" data-link-color="#5dfee8" data-body-style="font-size: 22px; font-family: helvetica,arial,sans-serif; color: #ffffff; background-color: #d2e4f9;">
+      <div class="webkit">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="wrapper" bgcolor="#d2e4f9">
+          <tr>
+            <td valign="top" bgcolor="#d2e4f9" width="100%">
+              <table width="100%" role="content-container" class="outer" align="center" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td width="100%">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td>
+                          <!--[if mso]>
+                          <center>
+                          <table><tr><td width="800">
+                          <![endif]-->
+                          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%; max-width:800px;" align="center">
+                            <tr>
+                              <td role="modules-container" style="padding: 010px 00px 00px 00px; color: #ffffff; text-align: left;" bgcolor="#1C76D1" width="100%" align="left">
+                              
+  
+    <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+      <tr>
+        <td style="padding:9px 0px 9px 0px;line-height:22px;text-align:inherit;"
+            height="100%"
+            valign="top"
+            bgcolor="">
+            <h1 style="text-align: center;"><span style="font-family:tahoma,geneva,sans-serif;">Keyglee Dispo</span></h1>
 
-    <!--*|END:IF|*-->
-    <center>
-      <table
-        align="center"
-        border="0"
-        cellpadding="0"
-        cellspacing="0"
-        height="100%"
-        width="100%"
-        id="bodyTable"
-      >
-        <tr>
-          <td align="left" valign="top" id="bodyCell">
-            <!-- BEGIN TEMPLATE // -->
+        </td>
+      </tr>
+    </table>
+  
+    <table class="wrapper" role="module" data-type="image" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+      <tr>
+        <td style="font-size:6px;line-height:10px;padding:00px 0px 0px 0px;" valign="top" align="center">
+          <img class="max-width" border="0" style="display:block;color:#000000;text-decoration:none;font-family:Helvetica, arial, sans-serif;font-size:16px;max-width:100% !important;width:100%;height:auto !important;" src="${blastPhoto}" alt="Photo of ${address.replace(', USA', '')}" width="800">
+        </td>
+      </tr>
+    </table>
+  
+    <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+      <tr>
+        <td style="padding:025px 0px 025px 0px;line-height:22px;text-align:inherit;"
+            height="100%"
+            valign="top"
+            bgcolor="">
+            <div style="text-align: center;"><span style="font-family:lucida sans unicode,lucida grande,sans-serif;"><span style="font-size:28px;">${address.replace(', USA', '')}</span></span></div>
 
+        </td>
+      </tr>
+    </table>
+  
+    <table class="module"
+           role="module"
+           data-type="divider"
+           border="0"
+           cellpadding="0"
+           cellspacing="0"
+           width="100%"
+           style="table-layout: fixed;">
+      <tr>
+        <td style="padding:0px 0px 0px 0px;background-color:#ffffff;"
+            role="module-content"
+            height="100%"
+            valign="top"
+            bgcolor="#ffffff">
+          <table border="0"
+                 cellpadding="0"
+                 cellspacing="0"
+                 align="center"
+                 width="100%"
+                 height="2px"
+                 style="line-height:2px; font-size:2px;">
+            <tr>
+              <td
+                style="padding: 0px 0px 2px 0px;"
+                bgcolor="#ffffff"></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  
+    <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+      <tr>
+        <td style="padding:30px 0px 18px 50px;line-height:22px;text-align:inherit;"
+            height="100%"
+            valign="top"
+            bgcolor="">
+            <div><a style="color: #5DFEE8" href="${pictureLink}"><font face="georgia, serif"><span style="font-size: 24px;"><u>View property photos</u></span></font></a></div>
+
+        </td>
+      </tr>
+    </table>
+  
+    <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+      <tr>
+        <td style="background-color:#1C76D1;padding:10px 50px 30px 50px;line-height:22px;text-align:inherit;"
+            height="100%"
+            valign="top"
+            bgcolor="#1C76D1">
+            <ul>
+	<li style="${line1 != '' ? "display: list-item" : "display: none"}><span style="font-family:courier,monospace;"><span style="color:#FFFFFF;">${line1}</span></span></li>
+	<li style="${line2 != '' ? "display: list-item" : "display: none"}><span style="font-family:courier,monospace;"><span style="color:#FFFFFF;">${line2}</span></span></li>
+	<li style="${line3 != '' ? "display: list-item" : "display: none"}><span style="font-family:courier,monospace;"><span style="color:#FFFFFF;">${line3}</span></span></li>
+	<li style="${line4 != '' ? "display: list-item" : "display: none"}><span style="font-family:courier,monospace;"><span style="color:#FFFFFF;">${line4}</span></span></li>
+</ul>
+
+        </td>
+      </tr>
+    </table>
+  
+    <table class="module"
+           role="module"
+           data-type="divider"
+           border="0"
+           cellpadding="0"
+           cellspacing="0"
+           width="100%"
+           style="table-layout: fixed;">
+      <tr>
+        <td style="padding:0px 0px 0px 0px;"
+            role="module-content"
+            height="100%"
+            valign="top"
+            bgcolor="">
+          <table border="0"
+                 cellpadding="0"
+                 cellspacing="0"
+                 align="center"
+                 width="100%"
+                 height="2px"
+                 style="line-height:2px; font-size:2px;">
+            <tr>
+              <td
+                style="padding: 0px 0px 2px 0px;"
+                bgcolor="#ffffff"></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  
+    <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+      <tr>
+        <td style="background-color:#1C76D1;padding:30px 0px 18px 0px;line-height:22px;text-align:center;"
+            height="100%"
+            valign="top"
+            bgcolor="#1C76D1">
+            <h3 style="${netPrice != '' ? "display: block" : "display: none"}"><span style="color:#0ef7bd;"><span style="font-family:times new roman,times,serif;">Wholesale Price: ${netPrice}</span></span></h3>
+
+<h3 style="${arv != '' ? "display: block" : "display: none"}"><span style="color:#0ef7bd;"><span style="font-family:times new roman,times,serif;">After Repair Value: ${arv}</span></span></h3>
+
+        </td>
+      </tr>
+    </table>
+  
+    <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+      <tr>
+        <td style="padding:8px 0px 25px 0px;line-height:22px;text-align:center;"
+            height="100%"
+            valign="top"
+            bgcolor="">
+            <div style="${dispo != '' ? "display: block" : "display: none"}"><span style="color:#fe5d61;"><span style="font-size:28px;">${dispo}</span></span></div>
+
+        </td>
+      </tr>
+    </table>
+  
+    <table  border="0"
+            cellpadding="0"
+            cellspacing="0"
+            align="center"
+            width="100%"
+            role="module"
+            data-type="columns"
+            data-version="2"
+            style="background-color:#ffffff;padding:040px 0px 40px 0px;"
+            bgcolor="#ffffff">
+      <tr role='module-content'>
+        <td height="100%" valign="top">
             <!--[if (gte mso 9)|(IE)]>
-                        <table align="center" border="0" cellspacing="0" cellpadding="0" width="600" style="width:600px;">
-                        <tr>
-                        <td align="center" valign="top" width="600" style="width:600px;">
-                        <![endif]-->
-            <table
-              border="0"
-              cellpadding="0"
-              cellspacing="0"
-              width="100%"
-              class="templateContainer"
-            >
-              <tr>
-                <td valign="top" id="templateHeader"></td>
-              </tr>
+              <center>
+                <table cellpadding="0" cellspacing="0" border="0" width="100%" style="border-spacing:0;border-collapse:collapse;table-layout: fixed;" >
+                  <tr>
+            <![endif]-->
+          
+    <!--[if (gte mso 9)|(IE)]>
+      <td width="800.000px" valign="top" style="padding: 0px 0px 0px 0px;border-collapse: collapse;" >
+    <![endif]-->
+
+    <table  width="800.000"
+            style="width:800.000px;border-spacing:0;border-collapse:collapse;margin:0px 0px 0px 0px;"
+            cellpadding="0"
+            cellspacing="0"
+            align="left"
+            border="0"
+            bgcolor="#ffffff"
+            class="column column-0 of-1
+                  empty"
+      >
+      <tr>
+        <td style="padding:0px;margin:0px;border-spacing:0;">
+            <table border="0" cellPadding="0" cellSpacing="0" class="module" data-role="module-button" data-type="button" role="module" style="table-layout:fixed" width="100%"><tbody><tr><td align="center" bgcolor="#ffffff" class="outer-td" style="padding:0px 0px 0px 0px;background-color:#ffffff"><table border="0" cellPadding="0" cellSpacing="0" class="button-css__deep-table___2OZyb wrapper-mobile" style="text-align:center"><tbody><tr><td align="center" bgcolor="#1C76D1" class="inner-td" style="border-radius:6px;font-size:16px;text-align:center;background-color:inherit"><a href="https://keygleedispo.com/" style="background-color:#1C76D1;border:1px solid #333333;border-color:#333333;border-radius:6px;border-width:1px;color:#ffffff;display:inline-block;font-family:arial,helvetica,sans-serif;font-size:16px;font-weight:normal;letter-spacing:0px;line-height:20px;padding:18px 18px 18px 18px;text-align:center;text-decoration:none;cursor:pointer" target="_blank">View more properties</a></td></tr></tbody></table></td></tr></tbody></table>
+        </td>
+      </tr>
+    </table>
+
+    <!--[if (gte mso 9)|(IE)]>
+      </td>
+    <![endif]-->
+            <!--[if (gte mso 9)|(IE)]>
+                  <tr>
+                </table>
+              </center>
+            <![endif]-->
+        </td>
+      </tr>
+    </table>
+  
+    <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+      <tr>
+        <td style="padding:0px 0px 0px 0px;line-height:22px;text-align:inherit;"
+            height="100%"
+            valign="top"
+            bgcolor="">
+            <div style="text-align: center;">&nbsp;</div>
+
+<div style="text-align: center;"><span style="font-size:8px;">&nbsp;Disclaimer: all homes listed herein are either owned or under contract by aem real estate group, llc (dba keyglee dispo) (&quot;seller&quot;). seller is in the business of acquiring properties and selling wholesale to investors, among other real estate investing activities. properties are acquired through a variety of sources. the prices are net to seller. buyer pays all closing/escrow costs including hoa transfer/reserves and any other fees associated with the transfer of property. prices are based on quick closing of 7-14 days or less, using cash or a combination of cash and private financing/hard money. all properties are sold in &#39;as is&#39; condition. arv values are estimates, buyer to verify. seller makes no warranty of any kind, expressed or implied, regarding the condition, square footage, insurability, verification of septic or sewer connection, structural, plumbing, electrical or mechanical systems, wells, heating, air conditioning, appliances, soil, foundation, pool/spa, and related equipment, environmental hazards (such as asbestos, formaldehyde, radon gas, lead based paint, fuel or chemical storage tanks, hazardous waste, landfills, high voltage electrical lines, location near superfund areas, endangered species, water quality, geological conditions), location of property lines, water/utility use restrictions, flood plain, building permits or compliance with building codes, zoning, the occurrence of disease, death, homicide, suicide, or other crime in the vicinity of the premises. everything, not limited to the above referenced items, is the responsibility of the buyer to investigate and satisfy to a level suitable to the buyer, prior to signing a contract to purchase the property and/or depositing earnest money funds. typically, seller will gather information regarding square footage, lot size, year built, condition, values, etc from the county assessor&#39;s website, public tax records, prior mls listings, and other sources that might be available. although the information should be accurate, these sources have been known to produce wrong information on occasion. seller is not held liable for any information released to the buyer from any source referenced for the buyer&#39;s convenience. buyer must do its own due diligence, evaluation and inspection prior to making an offer. determining value is the buyer&#39;s responsibility. seller strongly recommends buyers employ an investor-focused realtor or appraiser to help determine current and/or after repair value. any reference to the value of a property by seller or any representative of seller is simply an opinion of value. everyone has a differing opinion on value, cost of construction, materials, quality of workmanship and market speculation. value is ultimately the buyer&#39;s responsibility and they should be diligent in determining market value. seller may or may not currently own all of the properties listed herein and may be marketing the equitable interest however great or small in the given properties. some of these properties listed on this site are under contract to purchased by seller. as regards such properties, seller is only selling (without any warranty or representation other than it is the buyer under the subject contract) its contract rights as purchaser of such property. some properties are occupied, as indicated. if shown as occupied, buyer is to contact seller to set up viewing appointment. buyer(s) and their representatives are hereby noticed of tenant/resident rights -- at no time shall residents be disturbed; no approaching the house, knocking on door, engaging in conversation with residents or neighbors, etc. transactions are completed through a title/escrow company, with buyer receiving a title insurance policy. equal opportunity housing. one or more members, directors, or employees of aem real estate group, llc (dba keyglee dispo) are licensed real estate agents in the state of arizona with stunning homes realty, west usa realty, keller williams east valley, or coldwell banker, the state of nevada with compass realty &amp; management llc, and/or the state of utah with wise choice real estate. there is no agency, expressed or implied, between buyer and keyglee dispo or any of its members, directors, or employees. One or more employees of KeyGlee Dispo is a licensed Real Estate Broker in the state of Washington with PC Management LLC.</span></div>
+
+        </td>
+      </tr>
+    </table>
+  
+    <table  border="0"
+            cellpadding="0"
+            cellspacing="0"
+            align="center"
+            width="100%"
+            role="module"
+            data-type="columns"
+            data-version="2"
+            style="background-color:#ffffff;padding:0px 0px 0px 0px;"
+            bgcolor="#ffffff">
+      <tr role='module-content'>
+        <td height="100%" valign="top">
+            <!--[if (gte mso 9)|(IE)]>
+              <center>
+                <table cellpadding="0" cellspacing="0" border="0" width="100%" style="border-spacing:0;border-collapse:collapse;table-layout: fixed;" >
+                  <tr>
+            <![endif]-->
+          
+    <!--[if (gte mso 9)|(IE)]>
+      <td width="200.000px" valign="top" style="padding: 0px 0px 0px 0px;border-collapse: collapse;" >
+    <![endif]-->
+
+    <table  width="200.000"
+            style="width:200.000px;border-spacing:0;border-collapse:collapse;margin:0px 0px 0px 0px;"
+            cellpadding="0"
+            cellspacing="0"
+            align="left"
+            border="0"
+            bgcolor="#ffffff"
+            class="column column-0 of-4
+                  empty"
+      >
+      <tr>
+        <td style="padding:0px;margin:0px;border-spacing:0;">
+            
+    <table class="wrapper" role="module" data-type="image" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+      <tr>
+        <td style="font-size:6px;line-height:10px;padding:0px 0px 0px 0px;" valign="top" align="center">
+          <img class="max-width" border="0" style="display:block;color:#000000;text-decoration:none;font-family:Helvetica, arial, sans-serif;font-size:16px;max-width:100% !important;width:100%;height:auto !important;" src="https://kgt-internal.s3.us-west-1.amazonaws.com/SendGrid/AEM/MainTemplate/Logos/CompasRealty_Logo.jpg" alt="" width="200">
+        </td>
+      </tr>
+    </table>
+  
+        </td>
+      </tr>
+    </table>
+
+    <!--[if (gte mso 9)|(IE)]>
+      </td>
+    <![endif]-->
+    <!--[if (gte mso 9)|(IE)]>
+      <td width="200.000px" valign="top" style="padding: 0px 0px 0px 0px;border-collapse: collapse;" >
+    <![endif]-->
+
+    <table  width="200.000"
+            style="width:200.000px;border-spacing:0;border-collapse:collapse;margin:0px 0px 0px 0px;"
+            cellpadding="0"
+            cellspacing="0"
+            align="left"
+            border="0"
+            bgcolor="#ffffff"
+            class="column column-1 of-4
+                  empty"
+      >
+      <tr>
+        <td style="padding:0px;margin:0px;border-spacing:0;">
+            
+    <table class="wrapper" role="module" data-type="image" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+      <tr>
+        <td style="font-size:6px;line-height:10px;padding:0px 0px 0px 0px;" valign="top" align="center">
+          <img class="max-width" border="0" style="display:block;color:#000000;text-decoration:none;font-family:Helvetica, arial, sans-serif;font-size:16px;max-width:50% !important;width:50%;height:auto !important;" src="https://kgt-internal.s3.us-west-1.amazonaws.com/SendGrid/AEM/MainTemplate/Logos/EqualHousingOpportunity_Logo.png" alt="" width="100">
+        </td>
+      </tr>
+    </table>
+  
+        </td>
+      </tr>
+    </table>
+
+    <!--[if (gte mso 9)|(IE)]>
+      </td>
+    <![endif]-->
+    <!--[if (gte mso 9)|(IE)]>
+      <td width="200.000px" valign="top" style="padding: 0px 0px 0px 0px;border-collapse: collapse;" >
+    <![endif]-->
+
+    <table  width="200.000"
+            style="width:200.000px;border-spacing:0;border-collapse:collapse;margin:0px 0px 0px 0px;"
+            cellpadding="0"
+            cellspacing="0"
+            align="left"
+            border="0"
+            bgcolor="#ffffff"
+            class="column column-2 of-4
+                  empty"
+      >
+      <tr>
+        <td style="padding:0px;margin:0px;border-spacing:0;">
+            
+    <table class="wrapper" role="module" data-type="image" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+      <tr>
+        <td style="font-size:6px;line-height:10px;padding:0px 0px 0px 0px;" valign="top" align="center">
+          <img class="max-width" border="0" style="display:block;color:#000000;text-decoration:none;font-family:Helvetica, arial, sans-serif;font-size:16px;max-width:50% !important;width:50%;height:auto !important;" src="https://kgt-internal.s3.us-west-1.amazonaws.com/SendGrid/AEM/MainTemplate/Logos/Keyglee_Logo+-+Copy.png" alt="" width="100">
+        </td>
+      </tr>
+    </table>
+  
+        </td>
+      </tr>
+    </table>
+
+    <!--[if (gte mso 9)|(IE)]>
+      </td>
+    <![endif]-->
+    <!--[if (gte mso 9)|(IE)]>
+      <td width="200.000px" valign="top" style="padding: 0px 0px 0px 0px;border-collapse: collapse;" >
+    <![endif]-->
+
+    <table  width="200.000"
+            style="width:200.000px;border-spacing:0;border-collapse:collapse;margin:0px 0px 0px 0px;"
+            cellpadding="0"
+            cellspacing="0"
+            align="left"
+            border="0"
+            bgcolor="#ffffff"
+            class="column column-3 of-4
+                  empty"
+      >
+      <tr>
+        <td style="padding:0px;margin:0px;border-spacing:0;">
+            
+    <table class="wrapper" role="module" data-type="image" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+      <tr>
+        <td style="font-size:6px;line-height:10px;padding:0px 0px 0px 0px;" valign="top" align="center">
+          <img class="max-width" border="0" style="display:block;color:#000000;text-decoration:none;font-family:Helvetica, arial, sans-serif;font-size:16px;max-width:50% !important;width:50%;height:auto !important;" src="https://kgt-internal.s3.us-west-1.amazonaws.com/SendGrid/AEM/MainTemplate/Logos/Reatlor_Logo.png" alt="" width="100">
+        </td>
+      </tr>
+    </table>
+  
+        </td>
+      </tr>
+    </table>
+
+    <!--[if (gte mso 9)|(IE)]>
+      </td>
+    <![endif]-->
+            <!--[if (gte mso 9)|(IE)]>
+                  <tr>
+                </table>
+              </center>
+            <![endif]-->
+        </td>
+      </tr>
+    </table>
+  
+    <table  border="0"
+            cellpadding="0"
+            cellspacing="0"
+            align="center"
+            width="100%"
+            role="module"
+            data-type="columns"
+            data-version="2"
+            style="background-color:#ffffff;padding:0px 0px 0px 0px;"
+            bgcolor="#ffffff">
+      <tr role='module-content'>
+        <td height="100%" valign="top">
+            <!--[if (gte mso 9)|(IE)]>
+              <center>
+                <table cellpadding="0" cellspacing="0" border="0" width="100%" style="border-spacing:0;border-collapse:collapse;table-layout: fixed;" >
+                  <tr>
+            <![endif]-->
+          
+    <!--[if (gte mso 9)|(IE)]>
+      <td width="200.000px" valign="top" style="padding: 0px 0px 0px 0px;border-collapse: collapse;" >
+    <![endif]-->
+
+    <table  width="200.000"
+            style="width:200.000px;border-spacing:0;border-collapse:collapse;margin:0px 0px 0px 0px;"
+            cellpadding="0"
+            cellspacing="0"
+            align="left"
+            border="0"
+            bgcolor="#ffffff"
+            class="column column-0 of-4
+                  empty"
+      >
+      <tr>
+        <td style="padding:0px;margin:0px;border-spacing:0;">
+            
+    <table class="wrapper" role="module" data-type="image" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+      <tr>
+        <td style="font-size:6px;line-height:10px;padding:0px 0px 0px 0px;" valign="top" align="center">
+          <img class="max-width" border="0" style="display:block;color:#000000;text-decoration:none;font-family:Helvetica, arial, sans-serif;font-size:16px;max-width:50% !important;width:50%;height:auto !important;" src="https://kgt-internal.s3.us-west-1.amazonaws.com/SendGrid/AEM/MainTemplate/Logos/StunningHomesRealty_Logo.jpg" alt="" width="100">
+        </td>
+      </tr>
+    </table>
+  
+        </td>
+      </tr>
+    </table>
+
+    <!--[if (gte mso 9)|(IE)]>
+      </td>
+    <![endif]-->
+    <!--[if (gte mso 9)|(IE)]>
+      <td width="200.000px" valign="top" style="padding: 0px 0px 0px 0px;border-collapse: collapse;" >
+    <![endif]-->
+
+    <table  width="200.000"
+            style="width:200.000px;border-spacing:0;border-collapse:collapse;margin:0px 0px 0px 0px;"
+            cellpadding="0"
+            cellspacing="0"
+            align="left"
+            border="0"
+            bgcolor="#ffffff"
+            class="column column-1 of-4
+                  empty"
+      >
+      <tr>
+        <td style="padding:0px;margin:0px;border-spacing:0;">
+            
+    <table class="wrapper" role="module" data-type="image" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+      <tr>
+        <td style="font-size:6px;line-height:10px;padding:0px 0px 0px 0px;" valign="top" align="center">
+          <img class="max-width" border="0" style="display:block;color:#000000;text-decoration:none;font-family:Helvetica, arial, sans-serif;font-size:16px;max-width:100% !important;width:100%;height:auto !important;" src="https://kgt-internal.s3.us-west-1.amazonaws.com/SendGrid/AEM/MainTemplate/Logos/WestUSA_Logo.png" alt="" width="200">
+        </td>
+      </tr>
+    </table>
+  
+        </td>
+      </tr>
+    </table>
+
+    <!--[if (gte mso 9)|(IE)]>
+      </td>
+    <![endif]-->
+    <!--[if (gte mso 9)|(IE)]>
+      <td width="200.000px" valign="top" style="padding: 0px 0px 0px 0px;border-collapse: collapse;" >
+    <![endif]-->
+
+    <table  width="200.000"
+            style="width:200.000px;border-spacing:0;border-collapse:collapse;margin:0px 0px 0px 0px;"
+            cellpadding="0"
+            cellspacing="0"
+            align="left"
+            border="0"
+            bgcolor="#ffffff"
+            class="column column-2 of-4
+                  empty"
+      >
+      <tr>
+        <td style="padding:0px;margin:0px;border-spacing:0;">
+            
+    <table class="wrapper" role="module" data-type="image" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+      <tr>
+        <td style="font-size:6px;line-height:10px;padding:0px 0px 0px 0px;" valign="top" align="center">
+          <img class="max-width" border="0" style="display:block;color:#000000;text-decoration:none;font-family:Helvetica, arial, sans-serif;font-size:16px;max-width:90% !important;width:90%;height:auto !important;" src="https://kgt-internal.s3.us-west-1.amazonaws.com/SendGrid/AEM/MainTemplate/Logos/charles-rutenberg.jpg" alt="" width="180">
+        </td>
+      </tr>
+    </table>
+  
+        </td>
+      </tr>
+    </table>
+
+    <!--[if (gte mso 9)|(IE)]>
+      </td>
+    <![endif]-->
+    <!--[if (gte mso 9)|(IE)]>
+      <td width="200.000px" valign="top" style="padding: 0px 0px 0px 0px;border-collapse: collapse;" >
+    <![endif]-->
+
+    <table  width="200.000"
+            style="width:200.000px;border-spacing:0;border-collapse:collapse;margin:0px 0px 0px 0px;"
+            cellpadding="0"
+            cellspacing="0"
+            align="left"
+            border="0"
+            bgcolor="#ffffff"
+            class="column column-3 of-4
+                  empty"
+      >
+      <tr>
+        <td style="padding:0px;margin:0px;border-spacing:0;">
+            
+    <table class="wrapper" role="module" data-type="image" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+      <tr>
+        <td style="font-size:6px;line-height:10px;padding:0px 0px 0px 0px;" valign="top" align="center">
+          <img class="max-width" border="0" style="display:block;color:#000000;text-decoration:none;font-family:Helvetica, arial, sans-serif;font-size:16px;max-width:100% !important;width:100%;height:auto !important;" src="https://kgt-internal.s3.us-west-1.amazonaws.com/SendGrid/AEM/MainTemplate/Logos/millerdiversified.jpg" alt="" width="200">
+        </td>
+      </tr>
+    </table>
+  
+        </td>
+      </tr>
+    </table>
+
+    <!--[if (gte mso 9)|(IE)]>
+      </td>
+    <![endif]-->
+            <!--[if (gte mso 9)|(IE)]>
+                  <tr>
+                </table>
+              </center>
+            <![endif]-->
+        </td>
+      </tr>
+    </table>
+  
+    <table class="module"
+           role="module"
+           data-type="spacer"
+           border="0"
+           cellpadding="0"
+           cellspacing="0"
+           width="100%"
+           style="table-layout: fixed;">
+      <tr>
+        <td style="padding:0px 0px 30px 0px;"
+            role="module-content"
+            bgcolor="">
+        </td>
+      </tr>
+    </table>
+  
+    <table class="module"
+           role="module"
+           data-type="divider"
+           border="0"
+           cellpadding="0"
+           cellspacing="0"
+           width="100%"
+           style="table-layout: fixed;">
+      <tr>
+        <td style="padding:0px 0px 0px 0px;"
+            role="module-content"
+            height="100%"
+            valign="top"
+            bgcolor="">
+          <table border="0"
+                 cellpadding="0"
+                 cellspacing="0"
+                 align="center"
+                 width="100%"
+                 height="3px"
+                 style="line-height:3px; font-size:3px;">
+            <tr>
+              <td
+                style="padding: 0px 0px 3px 0px;"
+                bgcolor="#ffffff"></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  
+    <table class="module"
+           role="module"
+           data-type="spacer"
+           border="0"
+           cellpadding="0"
+           cellspacing="0"
+           width="100%"
+           style="table-layout: fixed;">
+      <tr>
+        <td style="padding:0px 0px 30px 0px;"
+            role="module-content"
+            bgcolor="">
+        </td>
+      </tr>
+    </table>
+  
+    <table class="module" role="module" data-type="social" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+      <tbody>
+        <tr>
+          <td valign="top" style="padding:0px 0px 0px 0px;font-size:6px;line-height:10px;">
+            <table align="center">
+              <tbody>
+                <tr>
+                  <td style="padding: 0px 5px;">
+        <a role="social-icon-link"  href="https://www.facebook.com/keygleedispo/" target="_blank" alt="Facebook"
+          data-nolink="false"
+          title="Facebook "
+          style="-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;display:inline-block;background-color:rgb(254, 93, 97);">
+          <img role="social-icon" alt="Facebook" title="Facebook "
+            height="30"
+            width="30"
+            style="height: 30px, width: 30px"
+            src="https://marketing-image-production.s3.amazonaws.com/social/white/facebook.png" />
+        </a>
+      </td>
+                  
+                  <td style="padding: 0px 5px;">
+        <a role="social-icon-link"  href="https://mc.sendgrid.com/assets/social/white/instagram.png" target="_blank" alt="Instagram"
+          data-nolink="false"
+          title="Instagram "
+          style="-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;display:inline-block;background-color:rgb(254, 93, 97);">
+          <img role="social-icon" alt="Instagram" title="Instagram "
+            height="30"
+            width="30"
+            style="height: 30px, width: 30px"
+            src="https://marketing-image-production.s3.amazonaws.com/social/white/instagram.png" />
+        </a>
+      </td>
+                  
+                  
+                  <td style="padding: 0px 5px;">
+        <a role="social-icon-link"  href="https://www.linkedin.com/company/keyglee-dispo/" target="_blank" alt="LinkedIn"
+          data-nolink="false"
+          title="LinkedIn "
+          style="-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;display:inline-block;background-color:rgb(254, 93, 97);">
+          <img role="social-icon" alt="LinkedIn" title="LinkedIn "
+            height="30"
+            width="30"
+            style="height: 30px, width: 30px"
+            src="https://marketing-image-production.s3.amazonaws.com/social/white/linkedin.png" />
+        </a>
+      </td>
+                </tr>
+              </tbody>
             </table>
           </td>
         </tr>
-      </table>
+      </tbody>
+    </table>
+  <div data-role="module-unsubscribe" class="module unsubscribe-css__unsubscribe___2CDlR" role="module" data-type="unsubscribe" style="color:#8d9db9;font-size:12px;line-height:20px;padding:16px 16px 16px 16px;text-align:center"><div class="Unsubscribe--addressLine"><p class="Unsubscribe--senderName" style="font-family:Arial,Helvetica, sans-serif;font-size:12px;line-height:20px;color: white">[Sender_Name]</p><p style="font-family:Arial,Helvetica, sans-serif;font-size:12px;line-height:20px;color: white"><span class="Unsubscribe--senderAddress">[Sender_Address]</span>, <span class="Unsubscribe--senderCity">[Sender_City]</span>, <span class="Unsubscribe--senderState">[Sender_State]</span> <span class="Unsubscribe--senderZip">[Sender_Zip]</span> </p></div><p style="font-family:Arial,Helvetica, sans-serif;font-size:12px;line-height:20px"><a class="Unsubscribe--unsubscribeLink" href="<%asm_global_unsubscribe_raw_url%>">Unsubscribe</a> - <a class="Unsubscribe--unsubscribePreferences" href="<%asm_preferences_raw_url%>">Unsubscribe Preferences</a></p></div>
+  <% Unsubscribe %>
+                              </td>
+                            </tr>
+                          </table>
+                          <!--[if mso]>
+                          </td></tr></table>
+                          </center>
+                          <![endif]-->
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
     </center>
   </body>
 </html>
-<div><img src="https://kgt-internal.s3.us-west-1.amazonaws.com/SendGrid/AEM/MainTemplate/banner.png" height="120" style="border: 0px;width: 450px;margin: 0px;padding-left: 20px;" width="500" margin-left="500px"></div>
-
-<table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width:100%;">
-  <tbody class="mcnTextBlockOuter"><tr><td valign="top" class="mcnTextBlockInner" style="padding-top:9px;"><!--[if mso]><table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100%;"><tr><![endif]--><!--[if mso]><td valign="top" width="600" style="width:600px;"><![endif]--><table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer"><tbody><tr><td valign="top" class="mcnTextContent" style="padding: 0px 18px 9px; font-family: Times New Roman, Times, Baskerville, Georgia, serif; line-height: 150%;"><p style="font-family: Times New Roman, Times, Baskerville, Georgia, serif; line-height: 150%;">
-  <img data-file-id="730965" height="337" src="${blastPhoto}" style="border: 0px ; width: 450px; height: 337px; margin: 0px;"width="450">
-  <br>
-  <span style="font-family:times new roman,times,baskerville,georgia,serif"><span style="font-size:24px"><br><u></u>${address.replace(', USA', '')}</u></span></span><br><br>
-  <a href="${pictureLink}"target="_blank"><span style="font-family:times new roman,times,baskerville,georgia,serif"><u><span style="font-size:18px">Link to More Pictures!</span></u></span></a></p>
-  <ul></ul>
-  <li style="${line1 != '' ? "display: list-item" : "display: none"}">${line1}</li>
-  <li style="${line2 != '' ? "display: list-item" : "display: none"}">${line2}</li>
-  <li style="${line3 != '' ? "display: list-item" : "display: none"}">${line3}</li>
-  <li style="${line4 != '' ? "display: list-item" : "display: none"}">${line4}</li>
-  <li style="${line5 != '' ? "display: list-item" : "display: none"}">${line5}</li></ul>
-  <span style="font-size:22px"><span style="font-family:times new roman,times,baskerville,georgia,serif"><span style="color: #008000"><em></em><br><br><span style="${netPrice != '' ? "display: block" : "display: none"}">Wholesale Price: ${netPrice}</span><span style="${arv != '' ? "display: block" : "display: none"}">After Repair Value: ${arv}</span></em></span></span></span><br><p style="font-family: Times New Roman, Times, Baskerville, Georgia, serif; line-height: 150%;"><span style="font-size:26px"><span style="color:#A52A2A"><span style="font-family:times new roman,times,baskerville,georgia,serif"></span>${dispo}</span></span></span></p><hr> </td></tr></tbody></table><!--[if mso]></td><![endif]--><!--[if mso]></tr></table><![endif]--></td></tr></tbody></table>                            </td>
-                        </tr>
-                        <tr>
-                            <td valign="top" id="templateBody">
-                                <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width:100%;">
-                                    <tbody class="mcnTextBlockOuter">
-                                        <tr>
-                                            <td valign="top" class="mcnTextBlockInner" style="padding-top:9px;">
-                                                <!--[if mso]>
-				<table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100%;">
-				<tr>
-				<![endif]-->
-
-                                                <!--[if mso]>
-				<td valign="top" width="600" style="width:600px;">
-				<![endif]-->
-                                                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer">
-                                                    <tbody>
-                                                        <tr>
-
-                                                            <td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
-
-                                                                <div style="text-align: center; font-size: smaller;"><span style="color:#A9A9A9">Disclaimer: all homes listed herein are either owned or under contract by aem real estate group, llc (dba keyglee dispo) ("seller"). seller is in the business of acquiring properties and selling wholesale to investors, among other real estate investing activities. properties are acquired through a variety of sources. the prices are net to seller.  buyer pays all closing/escrow costs including hoa transfer/reserves and any other fees associated with the transfer of property.  prices are based on quick closing of 7-14 days or less, using cash or a combination of cash and private financing/hard money. all properties are sold in 'as is' condition. arv values are estimates, buyer to verify. seller makes no warranty of any kind, expressed or implied, regarding the condition, square footage, insurability, verification of septic or sewer connection, structural, plumbing, electrical or mechanical systems, wells, heating, air conditioning, appliances, soil, foundation, pool/spa, and related equipment, environmental hazards (such as asbestos, formaldehyde, radon gas, lead based paint, fuel or chemical storage tanks, hazardous waste, landfills, high voltage electrical lines, location near superfund areas, endangered species, water quality, geological conditions), location of property lines, water/utility use restrictions, flood plain, building permits or compliance with building codes, zoning, the occurrence of disease, death, homicide, suicide, or other crime in the vicinity of the premises.  everything, not limited to the above referenced items, is the responsibility of the buyer to investigate and satisfy to a level suitable to the buyer, prior to signing a contract to purchase the property and/or depositing earnest money funds. typically, seller will gather information regarding square footage, lot size, year built, condition, values, etc from the county assessor's website, public tax records, prior mls listings, and other sources that might be available. although the information should be accurate, these sources have been known to produce wrong information on occasion. seller is not held liable for any information released to the buyer from any source referenced for the buyer's convenience. buyer must do its own due diligence, evaluation and inspection prior to making an offer.  determining value is the buyer's responsibility.  seller strongly recommends buyers employ an investor-focused realtor or appraiser to help determine current and/or after repair value.  any reference to the value of a property by seller or any representative of seller is simply an opinion of value.  everyone has a differing opinion on value, cost of construction, materials, quality of workmanship and market speculation.  value is ultimately the buyer's responsibility and they should be diligent in determining market value. seller may or may not currently own all of the properties listed herein and may be marketing the equitable interest however great or small in the given properties. some of these properties listed on this site are under contract to purchased by seller. as regards such properties, seller is only selling (without any warranty or representation other than it is the buyer under the subject contract) its contract rights as purchaser of such property. some properties are occupied, as indicated. if shown as occupied, buyer is to contact seller to set up viewing appointment.  buyer(s) and their representatives are hereby noticed of tenant/resident rights -- at no time shall residents be disturbed; no approaching the house, knocking on door, engaging in conversation with residents or neighbors, etc. transactions are completed through a title/escrow company, with buyer receiving a title insurance policy. equal opportunity housing. one or more members, directors, or employees of aem real estate group, llc (dba keyglee dispo) are licensed real estate agents in the state of arizona with stunning homes realty, west usa realty,  keller williams east valley, or coldwell banker, the state of nevada with compass realty & management llc, and/or the state of utah with wise choice real estate. there is no agency, expressed or implied, between buyer and keyglee dispo or any of its members, directors, or employees. One or more employees of KeyGlee Dispo is a licensed Real Estate Broker in the state of Washington with PC Management LLC.</span>
-                                                                    <br>
-                                                                    <br>
-                                                                <div style="display: flex; height: 90px; justify-content: space-around; margin: auto;">
-                                                                    <img src="https://kgt-internal.s3.us-west-1.amazonaws.com/SendGrid/AEM/MainTemplate/Logos/CompasRealty_Logo.jpg">
-                                                                    <img src="https://kgt-internal.s3.us-west-1.amazonaws.com/SendGrid/AEM/MainTemplate/Logos/EqualHousingOpportunity_Logo.png">
-                                                                    <img src="https://kgt-internal.s3.us-west-1.amazonaws.com/SendGrid/AEM/MainTemplate/Logos/Keyglee_Logo.png">
-                                                                    <img src="https://kgt-internal.s3.us-west-1.amazonaws.com/SendGrid/AEM/MainTemplate/Logos/Reatlor_Logo.png">
-                                                                    <img src="https://kgt-internal.s3.us-west-1.amazonaws.com/SendGrid/AEM/MainTemplate/Logos/StunningHomesRealty_Logo.jpg">
-                                                                    <img src="https://kgt-internal.s3.us-west-1.amazonaws.com/SendGrid/AEM/MainTemplate/Logos/WestUSA_Logo.png">
-                                                                    <img src="https://kgt-internal.s3.us-west-1.amazonaws.com/SendGrid/AEM/MainTemplate/Logos/charles-rutenberg.jpg" />
-                                                                    <img src='https://kgt-internal.s3.us-west-1.amazonaws.com/SendGrid/AEM/MainTemplate/Logos/millerdiversified.jpg' />
-                                                                    <!-- <img data-file-id="724865" height="128" src="https://kgt-internal.s3.us-west-1.amazonaws.com/SendGrid/AEM/MainTemplate/Disclaimer_Logos_FINAL.png" style="border: 0px  ; width: 700px; margin: 0px;" width="500"> -->
-                                                                </div>
-                                                                <br>
-
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                                <!--[if mso]>
-				</td>
-				<![endif]-->
-
-                                                <!--[if mso]>
-				</tr>
-				</table>
-				<![endif]-->
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width:100%;">
-                                    <tbody class="mcnTextBlockOuter">
-                                        <tr>
-                                            <td valign="top" class="mcnTextBlockInner" style="padding-top:9px;">
-                                                <!--[if mso]>
-				<table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100%;">
-				<tr>
-				<![endif]-->
-
-                                                <!--[if mso]>
-				<td valign="top" width="600" style="width:600px;">
-				<![endif]-->
-                                                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer">
-                                                    <tbody>
-                                                        <tr>
-
-                                                            <td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
-
-                                                                <div style="text-align: center;"></div>
-                                                                
-                                                                <br>
-                                                                
-                                                                
-                                                                
-
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                                <!--[if mso]>
-				</td>
-				<![endif]-->
-
-                                                <!--[if mso]>
-				</tr>
-				</table>
-				<![endif]-->
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td valign="top" id="templateFooter">
-                                <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width:100%;">
-                                    <tbody class="mcnTextBlockOuter">
-                                        <tr>
-                                            <td valign="top" class="mcnTextBlockInner" style="padding-top:9px;">
-                                                <!--[if mso]>
-				<table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100%;">
-				<tr>
-				<![endif]-->
-
-                                                <!--[if mso]>
-				<td valign="top" width="600" style="width:600px;">
-				<![endif]-->
-                                                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer">
-                                                    <tbody>
-                                                        <tr>
-
-                                                            <td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
-
-                                                                <div style="text-align: center;">&nbsp;</div>
-                                                                <br>
-                                                                <br>
-                                                                <br>
-                                                                <br>
-                                                                <br>
-                                                                <br> &nbsp;
-                                                            </td>
-                                                        </tr>
-                                                </table>
-                                                <div data-role="module-unsubscribe" class="module unsubscribe-css__unsubscribe___2CDlR" role="module" data-type="unsubscribe" style="color:#444444;font-size:12px;line-height:20px;padding:16px 16px 16px 16px;text-align:center">
-                                                    <div class="Unsubscribe--addressLine">
-                                                        <p class="Unsubscribe--senderName" style="font-family:Arial,Helvetica, sans-serif;font-size:12px;line-height:20px">[Sender_Name]</p>
-                                                        <p style="font-family:Arial,Helvetica, sans-serif;font-size:12px;line-height:20px"><span class="Unsubscribe--senderAddress">[Sender_Address]</span>, <span class="Unsubscribe--senderCity">[Sender_City]</span>, <span class="Unsubscribe--senderState">[Sender_State]</span> <span class="Unsubscribe--senderZip">[Sender_Zip]</span> </p>
-                                                    </div>
-                                                    <p style="font-family:Arial,Helvetica, sans-serif;font-size:12px;line-height:20px"><a class="Unsubscribe--unsubscribeLink" href="[unsubscribe]">Unsubscribe</a> - <a class="Unsubscribe--unsubscribePreferences" href="<%asm_preferences_raw_url%>">Unsubscribe Preferences</a></p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                </table>
-
-                        </tr>
-                    </table>
-                    <!--[if (gte mso 9)|(IE)]>
-                        </td>
-                        </tr>
-                        </table>
-                        <![endif]-->
-                    <!-- // END TEMPLATE -->
-                    </td>
-            </tr>
-        </table>
-    </center>
-</body>
-
-</html>
-
-<html>
 `,
         "status": "Draft"
     };
@@ -1265,6 +1317,28 @@ app.put('/properties/:id/acqdrop', function (req, res) {
     UpdateExpression: 'set acqDrop = :acqDrop',
     ExpressionAttributeValues: {
       ':acqDrop': req.body.acqDrop
+    },
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+
+});
+
+// Acq Drop
+app.put('/properties/:id/acqgp', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    UpdateExpression: 'set acqGP = :acqGP',
+    ExpressionAttributeValues: {
+      ':acqGP': req.body.acqGP
     },
     ReturnValues: 'ALL_NEW'
   }
@@ -2041,6 +2115,28 @@ app.put('/properties/:id/perdiem', function (req, res) {
     });
 });
 
+// Pricing Date
+app.put('/properties/:id/picturelink', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    ExpressionAttributeValues: {
+      ':pictureLink': req.body.pictureLink
+    },
+    UpdateExpression: 'set pictureLink = :pictureLink',
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+      
+    });
+});
+
 // Post Possession
 app.put('/properties/:id/postpossession', function (req, res) {
 
@@ -2080,6 +2176,28 @@ app.put('/properties/:id/pricingdate', function (req, res) {
     docClient.update(params, (err, data) => {
       if (err) res.json({ err })
       else res.json({ success: data })
+    });
+});
+
+// Pricing Date
+app.put('/properties/:id/propPhoto', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    ExpressionAttributeValues: {
+      ':propPhoto': req.body.propPhoto
+    },
+    UpdateExpression: 'set propPhoto = :propPhoto',
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+
     });
 });
 
@@ -2210,7 +2328,7 @@ app.put('/properties/:id/soldgp', function (req, res) {
 });
 
 // Status
-app.put('/properties/:id/status', function (req, res) {
+app.put('/properties/:id/propstatus', function (req, res) {
 
   let params = {
     TableName: 'inventory-dev',
@@ -2218,9 +2336,9 @@ app.put('/properties/:id/status', function (req, res) {
       id: req.body.id,
     },
     ExpressionAttributeValues: {
-      ':status': req.body.status
+      ':propStatus': req.body.propStatus
     },
-    UpdateExpression: 'set status = :status',
+    UpdateExpression: 'set propStatus = :propStatus',
     ReturnValues: 'ALL_NEW'
   }
   
@@ -2462,7 +2580,7 @@ app.put('/applications/:id', function (req, res) {
 * Example delete method *
 ****************************/
 
-app.delete('/properties', function(req, res) {
+app.delete('/inventory/:id', function(req, res) {
   let params = {
     TableName: 'inventory-dev',
     Key: {
@@ -2488,7 +2606,7 @@ app.delete('/payouts', function(req, res) {
   })
 });
 
-app.put('/properties/:id/files/:fileid', function(req, res) {
+app.delete('/inventory/:id/files/:fileid', function(req, res) {
   let params = {
     TableName: 'inventory-dev',
     Key: {

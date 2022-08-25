@@ -11,8 +11,8 @@ const BuyerCredits = ({ prop, setOpenUpdate, employee }) => {
 
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0  ? 
-    <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-        <NumberFormat label='Buyer Credits' InputProps={{ startAdornment: ( <InputAdornment position='start'><AttachMoneyIcon fontSize='small' /></InputAdornment> ) }} customInput={TextField} defaultValue={prop.buyerCredits} onValueChange={({ value }) => {
+    <FormControl style={{ width: '100%' }}>
+        <NumberFormat variant='standard' label='Buyer Credits' InputProps={{ startAdornment: ( <InputAdornment position='start'><AttachMoneyIcon fontSize='small' /></InputAdornment> ), disableUnderline: true }} customInput={TextField} defaultValue={prop.buyerCredits} onValueChange={({ value }) => {
             API.put(apiName, path, {
             body: {
                 id: prop.id,
@@ -25,9 +25,10 @@ const BuyerCredits = ({ prop, setOpenUpdate, employee }) => {
         }} thousandSeparator isNumericString prefix='' />
     </FormControl>
     :
-        <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-            <TextField label='Buyer Credits' variant='outlined' InputProps={{
+        <FormControl style={{ width: '100%' }}>
+            <TextField label='Buyer Credits' variant='standard' InputProps={{
             readOnly: true,
+            disableUnderline: true
         }} value={prop.buyerCredits} />
         </FormControl>
   )

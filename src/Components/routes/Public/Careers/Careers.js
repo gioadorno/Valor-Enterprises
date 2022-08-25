@@ -1,6 +1,4 @@
 import { Box, Typography, Divider, Button, Fade, List, ListItem, ListItemText, ListItemIcon, TextField, Select, MenuItem, FormControl, InputLabel, IconButton, Snackbar } from "@mui/material";
-import NavBar from "../Homepage_Components/NavBar";
-import MobileNav from "../Homepage_Components/MobileNav";
 import background from './background.jpg';
 import CircleIcon from '@mui/icons-material/Circle';
 import { useState, useEffect, forwardRef, Fragment } from "react";
@@ -447,7 +445,7 @@ const Careers = () => {
 
                         <Divider sx={{ width: '85%' }} />
                         <Typography variant='body2' sx={{ mt: 3, width: '80%', textAlign: 'center', fontStyle: 'italic' }}>
-                        ***KeygleeDispo supports a diverse workforce and is an Equal Opportunity Employer who does not
+                        ***Valor Enterprises supports a diverse workforce and is an Equal Opportunity Employer who does not
                                 discriminate against individuals on the basis of race, gender, color, religion, national origin, age,
                                 sexual orientation, gender identity, disability, veteran status or other classification protected by
                                 law. Drug Free Workplace.
@@ -504,7 +502,6 @@ const Careers = () => {
                 </Box>
             </Fade>
         )}
-        <h1 className='absolute font-semibold text-lg z-50 bottom-0 text-white pb-2'>Our website is currently under construction. You will only have access to this career's page at this time.</h1>
         <img src={background} style={{ width: '100%', height: '100%', position: 'absolute', top: 0, right: 0, left: 0 }} />
     </Box>
   )

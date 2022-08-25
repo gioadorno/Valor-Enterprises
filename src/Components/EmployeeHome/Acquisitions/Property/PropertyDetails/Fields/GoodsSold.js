@@ -11,8 +11,8 @@ const GoodsSold = ({ prop, id, setOpenUpdate, employee }) => {
 
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? 
-    <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-      <NumberFormat label='Goods Sold' InputProps={{ startAdornment: ( <InputAdornment position='start'><AttachMoneyIcon fontSize='small' /></InputAdornment> ) }} customInput={TextField} defaultValue={prop.goodsSold} onValueChange={({ value }) => {
+    <FormControl style={{ width: '100%' }}>
+      <NumberFormat variant='standard' label='Goods Sold' InputProps={{ startAdornment: ( <InputAdornment position='start'><AttachMoneyIcon fontSize='small' /></InputAdornment> ), disableUnderline: true }} customInput={TextField} defaultValue={prop.goodsSold} onValueChange={({ value }) => {
          API.put(apiName, path, {
           body: {
               id: prop.id,
@@ -25,9 +25,10 @@ const GoodsSold = ({ prop, id, setOpenUpdate, employee }) => {
       }} thousandSeparator isNumericString prefix='' />
     </FormControl>
     :
-        <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-            <TextField label='Goods Sold' variant='outlined' InputProps={{
+        <FormControl style={{ width: '100%' }}>
+            <TextField label='Goods Sold' variant='standard' InputProps={{
             readOnly: true,
+            disableUnderline: true
         }} value={prop.goodsSold} />
         </FormControl>
   )

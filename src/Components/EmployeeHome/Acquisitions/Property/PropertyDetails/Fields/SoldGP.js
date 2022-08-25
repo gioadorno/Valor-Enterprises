@@ -20,12 +20,12 @@ const SoldGP = ({ prop, id, setOpenUpdate, employee }) => {
 
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ?
-    <FormControl size="medium" style={{ width: '100%', marginBottom: '.75em' }}>
-        <TextField onChange={handleSoldGP} id="standard-read-only-input" label="Sold GP" defaultValue={prop.soldGP} variant="outlined"/>
+    <FormControl size="medium" style={{ width: '100%' }}>
+        <TextField onChange={handleSoldGP} InputProps={{ disableUnderline: true }} id="standard-read-only-input" label="Sold GP" defaultValue={prop.soldGP} variant="standard"/>
     </FormControl>
     :
-    <FormControl size="medium" sx={{ width: '100%', mb: 2 }} >
-    <TextField color='primary' id="standard-read-only-input" label="Sold GP" InputProps={{readOnly: true, style: { borderColor: '#0082a9b0 !important' }}} value={prop.soldGP} variant="outlined"/>
+    <FormControl size="medium" sx={{ width: '100%' }} >
+    <TextField color='primary' id="standard-read-only-input" label="Sold GP" InputProps={{readOnly: true, disableUnderline: true, style: { borderColor: '#0082a9b0 !important' }}} value={prop.soldGP} variant="standard"/>
 </FormControl>
   )
 }

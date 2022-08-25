@@ -1,8 +1,10 @@
 import { TextField } from "@mui/material";
-import { LocalizationProvider, DatePicker} from '@mui/lab';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { API } from 'aws-amplify';
+import { useState } from 'react';
 import format from 'date-fns/format';
-import AdapterDateFns from "@mui/lab/modern/AdapterDateFns";
 
 
 const BuyerCloseDate = ({ prop, setOpenUpdate, employee }) => {
@@ -10,7 +12,7 @@ const BuyerCloseDate = ({ prop, setOpenUpdate, employee }) => {
       const apiName = 'valproperties';
       const path = `/properties/${prop.id}/buyerclosedate`;
       // 
-
+      const [ newDate, setNewDate ] = useState(prop.buyerCloseDate)
     const handleBuyerCloseDate = async (newValue) => {
       API.put(apiName, path, {
         body: {
@@ -19,6 +21,7 @@ const BuyerCloseDate = ({ prop, setOpenUpdate, employee }) => {
         }
     })
     .then(() => {
+      setNewDate(newValue)
       setOpenUpdate(true)
     })
     };
@@ -29,16 +32,16 @@ const BuyerCloseDate = ({ prop, setOpenUpdate, employee }) => {
     {employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0  ? 
     <DatePicker
       label="Buyer's Closing Date"
-      value={prop.buyerCloseDate}
+      value={newDate}
       onChange={handleBuyerCloseDate}
-      renderInput={(params) => <TextField variant='outlined' style={{ width: '100%', marginBottom: '.75em' }} {...params} />}
+      renderInput={(params) => <TextField variant='standard' style={{ width: '100%' }} {...params} />}
     />
     :
     <DatePicker
     label="Buyer's Closing Date"
     value={prop.buyerCloseDate}
     readOnly
-    renderInput={(params) => <TextField variant='outlined' style={{ width: '100%', marginBottom: '.75em' }} {...params} />}
+    renderInput={(params) => <TextField variant='standard' style={{ width: '100%' }} {...params} />}
   />
 }
   </LocalizationProvider>

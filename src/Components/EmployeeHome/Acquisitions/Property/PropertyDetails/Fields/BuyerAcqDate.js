@@ -1,8 +1,10 @@
 import { TextField } from "@mui/material";
-import { LocalizationProvider, DatePicker} from '@mui/lab';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { useState } from 'react';
 import { API } from 'aws-amplify';
 import format from 'date-fns/format';
-import AdapterDateFns from "@mui/lab/modern/AdapterDateFns";
 
 
 const BuyerAcqDate = ({ prop, setOpenUpdate, employee }) => {
@@ -10,7 +12,7 @@ const BuyerAcqDate = ({ prop, setOpenUpdate, employee }) => {
       const apiName = 'valproperties';
       const path = `/properties/${prop.id}/buyeracqdate`;
       // 
-
+      const [ newDate, setNewDate ] = useState(prop.buyerAcqDate)
     const handleBuyerAcqDate = async (newValue) => {
       API.put(apiName, path, {
         body: {
@@ -19,6 +21,7 @@ const BuyerAcqDate = ({ prop, setOpenUpdate, employee }) => {
         }
     })
     .then(() => {
+      setNewDate(newValue)
       setOpenUpdate(true)
     })
     };
@@ -28,17 +31,17 @@ const BuyerAcqDate = ({ prop, setOpenUpdate, employee }) => {
     {employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? 
     <DatePicker
       label="Buyer's Acquisition Date"
-      value={prop.buyerAcqDate}
+      value={newDate}
       onChange={handleBuyerAcqDate}
       className='datePicker'
-      renderInput={(params) => <TextField variant="outlined" sx={{ width: '100%', marginBottom: '1em', color: '#2285ffde' }} {...params} />}
+      renderInput={(params) => <TextField variant="standard" sx={{ width: '100%', color: '#2285ffde' }} {...params} />}
     />
     :
     <DatePicker
     label="Buyer's Acquisition Date"
     value={prop.buyerAcqDate}
     readOnly
-    renderInput={(params) => <TextField variant="outlined" sx={{ width: '100%', marginBottom: '.75em', color: '#2285ffde' }} {...params} />}
+    renderInput={(params) => <TextField variant="standard" sx={{ width: '100%', color: '#2285ffde' }} {...params} />}
   />
 }
   </LocalizationProvider>

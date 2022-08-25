@@ -1,5 +1,6 @@
 import { ToggleButtonGroup, ToggleButton } from "@mui/material";
 import { API } from 'aws-amplify';
+import { useState } from "react";
 
 
 const SourceOfDeal = ({ prop, id, setOpenUpdate, employee }) => {
@@ -7,6 +8,8 @@ const SourceOfDeal = ({ prop, id, setOpenUpdate, employee }) => {
         const apiName = 'valproperties';
         const path = `/properties/${prop.id}/supplier`;
         // 
+
+        const [ dealSource, setDealSource ] = useState(prop.supplier);
     const handleSupplier = async (e) => {
         API.put(apiName, path, {
             body: {
@@ -16,13 +19,13 @@ const SourceOfDeal = ({ prop, id, setOpenUpdate, employee }) => {
             })
             .then(() => {
             setOpenUpdate(true)
-            window.location.reload(false)
+            setDealSource(e.target.value)
             })
     };
   return (
 
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? (
-        <ToggleButtonGroup color='error' aria-label="Property Status" exclusive onChange={handleSupplier} fullWidth value={prop.supplier} sx={{ mb: 0, alignItems: 'center' }} variant='outlined'>
+        <ToggleButtonGroup color='error' aria-label="Property Status" exclusive onChange={handleSupplier} fullWidth value={dealSource} sx={{ mb: 0, alignItems: 'center' }} variant='outlined'>
             <ToggleButton value='Wholesaler'>
             Wholesaler
             </ToggleButton>

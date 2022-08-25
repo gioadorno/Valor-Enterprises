@@ -10,8 +10,9 @@ import { usePlacesWidget } from 'react-google-autocomplete';
 import PropTypes from 'prop-types';
 import { IMaskInput } from 'react-imask';
 import NumberFormat from 'react-number-format';
-import { LocalizationProvider, DatePicker} from '@mui/lab';
-import AdapterDateFns from "@mui/lab/modern/AdapterDateFns";
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import './style.css'
 import enLocale from 'date-fns/locale/en-US';
 import { format } from "date-fns";
@@ -75,7 +76,7 @@ const NumberCommaFormatCustom = forwardRef(function NumberFormatCustom(props, re
 
 
 const AcqPaperwork = ({ markets }) => {
-    const { employee, loggedIn, getSession } = useContext(AccountContext);
+    const { loggedIn} = useContext(AccountContext);
             // Send user to login screen if not logged in
             useEffect(() => {
                 getSession();
@@ -87,9 +88,10 @@ const AcqPaperwork = ({ markets }) => {
     const [ dispoReps, setDispoReps ] = useState([]);
     const [ photo, setPhoto ] = useState('');
     const [ isCreating, setIsCreating ] = useState(false);
+    const [ employee, setEmployee ] = useState('');
 
     useEffect(() => {
-        API.get(apiName, path)
+        API.get(apiName, '/properties')
         .then(res => setProps(res.Items))
     },[])
 
@@ -98,7 +100,6 @@ const AcqPaperwork = ({ markets }) => {
         .then(res => setDispoReps(res.Items))
     },[])
 
-    console.log(dispoReps)
 
     const GoogleAPI = "AIzaSyBat1MaRl7stoHN62WZ7f9aGYWYOqHnBtU";
         // Get current Date and format it to mm/dd/yyyy
@@ -107,7 +108,7 @@ const AcqPaperwork = ({ markets }) => {
         // Input Values for properties
         const [propertyData, setPropertyData] = useState({
             date: today,
-            status: 'Pending',
+            propStatus: 'Pending',
             name: employee?.attributes?.name,
             dispoName: '',
             dispoPhone: '',
@@ -184,7 +185,16 @@ const AcqPaperwork = ({ markets }) => {
         });
 
 
-
+        const getSession = async () => {
+            await Auth.currentAuthenticatedUser().then((user) => {
+                setEmployee(user)
+                setPropertyData({ ...propertyData, name: user.attributes.name })
+            })
+        };
+    
+        useEffect(() => {
+            getSession()
+        },[])
 
     // Reading image file to be displayed
     const [createFile, setFile] = useState('');
@@ -218,7 +228,12 @@ const AcqPaperwork = ({ markets }) => {
     };
     const handleSubmit = async (e) => {
         e.preventDefault()
-        await Storage.put(photo.name, photo)
+        if (photo != '') {
+            await Storage.put(photo.name, photo)
+        }
+        if(propertyData.name === undefined){
+            propertyData.name === employee.attributes.name
+        }
 
         dispoReps.map((dispoRep) => {
             if (propertyData.market == dispoRep.market[0]) {
@@ -315,24 +330,21 @@ const apiData = {
 };
 await API.post(apiName, path, apiData)
 .then((res) => {
-    console.log(res)
     setOpen(true);
 })
 .catch(err => console.log(err))
-if (propertyData.emailBlast === true) {
-    await API.post(apiName, sendgridPath, apiData)
-    .then((res) => {
-        console.log(res);
-        setOpen(true);
+// if (propertyData.emailBlast === true) {
+//     await API.post(apiName, sendgridPath, apiData)
+//     .then((res) => {
+//         console.log(res);
+//         setOpen(true);
         
-    })
-    .catch(err => console.log(err))
-}
+//     })
+//     .catch(err => console.log(err))
+// }
 });
     };
 
-    
-    console.log(dispoReps)
       
         // Removes Duplicates of Supplier Names
         const supplierNameList = props?.filter((value, index, self) => 

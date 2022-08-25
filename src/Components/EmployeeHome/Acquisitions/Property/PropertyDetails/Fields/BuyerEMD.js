@@ -11,8 +11,8 @@ const BuyerEMD = ({ prop, setOpenUpdate, employee }) => {
 
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? 
-    <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-        <NumberFormat label="Buyer's EMD Amount" customInput={TextField} InputProps={{ startAdornment: ( <InputAdornment position='start'><AttachMoneyIcon fontSize='small' /></InputAdornment> ) }} defaultValue={prop.buyerEMD} onValueChange={({ value }) => {
+    <FormControl style={{ width: '100%' }}>
+        <NumberFormat variant='standard' label="Buyer's EMD Amount" customInput={TextField} InputProps={{ startAdornment: ( <InputAdornment position='start'><AttachMoneyIcon fontSize='small' /></InputAdornment> ), disableUnderline: true }} defaultValue={prop.buyerEMD} onValueChange={({ value }) => {
           API.put(apiName, path, {
             body: {
                 id: prop.id,
@@ -25,8 +25,8 @@ const BuyerEMD = ({ prop, setOpenUpdate, employee }) => {
         }} thousandSeparator isNumericString prefix='' />
     </FormControl>
     :
-        <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-            <TextField label="Buyer's EMD Amount" variant='outlined' InputProps={{
+        <FormControl style={{ width: '100%' }}>
+            <TextField label="Buyer's EMD Amount" variant='standard' InputProps={{
             readOnly: true,
         }} value={prop.buyerEMD} />
         </FormControl>

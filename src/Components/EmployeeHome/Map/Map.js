@@ -1,5 +1,5 @@
 import { MapDiv, LeftDiv, Image} from './styles';
-import { GoogleMap, useLoadScript } from '@react-google-maps/api';
+import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import { useState } from 'react';
 import LeftPanel from './LeftPanel/LeftPanel';
 import { useDispatch } from 'react-redux';
@@ -96,12 +96,12 @@ const Map = ({ style }) => {
             <OuterBar />
         <Container maxWidth="2xl" sx={{ mt: 10, mb: 4, display: 'flex', alignItems: 'center', width: '-webkit-fill-available', height: '95%' }} >
             <Paper style={{ width: '-webkit-fill-available', height: '100%' }} elevation={16}>
-                <GoogleMap setGetMarker={setGetMarker} mapContainerStyle={style.map} zoom={getMarker.lat === '' ? 5 : 18 } center={getMarker.lat == '' ? center : {lat: getMarker.lat, lng: getMarker.lng} } >
+                {/* <GoogleMap setGetMarker={setGetMarker} mapContainerStyle={style.map} zoom={getMarker.lat === '' ? 5 : 18 } center={getMarker.lat == '' ? center : {lat: getMarker.lat, lng: getMarker.lng} } >
                     <FormControl  style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                 <Autocomplete sx={{ display: { xs: 'none', md: 'flex'} }} freeSolo={true} style={{ width: '50%' }} options={addressActiveList.map((prop) => prop.address)} renderInput={(params) => <TextField color='primary' focused style={{ color: 'white' }} variant='filled' {...params} label="Find Property"  />} onInputChange={(e, value) => setGetMarker({ ...getMarker, address: value })} />
                             </FormControl>
                     <Markers getMarker={getMarker} setGetMarker={setGetMarker} selected={selected} setSelected={setSelected}  />
-                </GoogleMap>
+                </GoogleMap> */}
             </Paper>
         </Container>
         <MobileNav />

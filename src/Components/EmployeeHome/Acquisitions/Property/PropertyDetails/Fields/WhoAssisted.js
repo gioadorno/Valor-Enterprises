@@ -22,8 +22,8 @@ const WhoAssisted = ({ prop, id, setOpenUpdate, employee }) => {
 
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? 
-    <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-        <Autocomplete defaultValue={prop.whoAssisted} freeSolo={true} style={{ width: '100%' }} id="combo-box" options={users?.map((user) => user.name)} renderInput={(params) => <TextField variant='outlined' {...params} label="Who Assisted this Sale"  />} onInputChange={(e, value) => {
+    <FormControl style={{ width: '100%' }}>
+        <Autocomplete defaultValue={prop.whoAssisted} freeSolo={true} style={{ width: '100%' }} id="combo-box" options={users?.map((user) => user.name)} renderInput={(params) => <TextField InputProps={{ disableUnderline: true }} variant='standard' {...params} label="Who Assisted this Sale"  />} onInputChange={(e, value) => {
         API.put(apiName, path, {
         body: {
             id: prop.id,
@@ -36,9 +36,10 @@ const WhoAssisted = ({ prop, id, setOpenUpdate, employee }) => {
         }} />
     </FormControl>
     :
-        <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-            <TextField label='Who Assisted this Sale' variant='outlined' InputProps={{
+        <FormControl style={{ width: '100%' }}>
+            <TextField label='Who Assisted this Sale' variant='standard' InputProps={{
             readOnly: true,
+            disableUnderline: true
         }} value={prop.whoAssisted} />
         </FormControl>
   )

@@ -50,10 +50,14 @@ const Files = ({ prop, setOpenUpdate, id, employee }) => {
             .then((res) => {
             setOpenUpdate(true)
             setIsUpdating(false)
-            window.location.reload(false)
+            window.location.reload(true)
             })
             .catch(error => console.log(error))
     };
+
+    console.log(uploadFiles)
+
+    
 
     // File API
     const filePath = `/properties/${prop.id}`;

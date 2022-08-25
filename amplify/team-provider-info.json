@@ -20,14 +20,14 @@
       "function": {
         "propertyfunction": {
           "deploymentBucketName": "amplify-valorant-dev-141128-deployment",
-          "s3Key": "amplify-builds/propertyfunction-724d562b783363416a38-build.zip",
+          "s3Key": "amplify-builds/propertyfunction-687a41683149642b5950-build.zip",
           "inventory": "properties-dev",
           "database": "properties-dev",
           "emailblast": "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",
           "emailBlast": "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",
-          "reactAppAcqOptions": "'https://hooks.slack.com/services/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'",
-          "reactAppAcqPaperwork": "'https://hooks.slack.com/services/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'",
-          "reactAppDispoPaperwork": "'https://hooks.slack.com/services/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'"
+          "reactAppAcqOptions": "https://hooks.slack.com/services/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",
+          "reactAppAcqPaperwork": "https://hooks.slack.com/services/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",
+          "reactAppDispoPaperwork": "https://hooks.slack.com/services/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"
         }
       }
     }

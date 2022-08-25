@@ -12,8 +12,9 @@ import { getDispoEmployees } from "../../../../actions/dispoemployees";
 import PropTypes from 'prop-types';
 import { IMaskInput } from 'react-imask';
 import NumberFormat from 'react-number-format';
-import { LocalizationProvider, DatePicker} from '@mui/lab';
-import AdapterDateFns from "@mui/lab/modern/AdapterDateFns";
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import './style.css'
 import enLocale from 'date-fns/locale/en-US';
 import { format } from "date-fns";
@@ -21,6 +22,7 @@ import { API, Storage } from 'aws-amplify';
 import MobileNav from "../../MobileNav";
 import CloseIcon from '@mui/icons-material/Close';
 require('dotenv').config();
+import { Auth } from 'aws-amplify';
 
 const TextMaskCustom = forwardRef(function TextMaskCustom(props, ref) {
 
@@ -70,16 +72,17 @@ const NumberCommaFormatCustom = forwardRef(function NumberFormatCustom(props, re
 
 
 const AcqOptions = ({ markets }) => {
-    const { employee, loggedIn, getSession } = useContext(AccountContext);
+    const { loggedIn } = useContext(AccountContext);
     const navigate = useNavigate();
     const [ open, setOpen ] = useState(false);
     const [ photo, setPhoto ] = useState('');
     const [ props, setProps ] = useState([]);
     const [ dispoReps, setDispoReps ] = useState([]);
     const [ isCreating, setIsCreating ] = useState(false);
+    const [ employee, setEmployee ] = useState('');
 
     useEffect(() => {
-        API.get(apiName, path)
+        API.get(apiName, '/properties')
         .then(res => setProps(res.Items))
     },[])
 
@@ -99,9 +102,10 @@ const AcqOptions = ({ markets }) => {
 
     // API
     const apiName = 'valproperties';
-    const path = '/properties';
+    const path = '/inventory';
     const sendgridPath = '/sendgrid';
     // 
+
 
         // Get current Date and format it to mm/dd/yyyy
         let today = new Date();
@@ -109,8 +113,8 @@ const AcqOptions = ({ markets }) => {
         // Input Values for properties
         const [propertyData, setPropertyData] = useState({
             date: today,
-            status: 'Active',
-            name: employee?.attributes?.name,
+            propStatus: 'Active',
+            name: '',
             dispoName: '',
             dispoPhone: '',
             dispoEmail: '',
@@ -184,16 +188,17 @@ const AcqOptions = ({ markets }) => {
             dispo: ''
         });
 
-        // Getting logged in state of user
+        const getSession = async () => {
+            await Auth.currentAuthenticatedUser().then((user) => {
+                setEmployee(user)
+                setPropertyData({ ...propertyData, name: user.attributes.name })
+            })
+        };
+    
         useEffect(() => {
             getSession()
         },[])
 
-
-    useEffect(() => {
-        API.get(apiName, path)
-        .then(res => console.log(res))
-    },[])
 
     // Reading image file to be displayed
     const [createFile, setFile] = useState('');
@@ -227,7 +232,12 @@ const AcqOptions = ({ markets }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-            await Storage.put(photo.name, photo)
+            if (photo != '') {
+                await Storage.put(photo.name, photo)
+            }
+            if(propertyData.name === undefined){
+                propertyData.name === employee.attributes.name
+            }
 
         dispoReps.map((dispoRep) => {
             if (propertyData.market == dispoRep.market[0]) {
@@ -333,14 +343,14 @@ const AcqOptions = ({ markets }) => {
                 setOpen(true);
             })
             .catch(err => console.log(err))
-            if (propertyData.emailBlast === true) {
-                await API.post(apiName, sendgridPath, apiData)
-                .then((res) => {
-                    console.log(res);
-                    setOpen(true);
-                })
-                .catch(err => console.log(err))
-            }
+            // if (propertyData.emailBlast === true) {
+            //     await API.post(apiName, sendgridPath, apiData)
+            //     .then((res) => {
+            //         console.log(res);
+            //         setOpen(true);
+            //     })
+            //     .catch(err => console.log(err))
+            // }
 
             })
         ;
@@ -400,6 +410,8 @@ const AcqOptions = ({ markets }) => {
             </div>
         </Modal>
         }
+
+
 
 
   return (
@@ -565,7 +577,7 @@ const AcqOptions = ({ markets }) => {
                             <FormControl style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '3em' }}>
                             <FormLabel style={{ marginBottom: '1em', color: '#607d8b', fontWeight: '550', textAlign: 'center', width: '100%' }}>When is COE?</FormLabel>
                                 <LocalizationProvider locale={enLocale} dateAdapter={AdapterDateFns}>
-                                    <DatePicker name='coe' label="COE" style={{ width: '90%' }} value={propertyData.coe} onChange={(newValue) => setPropertyData({ ...propertyData, coe: format(newValue, 'MM/dd/yyyy') })} renderInput={(params) => <TextField variant="outlined" sx={{ width: '90%' }} {...params}/> } />
+                                    <DatePicker name='coe' label="COE"  style={{ width: '90%', borderColor: '#c4c4c4' }} value={propertyData.coe} onChange={(newValue) => setPropertyData({ ...propertyData, coe: format(newValue, 'MM/dd/yyyy') })}  renderInput={(params) => <TextField inputProps={{ style: { borderColor: '#c4c4c4' } }} variant="outlined" sx={{ width: '90%', borderColor: '#c4c4c4' }} {...params}/> } />
                                 </LocalizationProvider>
                             {/* <TextField InputProps={{ inputComponent: NumberFormatCustom }} name='coe' style={{ width: '90%' }} variant='outlined' onBlur={handleChange} value={propertyData.coe}  /> */}
                             </FormControl>

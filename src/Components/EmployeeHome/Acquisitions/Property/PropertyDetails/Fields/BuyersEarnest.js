@@ -1,4 +1,5 @@
 import { ToggleButtonGroup, ToggleButton } from "@mui/material";
+import { useState } from "react";
 import { API } from 'aws-amplify';
 
 const BuyersEarnest = ({ prop, setOpenUpdate, employee }) => {
@@ -6,6 +7,8 @@ const BuyersEarnest = ({ prop, setOpenUpdate, employee }) => {
       const apiName = 'valproperties';
       const path = `/properties/${prop.id}/buyersearnest`;
       // 
+
+      const [ statusEMD, setStatusEMD ] = useState(prop.buyersEarnest)
 
     const handleBuyersEarnest = async (e) => {
         API.put(apiName, path, {
@@ -16,12 +19,13 @@ const BuyersEarnest = ({ prop, setOpenUpdate, employee }) => {
           })
           .then(() => {
             setOpenUpdate(true)
+            setStatusEMD(e.target.value)
           })
     };
 
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? (
-        <ToggleButtonGroup color='error' exclusive onChange={handleBuyersEarnest} size='small' fullWidth value={prop.buyersEarnest} sx={{ pb: 3, alignItems: 'center' }}>
+        <ToggleButtonGroup color='error' exclusive onChange={handleBuyersEarnest} size='small' fullWidth value={statusEMD} sx={{ alignItems: 'center' }}>
             <ToggleButton sx={{ height: '100%' }} value='Needed'>
             Needed
             </ToggleButton>
@@ -42,7 +46,7 @@ const BuyersEarnest = ({ prop, setOpenUpdate, employee }) => {
             </ToggleButton>
         </ToggleButtonGroup>
         ) :
-        <ToggleButtonGroup color='error' disabled exclusive fullWidth value={prop.buyersEarnest} sx={{ pb: 3 }} variant='outlined'>
+        <ToggleButtonGroup color='error' disabled exclusive fullWidth value={prop.buyersEarnest} variant='outlined'>
             <ToggleButton sx={{ height: '100%' }} value='Needed'>
             Needed
             </ToggleButton>

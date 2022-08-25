@@ -1,5 +1,5 @@
 import { ToggleButtonGroup, ToggleButton, } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { API } from 'aws-amplify';
 import { teal } from "@mui/material/colors";
 
@@ -7,40 +7,67 @@ import { teal } from "@mui/material/colors";
 const Status = ({ prop, id, setOpenUpdate, employee }) => {
         // Props API
         const apiName = 'valproperties';
-        const path = `/properties/${prop.id}/status`;
+        const path = `/properties/${prop.id}/propstatus`;
         const completionPath = `/properties/${prop.id}/completiondate`;
         // 
-    const [status, setStatus] = useState({ status: prop.status });
+    const [status, setStatus] = useState(prop.propStatus);
     let today = new Date();
     const newDate = parseInt(today.getMonth()+1) + '-' + today.getDate() + "-" + today.getFullYear();
     const [ completionDate, setCompletionDate ] = useState({ completionDate: newDate })
     const handleStatus = (e) => {
-        setStatus({ ...status, status: e.target.value })
+            API.put(apiName, path, {
+                body: {
+                    id: prop.id,
+                    propStatus: e.target.value
+                }
+                })
+                .then(() => {
+                setOpenUpdate(true)
+                setStatus(e.target.value)
+                if (e.target.value === 'Closed') { 
+                    API.put(apiName, completionPath, {
+                    body: {
+                        id: prop.id,
+                        completionDate: completionDate.completionDate
+                    }
+                    })
+                }
+                })
+        
     };
-    const submitStatus = () => {
-        API.put(apiName, path, {
-            body: {
-                id: prop.id,
-                supplier: status
-            }
-            })
-            .then(() => {
-            setOpenUpdate(true)
-            })
-        if(status.status === 'closed') API.put(apiName, completionPath, {
-            body: {
-                id: prop.id,
-                completionDate: completionDate.completionDate
-            }
-            })
-            .then(() => {
-            setOpenUpdate(true)
-            });
-    }
+
+    useEffect(() => {
+        setStatus(prop.propStatus)
+    },[prop])
+
+    
+
+    // const submitStatus = async () => {
+
+    //         await API.put(apiName, path, {
+    //             body: {
+    //                 id: prop.id,
+    //                 status: status.status
+    //             }
+    //             })
+    //             .then(() => {
+    //             setOpenUpdate(true)
+    //             })
+    //         if(status.status === 'closed') API.put(apiName, completionPath, {
+    //             body: {
+    //                 id: prop.id,
+    //                 completionDate: completionDate.completionDate
+    //             }
+    //             })
+    //             .then(() => {
+        //             setOpenUpdate(true)
+        //             });
+
+    // }
     
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? (
-        <ToggleButtonGroup aria-label="Property Status" color='error' exclusive onChange={handleStatus} onBlur={submitStatus} fullWidth value={status.status} sx={{ mb: 2, alignItems: 'center' }} variant='outlined'>
+        <ToggleButtonGroup aria-label="Property Status" color='success' exclusive onChange={handleStatus} fullWidth value={status} sx={{ mb: 2, alignItems: 'center' }} variant='outlined'>
             <ToggleButton value='Active'>
                 Active
             </ToggleButton>

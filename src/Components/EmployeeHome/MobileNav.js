@@ -1,9 +1,9 @@
-import { AppBar, Box, Toolbar, IconButton, ButtonGroup, Button, Typography, Container, Avatar, Tooltip, Menu, MenuItem, BottomNavigation, BottomNavigationAction } from '@mui/material';
-import { forwardRef, useMemo, useState } from 'react';
+import { AppBar, Box, Toolbar, IconButton, ButtonGroup, Button, Typography, Container, Avatar, Tooltip, Menu, MenuItem, BottomNavigation, BottomNavigationAction, Paper } from '@mui/material';
+import React, { useContext, useState, useEffect } from 'react';
+import { AccountContext } from '../Login/Account';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import { ListItemIcon } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { updateEmployee } from '../../actions/employees';
 import PeopleIcon from '@mui/icons-material/People';
 import PropTypes from 'prop-types';
@@ -20,17 +20,24 @@ import {
 } from 'react-router-dom';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+import { Auth, API, Storage } from 'aws-amplify';
 
 
 const MobileNav = () => {
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+    const { logout, employee } = useContext(AccountContext);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 const [anchorElNav, setAnchorElNav] = useState(null);
 const [anchorElUser, setAnchorElUser] = useState(null);
 const [anchorElReports, setAnchorElReports] = useState(null);
 const [ status, setStatus ] = useState({ status: 'InActive' });
 const [value, setValue] = useState(0);
+const [profilePhoto, setProfilePhoto] = useState('');
+
+useEffect(() => {
+    Storage.get(employee?.attributes?.picture, {
+        download: false
+    }).then(image => setProfilePhoto(image))
+},[])
 
 const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -56,34 +63,24 @@ const handleCloseUserMenu = () => {
 
 // Logout Function
 const logoutClickEmployee = () => {
-  dispatch(updateEmployee(user.result._id, status))
-  dispatch({ type: 'LOGOUT' })
-
-  navigate('/');
-
-  setUser(null);
+    logout()
 };
 
 const openProfile = () => {
     navigate(`/profile/${user.result._id}`)
   }
 
-const logoutClick = () => {
-    dispatch({ type: 'LOGOUT' })
-  
-    navigate('/');
-  
-    setUser(null);
-  };
     
 
         
   return (
-        <BottomNavigation sx={{ position: 'fixed' , bottom: 0, backgroundColor: '#ffffffeb', width: { xs: '100%' }, zIndex: '50', alignItems: 'center', justifyContent: 'center', display: { xs: 'flex', sm: 'none' }, boxShadow: '3', }} showLabels value={value} onChange={(event, newValue) => {setValue(newValue)}} >
-        <BottomNavigationAction onClick={() => navigate('/map')}  sx={{ color: '#048fb9' }} label='Map' icon={<MapIcon sx={{ color: '#048fb9' }} />} />
+    <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: '#ffffffeb', zIndex: '50', display: { xs: 'box', sm: 'none' } }} elevation={3}>
+
+        <BottomNavigation showLabels value={value} onChange={(event, newValue) => {setValue(newValue)}} >
+        <BottomNavigationAction onClick={() => navigate('/inventory')}  sx={{ color: '#048fb9' }} label='Inventory' icon={<MapIcon sx={{ color: '#048fb9' }} />} />
         <BottomNavigationAction onClick={() => navigate('/acquisitions')} sx={{ whiteSpace: 'nowrap', color: '#048fb9'  }} label='Properties' icon={<HomeIcon sx={{ color: '#048fb9' }}/>} />
 
-        <Box sx={{ flexGrow: 0, m: 2 }}>
+        <Box sx={{ flexGrow: 0, m: 0, padding: 0 }}>
             <BottomNavigationAction onClick={handleOpenReportsMenu} sx={{ color: '#048fb9' }} showLabel label='Reports' icon={<AssignmentIcon sx={{ color: '#048fb9' }} />} />
             <Menu
             sx={{ marginBottom: '45px' }}
@@ -118,11 +115,7 @@ const logoutClick = () => {
         <Box sx={{ flexGrow: 0, m: 1 }}>
             <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                {user?.result?.name ? 
-                <Avatar sx={{ fontSize: '35px' }} alt={user.result.name} src={user.result.profilePhoto} />  
-                :  
-                <Avatar sx={{ fontSize: '35px' }} alt="Keyglee" src="/static/images/avatar/2.jpg" />
-            }
+                <Avatar sx={{ fontSize: '35px' }} alt='Valor' src={profilePhoto} />  
             </IconButton>
             </Tooltip>
             <Menu
@@ -140,49 +133,30 @@ const logoutClick = () => {
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
             >
-                {user?.result?.accountLevel === 'Employee' && (
-                    <>
+
                     <MenuItem onClick={openProfile}>
                         <ListItemIcon>
                             <Settings fontSize="small" />
                         </ListItemIcon>
                         Profile
                     </MenuItem>  
-                    <MenuItem onClick={() => navigate('/employeedashboard')}>
+                    <MenuItem onClick={() => navigate('/acquisitions')}>
                         <ListItemIcon>
                             <DashboardIcon fontSize="small" />
                         </ListItemIcon>
-                        Dashboard
+                        Properties
                     </MenuItem>
-                    {user.result.securityLevel === 'System Administrator' && (
-                    <MenuItem onClick={() => navigate('/users')}>
-                        <ListItemIcon>
-                            <GroupsIcon fontSize="small" />
-                        </ListItemIcon>
-                        Employees
-                    </MenuItem>  
-                    )}
-                    {user.result.securityLevel === 'HR' || user.result.securityLevel === 'System Administrator' && (
-                    <MenuItem onClick={() => navigate('/hr/applications')}>
-                        <ListItemIcon>
-                            <PeopleIcon fontSize="small" />
-                        </ListItemIcon>
-                        Applications
-                    </MenuItem>  
-                    )}
                     <MenuItem onClick={logoutClickEmployee}>
                         <ListItemIcon>
                             <Logout fontSize="small" />
                         </ListItemIcon>
                         Logout
                     </MenuItem>  
-                    </>
-                )
-            }
         
             </Menu>
         </Box>
         </BottomNavigation>
+    </Paper>
   )
 }
 

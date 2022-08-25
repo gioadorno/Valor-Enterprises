@@ -27,7 +27,7 @@ const FileType = ({ prop, setOpenUpdate, employee }) => {
                 <MenuItem value='Directly Under Contract Traditional Wholesale'>Directly Under Contract Traditional Wholesale</MenuItem>
                 <MenuItem value='Exclusive Option Traditional Wholesale'>Exclusive Option Traditional Wholesale</MenuItem>
                 <MenuItem value='Directly Under Contract Traditional Wholesale'>Directly Under Contract Traditional Wholesale</MenuItem>
-                <MenuItem value='Exclusive Option Traditional Wholesale'>Exclusive Option Traditional Wholesale</MenuItem>
+                <MenuItem value='Non-Exclusive Option Traditional Wholesale'>Non-Exclusive Option Traditional Wholesale</MenuItem>
             </Select>
         </FormControl>
         ) :

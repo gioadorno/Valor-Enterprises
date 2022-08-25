@@ -18,14 +18,11 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import Logout from '@mui/icons-material/Logout';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import decode from 'jwt-decode';
-import { updateEmployee } from '../../actions/employees';
 import Login from '../Login/Login';
 import handbook from './Handbook.pdf';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { Modal } from '@mui/material';
-import { Storage } from 'aws-amplify';
-import { Auth, API } from 'aws-amplify';
+import { Auth, API, Storage } from 'aws-amplify';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -59,7 +56,6 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 export default function AccountMenu() {
   const { logout, employee } = useContext(AccountContext);
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -153,7 +149,7 @@ export default function AccountMenu() {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={openProfile}>
-          <Avatar src={profilePhoto} /> Profile
+          <Avatar src={profilePhoto || null} alt='Valorant' /> Profile
         </MenuItem>
         {/* <MenuItem>
           <Avatar /> My account

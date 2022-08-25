@@ -38,14 +38,16 @@ const Property = ({ prop, setOpen }) => {
 
 
     useEffect(() => {
-        API.get('valproperties', '/photos', {
-            queryStringParameters: {
-                propPhoto: prop.propPhoto
-            }
-        })
-        .then(url => setPropertyImage(url))
-        .catch(err => console.log(err))
-    }, [])
+        if(prop.propPhoto != '') {
+            API.get('valproperties', '/photos', {
+                queryStringParameters: {
+                    propPhoto: prop.propPhoto
+                }
+            })
+            .then(url => setPropertyImage(url))
+            .catch(err => console.log(err))
+        }
+    }, [propertyImage])
 
 
     
@@ -54,27 +56,27 @@ const Property = ({ prop, setOpen }) => {
         setDeleteModal(false)
     };
     const deleteProperty = async () => {
+        setDeleteModal(false)
         setIsDeleting(true)
         if(prop.propPhoto != '') {
-            return Storage.remove(prop.propPhoto)
+            Storage.remove(prop.propPhoto)
         }
-        API.del(apiName, path, {
+        setTimeout(() => {
+            setIsDeleting(false)
+            setOpen(true);
+            window.location.reload(false)
+        },2000)
+        await API.del(apiName, `/inventory/${prop.id}`, {
             body: {
                 id: prop.id
             }
-        })
-        .then(() => {
-            setDeleteModal(false)
-            setIsDeleting(false);
-            setOpen(true);
-            window.location.reload(false)
         })
     }
 
 
   return (
             // <Card sx={{ display: 'flex', marginBottom: '1em', flexDirection: 'column', justifyContent: 'space-between', borderRadius: '15px', height: '100%', position: 'relative', alignItems: 'center', alignContent: 'center', '&:hover': { transform: 'scale(1.01)' }}}>
-    <div className='bg-slate-100 w-5/6 xl:w-full h-full flex flex-col rounded-lg relative shadow-md my-1'>
+    <div className='bg-slate-100 w-5/6 xl:w-full flex flex-col rounded-lg relative items-center shadow-md my-1 pl-3'>
     <Modal open={deleteModal} style={{ zIndex: '10', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }} onClose={handleClose}>
                 <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', width: '30%', height: '30%', backgroundColor: 'white' }}>
                     <Typography>
@@ -90,35 +92,35 @@ const Property = ({ prop, setOpen }) => {
                     </Box>  
                 </Box>
             </Modal>
-            <Modal open={isDeleting} sx={{ zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', height: "100%", width: '100%' }} onClose={() => setIsDeleting(false)}>
+            <Modal open={isDeleting} sx={{ zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', height: "100vh", width: '100vh' }} onClose={() => setIsDeleting(false)}>
                 <div className='flex flex-col my-3 justify-center items-center'>
                     <h1 className='text-xl font-semibold text-white'>Deleting Property</h1>
                     <CircularProgress />
                 </div>
             </Modal>
-            <div className='w-full h-[300px] flex hover:opacity-90 hover:shadow-lg duration-200 ease-in-out p-5'>
-                <div className='w-[350px] relative'>
-                    <img className='rounded-xl w-full h-full' src={propertyImage || emptyPhoto} />
+            <div className='w-full h-auto sm:h-[300px] flex flex-col sm:flex-row hover:opacity-90 hover:shadow-lg duration-200 ease-in-out p-5'>
+                <div className='w-full sm:w-[350px] relative'>
+                    <img className='rounded-xl w-full h-full' src={propertyImage != '' ? propertyImage : emptyPhoto} />
                 </div>
                 <div className='flex-grow flex flex-col relative justify-start items-start'>
-                    <div className='flex opacity-90 pl-4'>
-                        <h6 className='font-semibold text-lg'>{prop.address.replace(', USA', '')}</h6>
+                    <div className='flex opacity-90 pl-4 pt-2 sm:pt-0'>
+                        <h6 className='font-semibold text-md sm:text-lg'>{prop.address.replace(', USA', '')}</h6>
                     </div>
                     <div className='flex opacity-70 pl-4 pt-2'>
-                    {prop.status === 'Active' ? (
+                    {prop.propStatus === 'Active' ? (
                             <p className='font-semibold text-xl text-[#00ff00]'>
                                 Active
                             </p>
-                        ) : prop.status === 'Pending' ?
+                        ) : prop.propStatus === 'Pending' ?
                             <p className='font-semibold text-xl text-[orange]'>
                             Pending
                             </p>
-                        : prop.status === 'Closed' ? (
+                        : prop.propStatus === 'Closed' ? (
                             <p className='font-semibold text-xl text-[#20b7b7]'>
                             Closed
                             </p>
                         )
-                        : prop.status === 'Cancelled' && (
+                        : prop.propStatus === 'Cancelled' && (
                             <p className='font-semibold text-xl text-[red]'>
                             Cancelled
                             </p>
@@ -138,27 +140,27 @@ const Property = ({ prop, setOpen }) => {
                     </div>
                     <div className='flex opacity-70 pl-4 pt-1'>
                         {prop.netPrice != '' && (
-                            <p>Wholesale Price: {prop.netPrice}&#160; | &#160;</p>
+                            <p>Wholesale Price: {prop.salePrice}</p>
                         )}
                         {prop.arv != '' && (
-                            <p>After Repair Value: {prop.arv}</p>
+                            <p>&#160; | &#160;After Repair Value: {prop.arv}</p>
                         )}
                     </div>
                     <div className='flex opacity-100 pl-4 pt-2'>
                         <button onClick={openDealText} className='hover:scale(1.1) hover:text-[#ca3434] hover:border-[#ca3434] transform duration-150 ease-in px-4 py-1 border-[1px] rounded-md border-[#426ddb] text-[#426ddb] font-semibold'>Deal Text</button>
-                        {employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 &&
+                        {employee?.signInUserSession?.accessToken?.payload['cognito:groups']?.indexOf('Operations') >= 0 &&
                         <button onClick={openBlast} className='hover:scale(1.1) hover:text-[#ca3434] ml-5 hover:border-[#ca3434] transform duration-150 ease-in px-4 py-1 border-[1px] rounded-md border-[#426ddb] text-[#426ddb] font-semibold'>Email Blast</button>
                         }
                     </div>
 
                     {prop.market != '' && (
-                        <h1 className='absolute bottom-1 left-4 text-md opacity-70'>Posted {moment(prop.date).fromNow()} by <strong>{prop.name}</strong></h1>
+                        <h1 className='inline-block sm:absolute py-5 sm:py-0 bottom-1 left-4 text-md opacity-70'>Posted {moment(prop.date).fromNow()} by <strong>{prop.name}</strong></h1>
                     )}
                 </div>
-                <div className='w-[300px] flex flex-col items-center justify-evenly px-4 text-center'>
+                <div className='w-[300px]  flex flex-col items-center justify-evenly px-4 text-center'>
                         <h1 onClick={openProperty} className='font-semibold text-lg cursor-pointer group pt-5'><span className='group-hover:text-[#df2a3c] group-hover:text-xl transform duration-150 ease-in'>View more property details</span></h1>
-                        {employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 &&
-                        <div className='flex px-2'>
+                        {employee?.signInUserSession?.accessToken?.payload['cognito:groups']?.indexOf('Admin') >= 0 &&
+                        <div className='flex px-2 pt-4 sm:pt-0'>
                             <h6 onClick={() => setDeleteModal(true)} className='font-semibold text-lg cursor-pointer group'><span className='group-hover:text-[#426ddb] group-hover:text-xl transform duration-150 ease-in'>Delete Property</span></h6>
                         </div>
                         }

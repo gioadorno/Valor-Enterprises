@@ -34,8 +34,8 @@ const BuyerContact = ({ prop, setOpenUpdate, employee }) => {
 
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0  ? 
-    <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-        <Autocomplete defaultValue={prop.signersName} freeSolo={true} style={{ width: '100%' }} id="combo-box" options={signerNameList?.map((prop) => prop.signersName)} renderInput={(params) => <TextField variant='outlined' {...params} label="Buyer Contact"  />} onInputChange={(e, value) => {
+    <FormControl style={{ width: '100%' }}>
+        <Autocomplete defaultValue={prop.signersName} freeSolo={true} style={{ width: '100%' }} id="combo-box" options={signerNameList?.map((prop) => prop.signersName)} renderInput={(params) => <TextField InputProps={{ disableUnderline: true }} variant='standard' {...params} label="Buyer Contact"  />} onInputChange={(e, value) => {
              API.put(apiName, path, {
                 body: {
                     id: prop.id,
@@ -48,9 +48,10 @@ const BuyerContact = ({ prop, setOpenUpdate, employee }) => {
         }} />
     </FormControl>
     :
-        <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-            <TextField variant='outlined' label='Buyer Contact' InputProps={{
+        <FormControl style={{ width: '100%' }}>
+            <TextField variant='standard' label='Buyer Contact' InputProps={{
             readOnly: true,
+            disableUnderline: true
         }} value={prop.signersName} />
         </FormControl>
   )

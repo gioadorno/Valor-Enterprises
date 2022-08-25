@@ -6,17 +6,17 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 const NetPrice = ({ prop, id, setOpenUpdate, employee }) => {
           // Props API
           const apiName = 'valproperties';
-          const path = `/properties/${prop.id}/netprice`;
+          const path = `/properties/${prop.id}/saleprice`;
           // 
 
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? 
-    <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-      <NumberFormat label='Wholesale Price' InputProps={{ startAdornment: ( <InputAdornment position='start'><AttachMoneyIcon fontSize='small'/></InputAdornment> ) }} customInput={TextField} defaultValue={prop.netPrice} onValueChange={({ value }) => {
+    <FormControl style={{ width: '100%' }}>
+      <NumberFormat variant='standard' label='Wholesale Price' InputProps={{ startAdornment: ( <InputAdornment position='start'><AttachMoneyIcon fontSize='small'/></InputAdornment> ), disableUnderline: true }} customInput={TextField} defaultValue={prop.salePrice} onValueChange={({ value }) => {
           API.put(apiName, path, {
             body: {
                 id: prop.id,
-                netPrice: value
+                salePrice: Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD'}).format(value).replace('.00', '')
             }
             })
             .then(() => {
@@ -25,10 +25,11 @@ const NetPrice = ({ prop, id, setOpenUpdate, employee }) => {
       }} thousandSeparator isNumericString prefix='' />
     </FormControl>
     :
-        <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-            <TextField label='Wholesale Price' variant='outlined' InputProps={{
+        <FormControl style={{ width: '100%' }}>
+            <TextField label='Wholesale Price' variant='standard' InputProps={{
             readOnly: true,
-        }} value={prop.netPrice} />
+            disableUnderline: true
+        }} value={prop.salePrice} />
         </FormControl>
   )
 }

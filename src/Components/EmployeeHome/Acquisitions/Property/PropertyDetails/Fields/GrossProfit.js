@@ -7,9 +7,10 @@ import { TextField, FormControl, Divider, InputLabel } from '@mui/material';
 const GrossProfit = ({ grossProfit }) => {
 
   return (
-        <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-            <TextField label='Gross Profit' variant='outlined' InputProps={{
+        <FormControl style={{ width: '100%' }}>
+            <TextField label='Gross Profit' variant='standard' InputProps={{
             readOnly: true,
+            disableUnderline: true
         }} value={grossProfit > 0 ? grossProfit : null} />
         </FormControl>
   )

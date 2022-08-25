@@ -11,8 +11,8 @@ const AddComp = ({ prop, employee, setOpenUpdate }) => {
 
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? 
-    <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-        <NumberFormat label='Additional Compensation' InputProps={{ startAdornment: ( <InputAdornment position='start'><AttachMoneyIcon fontSize='small'/></InputAdornment> ) }} customInput={TextField} defaultValue={prop.addComp} onValueChange={({ value }) => {
+    <FormControl style={{ width: '100%' }}>
+        <NumberFormat variant='standard' label='Additional Compensation' InputProps={{ startAdornment: ( <InputAdornment position='start'><AttachMoneyIcon fontSize='small'/></InputAdornment> ), disableUnderline: true }} customInput={TextField} defaultValue={prop.addComp} onValueChange={({ value }) => {
            API.put(apiName, path, {
             body: {
                 id: prop.id,
@@ -25,9 +25,10 @@ const AddComp = ({ prop, employee, setOpenUpdate }) => {
         }} thousandSeparator isNumericString prefix="" />
     </FormControl>
     :
-        <FormControl style={{ width: '100%', marginBottom: '.75em' }}>
-            <TextField label='Additional Compensation' variant='outlined' InputProps={{
+        <FormControl style={{ width: '100%' }}>
+            <TextField label='Additional Compensation' variant='standard' InputProps={{
             readOnly: true,
+            disableUnderline: true
         }} value={prop.addComp} />
         </FormControl>
   )
