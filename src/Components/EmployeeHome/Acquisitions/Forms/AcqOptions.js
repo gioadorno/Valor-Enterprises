@@ -390,8 +390,7 @@ const AcqOptions = ({ markets }) => {
   return (
         <div style={{ display: 'flex', height: '100%', paddingBottom: '2em'}}>
             <Snackbar open={open} autoHideDuration={10000} onClose={handleClose} message='Property has been submitted' action={propertyAction} />
-            <OuterBar />
-            <Box autoComplete={true} component='form' maxWidth='2xl' style={{ marginTop: '5em', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', flexWrap: 'wrap' }}>
+            <Box autoComplete={true} component='form' maxWidth='2xl' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', flexWrap: 'wrap' }}>
                 <Paper style={{ width: '95%', paddingBottom: '3em' }} elevation={12}>
                 <Toolbar sx={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
                         <Typography variant='h3' component='h4' style={{ width: '100%', textAlign: 'center' }}>
@@ -783,7 +782,6 @@ const AcqOptions = ({ markets }) => {
                     </Grid>
                 </Paper>
             </Box>
-            <MobileNav />
         </div>
   )
 }

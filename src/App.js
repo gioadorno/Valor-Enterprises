@@ -26,7 +26,7 @@ import YearPayout from './Components/EmployeeHome/HR/YearPayout/YearPayout';
 import Inventory from './Components/EmployeeHome/Inventory/Inventory';
 import EmailBlast from './Components/EmployeeHome/Acquisitions/Property/EmailBlast/EmailBlast';
 
-import { Account } from './Components/Login/Account';
+import { Account, AccountContext } from './Components/Login/Account';
 import Status from './Components/Login/Status';
 import Settings from './Components/Login/Settings';
 import ChangePassword from './Components/Login/ChangePassword';
@@ -46,111 +46,38 @@ import ToDetails from './Reroutes/ToDetails';
 import ToDealText from './Reroutes/ToDealText';
 import Sales from './Components/EmployeeHome/Inventory/Sales';
 import { SideMenu } from './Components/EmployeeHome/Inventory/SideMenu';
+import { InternalMenu, useStateContext } from './context/InternalContext';
 // import ClosedProps from './Components/EmployeeHome/Inventory/ClosedProps';
+import { InternalContext } from './context/InternalContext';
+import Side from './Components/EmployeeHome/Inventory/Side';
+import Navbar from './Components/EmployeeHome/Inventory/Navbar';
+
 
 Amplify.configure(awsConfig);
 
 
 
-// const ProtectedRoutes = () => {
-//     return (
-//         <Router>
-//         <Routes>
-//                 {/* Home */}
-//                 <Route path='/' exact element={<Homepage />} />
-
-//                 {/* Support */}
-//                 <Route path='/support' exact element={<Support />} />
-
-//                 {/* Reset Password */}
-//                 <Route path='/forgotpassword/:token' exact element={<ResetPassword />} />
-
-//                 {/* Employee Login */}
-//                 <Route path='/login' element={ 
-//                     <Account>
-//                         {/* <Status /> */}
-//                         <Login />
-//                         <Settings />
-//                     </Account>
-//                 } />
-                
-//                 <Route path='/dashboard' element={<RequireAuth><Dashboard /></RequireAuth> } />
-//                 <Route path='/acquisitions' exact element={<Acquisitions />} />
-//                 <Route path='/acquisitions/:id' exact element={<PropertyDetails />} />
-//                 <Route path='/profile/:id' exact element={<Profile />} />
-//                 <Route path='/acquisitions/search' exact element={<Acquisitions />} />
-
-//                 {/* Employee Reset Password */}
-//                 <Route path ='/user/resetpassword/:token' exact element={<ResetEmployeePassword />} />
-
-//                 {/* <Route path='/acqTable/:id' exact element={<AcqDetails />} /> */}
-//                 <Route path='/map' exact element={<Map />} />
-//                 <Route path='/buyerlogin' exact element={<GuestLogin />} />
-//                 {/* <Route path='/guestmap' exact element={<GuestMap />} /> */}
-
-//                 {/* Buyer Dashboard */}
-//                 {/* <Route path='/dashboard' exact element={<BuyerDashboard />} />
-//                 <Route path='/dashboard/:id' exact element={<Offer />} />
-//                 <Route path='/dashboard/search' exact element={<BuyerDashboard />} /> */}
-
-//                 {/* Buyer Map */}
-//                 <Route path='/propertymap' exact element={<PropertyMap />} />
-
-//                 {/* Buyer Profile */}
-//                 <Route path='/buyerprofile/:id' exact element={<BuyerProfile />} />
-
-//                 <Route path='/careers' exact element={<Careers />} />
-//                 {/* <Route path='/warehouse' exact element={<Warehouse />} /> */}
-//                 <Route path='/acqoptions' exact element={<AcqOptions />} />
-//                 <Route path='/acqpaperwork' exact element={<AcqPaperwork />} />
-//                 <Route path='/dispopaperwork' exact element={<DispoPaperwork />} />
-//                 <Route path='/users' exact element={<Employees />} />
-
-//                 {/* Inventory */}
-//                 <Route path='/inventory' exact element={<Inventory />} />
-
-//                 {/* Event Calendar */}
-//                 <Route path='/eventcalendar' exact element={<EventCalendar />} />
-
-//                 {/* Deal Text */}
-//                 <Route path='/dealtext/:id' exact element={<DealText />} />
-
-//                 {/* Onboarding */}
-//                 <Route path='/onboarding/videos' exact element={<Videos />} />
-
-//                 {/* HR */}
-//                 <Route path='/hr' exact element={<HR />} />
-//                 <Route path='/hr/postjob' exact element={<PostJob />} />
-//                 <Route path='/hr/applications' exact element={<Applications />} />
-//                 <Route path='/hr/payoutdata' exact element={<PayoutData />} />
-//                 <Route path='/hr/removepayouts' exact element={<RemovePayouts />} />
-//                 <Route path='/hr/yearpayout' exact element={<YearPayout />} />
-
-//                 {/* IT Dashboard */}
-//                 <Route path='/itdashboard' exact element={<ITDashboard />} />
-
-
-//                 {/* Reports */}
-//                 <Route path='/callreports' exact element={<OutboundCallsFull />} />
-//                 <Route path='/opportunityreports' exact element={<Opportunities />} />
-//                 <Route path='/opportunityreports/:status' exact element={<Opportunities />} />
-//                 <Route path='/notauthorized' exact element={<NotAuthorized />} />
-//                 <Route path='/submitproperty' exact element={<SubmitProperty />} />
-
-//                 {/* Create User */}
-//                 <Route path='/createuser' exact element={<CreateUser />} />
-            
-//         </Routes>
-//     </Router>
-//     )
-// }
-
 const App = () => {
+    const { activeMenu, showOuterBar } = useStateContext();
+    const [ employee, setEmployee ] = useState('');
 
     return (
         <Router>
-            <Account>
-                <SideMenu>
+            <Account employee={employee} setEmployee={setEmployee}>
+                <div className='flex relative'>
+                {activeMenu ? (
+                    <div className='w-80 fixed sidebar'>
+                        <Side />
+                    </div>
+                ) : (
+                    <div className='w-0'>
+                        <Side />
+                    </div>
+                )}
+                <div className={`bg-[#154a87b8] min-h-screen w-full ${activeMenu ? 'md:ml-80' : 'flex-2'}`}>
+                    <div className={`${employee === '' ? 'hidden' : 'fixed'} md:static shadow-lg navbar w-full`}>
+                        <Navbar />
+                    </div>
                 
             <Routes>
                 {/* Home */}
@@ -226,8 +153,9 @@ const App = () => {
                 <Route path='/notauthorized' exact element={<NotAuthorized />} />
             
                 </Routes>
-                </SideMenu>
-            </Account>
+                    </div>
+                </div>
+                </Account>
         </Router>
     )
 }

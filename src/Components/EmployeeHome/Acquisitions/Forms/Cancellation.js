@@ -149,8 +149,7 @@ const response = await fetch(process.env.REACT_APP_CANCEL, {
   return (
 <div onLoad={() => setCancelForm({ ...cancelForm, name: employee?.attributes?.name })} style={{ display: 'flex', height: '100%', paddingBottom: '2em', width: '100%'}}>
             <Snackbar open={open} autoHideDuration={10000} onClose={handleClose} message='Cancel form has been submitted' action={propertyAction} />
-            <OuterBar />
-            <Box autoComplete={true} component='form' maxWidth='2xl' style={{ marginTop: '5em', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', flexWrap: 'wrap', pb: 5 , width: '100%'}}>
+            <Box autoComplete={true} component='form' maxWidth='2xl' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', flexWrap: 'wrap', pb: 5 , width: '100%'}}>
                 <Paper style={{ width: '95%', paddingBottom: '3em' }} elevation={12}>
                 <Toolbar sx={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
                         <Typography variant='h3' component='h4' style={{ width: '100%', textAlign: 'center' }}>

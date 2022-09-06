@@ -283,11 +283,12 @@ const TC = () => {
 
   const handleDate = () => {
     setOpenDate(true)
+    setProperties(closedSort)
   }
 
   console.log(startDate, endDate)
     return (
-      <div className='w-full h-full flex items-center flex-col relative bg-[#154a87b8]'>
+      <div className='w-full h-full flex items-center flex-col relative'>
         {openDate &&
         <div style={{ zIndex: 99999999 }}  className='fixed w-full h-screen flex items-center justify-center bg-[#00000062]'>
             <div style={{ zIndex: 99999999 }} className='w-3/5 fixed h-full flex items-center justify-center flex-col'>
@@ -301,7 +302,7 @@ const TC = () => {
                     <div onClick={() => setOpenDate(false)} className='w-full h-full absolute' />
         </div>
         }
-        <Box sx={{ position: 'fixed', right: 10, bottom: 10, zIndex: '5', flexGrow: 1, transform: 'translateZ(0px)' }}>
+        {/* <Box sx={{ position: 'fixed', right: 10, bottom: 10, zIndex: '5', flexGrow: 1, transform: 'translateZ(0px)' }}>
                     <SpeedDial
                         ariaLabel="Forms" 
                         icon={<SpeedDialIcon />}
@@ -318,9 +319,9 @@ const TC = () => {
                         />
                         ))}
                     </SpeedDial>
-            </Box>
+            </Box> */}
         {/* <h1 className=' text-lg absolute top-1 left-2 animate-pulse font-semibold w-auto text-white cursor-pointer z-[99999]' onClick={() => navigate('/acquisitions')}>Back to dashboard</h1> */}
-        <nav className='relative overflow-x-scroll scrollbar-hide w-full overflow-y-hidden snap-x mt-2 py-4 px-12'>
+        <nav className='relative overflow-x-scroll scrollbar-hide w-full overflow-y-hidden snap-x py-4 px-12'>
           <p className=" z-[-50] text-center pt-12 italic">Preset Filters</p>
         <div className='flex px-2 sm:px-20 text-2xl whitespace-nowrap w-full space-x-4 xl:space-x-20 mt-4 pb-4 '>
             {

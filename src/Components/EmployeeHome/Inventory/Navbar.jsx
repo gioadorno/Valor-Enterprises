@@ -5,9 +5,12 @@ import { FilterContext } from './SideMenu';
 import { AiOutlineMenu } from "react-icons/ai";
 import { AccountContext } from "../../Login/Account";
 import { Auth } from 'aws-amplify';
+import { useStateContext } from '../../../context/InternalContext';
+
+// const greetings = ['Hello', "Welcome", "Keep up the drive"]
 
 const Navbar = () => {
-    const { activeMenu, setActiveMenu, userProfile, setUserProfile } = useContext(FilterContext);
+    const { activeMenu, setActiveMenu, userProfile, setUserProfile } = useStateContext();
     const [ employee, setEmployee ] = useState('');
 
     const getSession = async () => {
@@ -26,7 +29,7 @@ const Navbar = () => {
     //     }
     // ]
   return (
-    <div className='flex justify-between p-2 md:mx-6 relative'>
+    <div className={`flex justify-between p-2 md:mx-6 relative bg-transparent`}>
         <TooltipComponent content='Sidebar' position='RightCenter'>
             <button type='button' onClick={() => setActiveMenu((prevActiveMenu) => !prevActiveMenu)} className='relative text-xl rounded-full p-3 hover:drop-shadow-xl hover:scale-105 ease-in transform' >
                 <AiOutlineMenu className='text-white' />
@@ -34,7 +37,7 @@ const Navbar = () => {
         </TooltipComponent>
         <div className='flex'>
             <TooltipComponent content='Profile' position='BottomCenter'>
-                <div className='flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg' onClick={() => setUserProfile((prevProfileMenu) => !prevProfileMenu)}>
+                <div className='flex items-center justify-center gap-2 cursor-pointer p-2 hover:bg-light-gray rounded-lg' onClick={() => setUserProfile((prevProfileMenu) => !prevProfileMenu)}>
                     <p className='text-white font-serif text-lg'>Hello {employee?.attributes?.name}</p>
                 </div>
             </TooltipComponent>

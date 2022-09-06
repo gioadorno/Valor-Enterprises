@@ -9,6 +9,7 @@ import ChangePassword from './ChangePassword';
 import Status from './Status';
 import { Auth } from 'aws-amplify';
 import NewPassword from './NewPassword';
+import { useStateContext } from '../../context/InternalContext';
 
 
 const Login = () => {
@@ -18,7 +19,8 @@ const Login = () => {
 ;    const location = useLocation();
     const navigate = useNavigate();
 
-    const { authenticate, userChangePassword, setUserChangePassword, setUserName, invalid, employee } = useContext(AccountContext);
+    const { authenticate, userChangePassword, setUserChangePassword, setUserName, invalid, employee, } = useContext(AccountContext);
+    const { setOuterBar } = useStateContext();
 
   //   let from = location.state?.from?.pathname || '/';
   // useEffect(() => {
@@ -51,7 +53,7 @@ useEffect(() => {
 
   return (
     userChangePassword === false ?
-      <div className='flex flex-col relative h-[800px] xl:h-full w-full items-center justify-center'>
+      <div className='flex flex-col relative h-[800px] xl:h-full w-full items-center justify-center z-[9999999]'>
         <h1 onClick={() => navigate('/careers')} className='absolute left-5 font-sans bottom-4 text-white text-md cursor-pointer hover:animate-pulse hover:scale-105 transform duration-200 ease-in drop-shadow-md z-[500] whitespace-nowrap'>Careers Page</h1>
         <div className='w-full h-screen flex items-center justify-center bg-[#00000025] z-[100] overflow-y-auto'>
         <form onSubmit={login} className='flex flex-col items-center w-full sm:w-3/4 lg:w-2/4 2xl:w-1/3 h-3/4'>

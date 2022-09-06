@@ -6,13 +6,12 @@ import { Auth, API } from 'aws-amplify';
 
 const AccountContext = createContext();
 
-const Account = ({ children }) => {
+const Account = ({ children, employee, setEmployee }) => {
     const navigate = useNavigate();
 
 
     const [ loggedIn, setLoggedIn ] = useState(false);
     const [ userName, setUserName ] = useState('');
-    const [ employee, setEmployee ] = useState('');
     const [ userChangePassword, setUserChangePassword ] = useState(false);
     const [ invalid, setInvalid ] = useState(false);
 

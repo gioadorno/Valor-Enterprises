@@ -206,8 +206,7 @@ const DispoPaperwork = ({ markets }) => {
   return (
         <div style={{ display: 'flex', height: '100%', paddingBottom: '2em'}}>
             <Snackbar open={open} autoHideDuration={10000} onClose={handleClose} message='Form has been submitted' action={propertyAction} />
-            <OuterBar />
-            <Box component='form' maxWidth='2xl' sx={{ marginTop: '5em', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', flexWrap: 'wrap' }}>
+            <Box component='form' maxWidth='2xl' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', flexWrap: 'wrap' }}>
                 <Paper sx={{ width: '95%', paddingBottom: '3em' }} elevation={12}>
                 <Toolbar sx={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
                         <Typography variant='h3' component='h4' sx={{ width: '100%', textAlign: 'center' }}>

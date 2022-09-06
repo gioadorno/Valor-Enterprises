@@ -179,6 +179,26 @@ app.get('/dispoemployees', (req, res) => {
   return result
 })
 
+// Get Files
+
+app.get('/getfiles', (req, res) => {
+  const s3 = new AWS.S3();
+
+  const params = {
+    Key: `us-west-1:144c3712-aba0-439a-8ab3-3dff559428e3/${req.query.files}`,
+    Bucket: 'photos141128-dev'
+  };
+
+  s3.getSignedUrl('getObject', params, function (err, url) {
+    if (err) {
+      console.error(err)
+      next(err);
+    } else {
+      res.send(url)
+    }
+  })
+})
+
 // Get Events
 app.get('/events', (req, res) => {
   let params = {

@@ -1,10 +1,10 @@
 import React, { useContext} from 'react';
-import { FilterContext } from './SideMenu';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import Side from './Side';
+import { InternalContext, useStateContext } from '../../../context/InternalContext';
 
 const SideBar = () => {
-    const { activeMenu, setActiveMenu, userProfile, setUserProfile } = useContext(FilterContext);
+    const { activeMenu, setActiveMenu, userProfile, setUserProfile } = useStateContext();
   return (
     activeMenu ? (
         <div className='w-80 fixed sidebar bg-white'>

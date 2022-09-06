@@ -8,13 +8,37 @@ import { useNavigate } from "react-router-dom";
 
 const createID = () => Math.random().toString(36).substring(2) + Date.now().toString(36);
 
+
 const Files = ({ prop, setOpenUpdate, id, employee }) => {
     const navigate = useNavigate();
+    // const [ propFiles, setPropFiles ] = useState([]);
+    
 
     const name = employee?.attributes?.name;
     // API
     const apiName = 'valproperties';
     const path = `/properties/${prop.id}/files`;
+
+    // const getFilePath = `/getfiles`;
+    // const init = {
+    //     queryStringParameters: {
+    //         files: id
+    //     }
+    // };
+
+
+    // useEffect(() => {
+    //     prop?.files?.map(file => {
+    //         API.get(apiName, getFilePath, {
+    //             queryStringParameters: {
+    //                 files: file.fileName,
+    //             }
+    //         }).then((res) => setPropFiles({ ...propFiles, res }))
+    //         .catch(err => console.log(err))
+    //     })
+    // },[prop])
+
+    // console.log(propFiles)
 
     const [ deleteModal, setDeleteModal] = useState(false);
 
@@ -56,8 +80,6 @@ const Files = ({ prop, setOpenUpdate, id, employee }) => {
             })
             .catch(error => console.log(error))
     };
-
-    console.log(uploadFiles)
 
     
 
@@ -114,10 +136,32 @@ const Files = ({ prop, setOpenUpdate, id, employee }) => {
         )
     }
 
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename || 'download';
+  const clickHandler = () => {
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+      a.removeEventListener('click', clickHandler);
+    }, 150);
+  };
+  a.addEventListener('click', clickHandler, false);
+  a.click();
+  return a;
+}
+
     const openPropFile = async (pdf) => {
-        Storage.get(pdf)
-        .then(newFile => setFile(newFile))
+        const result = await Storage.get(pdf, {
+            level: 'protected',
+            download: true
+        })
+        downloadBlob(result.Body, 'filename')
     }
+
+    console.log(propertyFile)
+
 
 
   return (
@@ -137,10 +181,9 @@ const Files = ({ prop, setOpenUpdate, id, employee }) => {
         {prop?.files?.map((file) => 
                 <Item className="grid grid-cols-2 items-center justify-center py-2" elevation={4} onMouseOver={() => {
                     setGetFileID(file)
-                    openPropFile(file.fileName)
                     }}>
                     <Grid item>
-                    <a className="font-semibold text-lg text-teal-600 hover:scale-105 hover:text-cyan-500 transform duration-200 ease-in" href={propertyFile} target='_blank' rel="noopener noreferrer" >
+                    <a className="font-semibold text-lg text-teal-600 hover:scale-105 hover:text-cyan-500 transform duration-200 ease-in" onClick={() => openPropFile(file.fileName)} target='_blank'>
                         {file.fileName}
                     </a>
                     </Grid>

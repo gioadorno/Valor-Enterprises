@@ -7,10 +7,15 @@ import {marketList} from './Markets/markets';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRangePicker } from 'react-date-range';
+import { InternalContext, useStateContext } from '../../../context/InternalContext';
+import { links } from './Links/MenuData';
+import { NavLink } from 'react-router-dom';
+import { linkClasses, ListItemSecondaryAction } from '@mui/material';
+import { AccountContext } from '../../Login/Account';
 
 const initialState = {
-    create: true,
-    saved: false
+    navigation: true,
+    smartView: false
 }
 
 const Filter = ({ title, children }) => (
@@ -20,48 +25,59 @@ const Filter = ({ title, children }) => (
     </div>
 )
 
+const activeLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-rose-600 text-md m-2 animate-pulse hover:scale-105 transform duration-150 ease-in';
+const normalLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-md text-blue-900 hover:scale-105 transform duration-200 ease-in hover:bg-light-gray m-2';
+
 const Side = () => {
     const { 
     activeMenu, setActiveMenu,
-    market, setMarket,
-    status, setStatus,
-    ipStartDate, setIPStartDate,
-    ipEndDate, setIPEndDate,
-    openIP, setOpenIP
-    } = useContext(FilterContext);
+    screenSize
+    // market, setMarket,
+    // status, setStatus,
+    // ipStartDate, setIPStartDate,
+    // ipEndDate, setIPEndDate,
+    // openIP, setOpenIP
+    } = useStateContext();
+    const { logout, employee } = useContext(AccountContext);
     const navigate = useNavigate();
     const [isClicked, setIsClicked] = useState(initialState);
    
+    const handleCloseSideBar = () => {
+        if(activeMenu && screenSize <= 900) {
+          setActiveMenu(false)
+        }
+      }
 
     const handleClick = (clicked) => {
         setIsClicked({ ...initialState, [clicked]: true })
     };
 
-    const handleSelect = (ranges) => {
-        setIPStartDate({ ...ipStartDate, value: ranges.selection.startDate});
-        setIPEndDate({ ...ipEndDate, value: ranges.selection.endDate});
-    };
+    // const handleSelect = (ranges) => {
+    //     setIPStartDate({ ...ipStartDate, value: ranges.selection.startDate});
+    //     setIPEndDate({ ...ipEndDate, value: ranges.selection.endDate});
+    // };
 
-    const selectionRange = {
-        startDate: ipStartDate.value,
-        endDate: ipEndDate.value,
-        key: 'selection'
-    };
+    // const selectionRange = {
+    //     startDate: ipStartDate.value,
+    //     endDate: ipEndDate.value,
+    //     key: 'selection'
+    // };
 
-    const handleMarket = (e) => {
-        setMarket({ ...market, value: e.target.value, operator: 'equal' })
-    };
-    const handleStatus = (e) => {
-        setStatus({ ...status, value: e.target.value, operator: 'equal' })
-    };
+    // const handleMarket = (e) => {
+    //     setMarket({ ...market, value: e.target.value, operator: 'equal' })
+    // };
+    // const handleStatus = (e) => {
+    //     setStatus({ ...status, value: e.target.value, operator: 'equal' })
+    // };
 
-    console.log(market)
+    const signOut = () => {
+        logout()
+      };
 
-    console.log(ipStartDate, ipEndDate)
 
   return (
-    <div className=' bg-[#ddedff] h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10'>
-        {openIP &&
+    <div className=' bg-[#16456c12] h-screen relative md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10'>
+        {/* {openIP &&
         <div className='fixed w-full h-screen flex items-center justify-center bg-[#00000062]'>
             <div style={{ zIndex: 999999 }} className='w-3/5 fixed h-full flex items-center justify-center'>
                     <div className='flex flex-col'>
@@ -70,11 +86,11 @@ const Side = () => {
             </div>
                     <div onClick={() => setOpenIP(false)} className='w-full h-full absolute' />
         </div>
-        }
+        } */}
+                <p className='text-sm absolute bottom-3 right-4 cursor-pointer animate-pulse' onClick={signOut}>Logout</p>
         {activeMenu && (
             <>
             <div className='flex justify-between items-center'>
-                <p className='text-md cursor-pointer animate-pulse pl-4 pt-2' onClick={() => navigate('/acquisitions')}>Back to dashboard</p>
                 <TooltipComponent content='Menu' position='BottomCenter'>
               <button type='button' onClick={(prevActiveMenu) => !prevActiveMenu} className='text-xl rounded-full p-3 hover:bg-light-gray mt-4 block md:hidden'>
                 <MdOutlineCancel />
@@ -82,63 +98,47 @@ const Side = () => {
             </TooltipComponent>
             </div>
             <div className='flex items-center justify-center relative text-center'>
-                <p className='text-center italic text-md font-serif font-semibold py-5 px-1 flex-1 whitespace-nowrap'>Smart Views</p>
+                <p className='text-center italic text-md font-serif font-semibold py-5 px-1 flex-1 whitespace-nowrap'>Valor Enterprises</p>
             </div>
             <div className='flex items-center justify-center mt-7 w-full'>
                 <div className='w-4/5 border-[1px] items-center justify-evenly border-cyan-900 rounded-lg flex'>
-                    <button className={`${isClicked.create && 'animate-pulse text-rose-400 bg-slate-100'} rounded-lg border-r-[1px] border-cyan-900 w-1/2 hover:text-cyan-500 hover:animate-pulse hover:bg-slate-50`} onClick={() => handleClick('create')}>
-                        Create
+                    <button className={`${isClicked.navigation && 'animate-pulse text-rose-400 bg-slate-100'} rounded-lg border-r-[1px] border-cyan-900 w-1/2 hover:text-cyan-500 hover:animate-pulse hover:bg-slate-50`} onClick={() => setIsClicked({ ...isClicked, navigation: true, smartView: false })}>
+                        Navigation
                     </button>
-                    <button className={`${isClicked.saved && 'animate-pulse text-rose-400 bg-slate-100'}  rounded-lg w-1/2 hover:text-cyan-900 hover:animate-pulse hover:bg-slate-50`} onClick={() => handleClick('saved')}>
-                        Saved
+                    <button className={`${isClicked.smartView && 'animate-pulse text-rose-400 bg-slate-100'}  rounded-lg w-1/2 hover:text-cyan-900 hover:animate-pulse hover:bg-slate-50`} onClick={() => setIsClicked({ ...isClicked, navigation: false, smartView: true })}>
+                        Smart View
                     </button>
                 </div>
             </div>
+            {isClicked.navigation &&
             <div className='flex flex-col px-2 py-4'>
-                <Filter title='Market'>
-                    <select defaultValue={market.value} onChange={handleMarket} className='form-select px-1 py-1 rounded-full'>
-                        <option value='' />
-                        {marketList.map((market) => (
-                            <option value={market.market} key={market.market}>
-                                {market.market}
-                            </option>
-                            ))}
-                    </select>
-                </Filter>
-                <Filter title='Status'>
-                <select defaultValue={status.value} onChange={handleStatus} className='form-select px-1 py-1 rounded-full'>
-                        <option value={null} />
-                        <option value='Active'>
-                            Active
-                        </option>
-                        <option value='Pending'>
-                            Pending
-                        </option>
-                        <option value='Cancelled'>
-                            Cancelled
-                        </option>
-                        <option value='Closed'>
-                            Closed
-                        </option>
-                        <option value='In Progress'>
-                            In Progress
-                        </option>
-                    </select>
-                </Filter>
-                <Filter title='IP'>
-                    <button className='px-3 py-1 border-2 border-black rounded-full' onClick={() => setOpenIP(true)}>Select Dates</button>
-                    <div className='flex flex-col items-center justify-center'>
-                        <div className='flex'>
-                            <label className='pr-3'>Start Date:</label>
-                            <input disabled value={new Date(ipStartDate.value).toLocaleDateString('us-EN', { month: '2-digit', day: '2-digit', year: "numeric" })} />
-                        </div>
-                        <div className='flex'>
-                        <label className='pr-3'>End Date:</label>
-                        <input disabled value={new Date(ipEndDate.value).toLocaleDateString('us-EN', { month: '2-digit', day: '2-digit', year: "numeric" })} />
-                        </div>
+                {links.map((item) => (
+                    <div key={item.title}>
+                        <p className='text-black m-3 mt-4 uppercase'>
+                            {item.title}
+                        </p>
+                        {item.links.map((link) => (
+                            <NavLink
+                            to={`/${link.to}`}
+                            key={link.to}
+                            onClick={handleCloseSideBar}
+                            className={({isActive}) => isActive ? activeLink : normalLink}
+                            >
+                                {link.icon}
+                                <span className='capitalize '>
+                                    {link.name}
+                                </span>
+                            </NavLink>
+                        ))}
                     </div>
-                </Filter>
+                ))}
             </div>
+            }
+            {isClicked.smartView &&
+            <div className='flex flex-col px-2 py-4'>
+                Work in progress
+            </div>
+            }
             </>
         )}
     </div>
