@@ -122,23 +122,24 @@ import {
 
 export const mainListItems = (
   <React.Fragment>
-        {/* <ListItemLink style={{ width: '100%' }} placement='right' title='Dashboard' primary="Dashboard" to='/dashboard' icon={<DashboardIcon />} /> */}
+        
         {/* <ListItemLink style={{ width: '100%' }} placement='right' title='Map' primary="Map" to='/map' icon={<AddLocationAltIcon />} /> */}
-        <ListItemLink style={{ width: '100%' }} placement='right' title='Properties' primary="Properties" to='/acquisitions?page=1' icon={<MapsHomeWorkIcon />} />
-        <ListItemLink style={{ width: '100%' }} placement='right' title='Inventory' primary="Inventory" to='/inventory' icon={<ListAltIcon />} />
+        <ListItemLink style={{ width: '100%' }} placement='right' title='Properties' primary="Properties" to='/internal' icon={<MapsHomeWorkIcon />} />
+        {/* <ListItemLink style={{ width: '100%' }} placement='right' title='Ops' primary="Ops" to='/operations' icon={<DashboardIcon />} /> */}
+        {/* <ListItemLink style={{ width: '100%' }} placement='right' title='Closed' primary="Closed" to='/closedproperties' icon={<ListAltIcon />} /> */}
         <ListItemLink style={{ width: '100%' }} placement='right' title='Calendar/Events' primary="Calendar/Events" to='/eventcalendar' icon={<DateRangeIcon />} />
   </React.Fragment>
 );
 
-export const secondaryListItems = (
-  <React.Fragment>
-    <ListSubheader sx={{ color: 'black' }} component="div" inset>
-      Reports
-    </ListSubheader>
-    <ListItemLink style={{ width: '100%' }} placement='right' title='Calls & Texts' primary="Calls & Texts" to='/callreports' icon={<PhoneIcon />} />
-      <ListItemLink style={{ width: '100%' }} placement='right' title='Opportunities' primary="Opportunities" to='/opportunityreports' icon={<AttachMoneyIcon />} />
-  </React.Fragment>
-);
+// export const secondaryListItems = (
+//   <React.Fragment>
+//     <ListSubheader sx={{ color: 'black' }} component="div" inset>
+//       Reports
+//     </ListSubheader>
+//     <ListItemLink style={{ width: '100%' }} placement='right' title='Calls & Texts' primary="Calls & Texts" to='/callreports' icon={<PhoneIcon />} />
+//       <ListItemLink style={{ width: '100%' }} placement='right' title='Opportunities' primary="Opportunities" to='/opportunityreports' icon={<AttachMoneyIcon />} />
+//   </React.Fragment>
+// );
 
 export const onboardingListItems = (
   <React.Fragment>

@@ -19,20 +19,8 @@ const AcqGP = ({ prop, acqGPFifty, grossProfit, setOpenUpdate }) => {
     };
 
   return (
-    <FormControl style={{ width: '100%' }}>
-    <TextField id="standard-read-only-input" label="Acq Projected GP" value={prop.acqGP} InputProps={{readOnly: true, disableUnderline: true }} variant="standard"/>
-    {prop.dealSplit == '100' && acqGPFifty > 0 && (
-        <TextField id="standard-read-only-input" label="Acq Projected GP" value={grossProfit} InputProps={{readOnly: true, disableUnderline: true }} variant="standard"/>
-    ) 
-    }
-    {prop.dealSplit == '50/50' && acqGPFifty > 0 && (
-        <TextField id="standard-read-only-input" label="Acq Projected GP" value={acqGPFifty} InputProps={{readOnly: true, disableUnderline: true }} variant="standard"/>
-    ) 
-    }
-    {prop.dealSplit == 'Other' && (
+    <FormControl style={{ width: '100%'  }}>
         <TextField onChange={handleAcqGP} id="standard-read-only-input" InputProps={{ disableUnderline: true }} label="Acq Projected GP" defaultValue={prop.acqGP} variant="standard"/>
-    ) 
-    }
     </FormControl>
   )
 }

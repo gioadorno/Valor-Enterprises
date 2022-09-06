@@ -1,7 +1,7 @@
 import { TextField, FormControl } from "@mui/material";
 import { API } from 'aws-amplify';
 
-const SoldGP = ({ prop, id, setOpenUpdate, employee }) => {
+const SoldGP = ({ prop, id, setOpenUpdate, employee,  }) => {
         // Props API
         const apiName = 'valproperties';
         const path = `/properties/${prop.id}/soldgp`;

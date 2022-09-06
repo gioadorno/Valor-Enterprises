@@ -147,8 +147,8 @@ import { AccountContext } from '../Login/Account';
             <Divider />
             <List sx={{ overflow: 'hidden' }} component="nav">
               {mainListItems}
-              <Divider sx={{ my: 1 }} />
-              {secondaryListItems}
+              {/* <Divider sx={{ my: 1 }} />
+              {secondaryListItems} */}
               <Divider sx={{ my: 1 }} />
               {onboardingListItems}
               {employee?.signInUserSession?.accessToken?.payload['cognito:groups']?.indexOf('HR') >= 0 && (

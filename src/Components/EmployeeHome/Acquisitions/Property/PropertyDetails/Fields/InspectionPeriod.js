@@ -30,7 +30,7 @@ const InspectionPeriod = ({ prop, id, setOpenUpdate, employee }) => {
     {employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? 
     <DatePicker
       label="Inspection Period"
-      value={newDate}
+      value={newDate || ''}
       onChange={handleInspectionPeriod}
       renderInput={(params) => <TextField InputProps={{ disableUnderline: true }} variant='standard' style={{ width: '100%' }} {...params} />}
     />

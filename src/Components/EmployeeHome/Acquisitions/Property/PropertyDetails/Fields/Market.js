@@ -1,11 +1,14 @@
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { API } from 'aws-amplify';
+import { useState, useEffect } from 'react';
 
 const Market = ({ prop, id, setOpenUpdate, markets, employee }) => {
         // Props API
         const apiName = 'valproperties';
         const path = `/properties/${prop.id}/market`;
         // 
+
+        const [ market, setMarket ] = useState(prop.market)
     const handleMarket = (e) => {
         API.put(apiName, path, {
             body: {
@@ -15,15 +18,18 @@ const Market = ({ prop, id, setOpenUpdate, markets, employee }) => {
             })
             .then(() => {
             setOpenUpdate(true)
-            window.location.reload(false)
+            setMarket(e.target.value)
             })
     };
 
+        useEffect(() => {
+        setMarket(prop.market)
+    },[prop])
+
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? (
-        <FormControl sx={{ width: '100%', mb: 2 }}>
-            <InputLabel>Market</InputLabel>
-            <Select variant="outlined" name='market' labelId="market" id="market" label='Market' defaultValue={prop.market} onChange={handleMarket}>
+        <FormControl sx={{ width: '100%' }}>
+            <Select InputProps={{ disableUnderline: true }} variant="standard" name='market' labelId="market" id="market" label='Market' defaultValue={market} onChange={handleMarket}>
             <MenuItem value={markets.orlando}>
                     {markets.orlando}
                 </MenuItem>
@@ -57,6 +63,9 @@ const Market = ({ prop, id, setOpenUpdate, markets, employee }) => {
                 <MenuItem value={markets.sanAntonio}>
                     {markets.sanAntonio}
                 </MenuItem>
+                <MenuItem value='Phoenix, AZ'>
+                    Phoenix, AZ
+                </MenuItem>
                 <MenuItem value={markets.tucson}>
                     {markets.tucson}
                 </MenuItem>
@@ -81,9 +90,8 @@ const Market = ({ prop, id, setOpenUpdate, markets, employee }) => {
             </Select>
         </FormControl>
         ) :
-        <FormControl sx={{ width: '100%', mb: 2 }}>
-        <InputLabel>Market</InputLabel>
-        <Select label='Market' disabled defaultValue={prop.market} />
+        <FormControl sx={{ width: '100%' }}>
+        <TextField InputProps={{ disableUnderline: true }} variant='standard' label='Market' disabled value={prop.market} />
         </FormControl>
   )
 }

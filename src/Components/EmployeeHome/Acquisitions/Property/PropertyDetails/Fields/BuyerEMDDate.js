@@ -13,7 +13,7 @@ const BuyerEMDDate = ({ prop, setOpenUpdate, employee }) => {
       const path = `/properties/${prop.id}/buyeremddate`;
       // 
 
-      const [ newDate, setNewDate ] = useState(prop.buyersEMDDate)
+      const [ newDate, setNewDate ] = useState(prop.buyerEMDDate)
 
     const handleBuyersEMDDate = (newValue) => {
       API.put(apiName, path, {
@@ -33,14 +33,14 @@ const BuyerEMDDate = ({ prop, setOpenUpdate, employee }) => {
     {employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? 
     <DatePicker
       label="Date Buyer's EMD was Deposited"
-      value={newDate}
+      value={newDate != '' ? newDate : ''}
       onChange={handleBuyersEMDDate}
       renderInput={(params) => <TextField InputProps={{ disableUnderline: true }} variant='standard' style={{ width: '100%'}} {...params} />}
     />
     :
     <DatePicker
     label="Date Buyer's EMD was Deposited"
-    value={prop.buyersEMDDate}
+    value={prop.buyerEMDDate}
     readOnly
     renderInput={(params) => <TextField InputProps={{ disableUnderline: true }} variant='standard' style={{ width: '100%' }} {...params} />}
   />

@@ -21,9 +21,9 @@ const TransactionType = ({ prop, id, setOpenUpdate, transaction, employee }) => 
     
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? (
-        <FormControl sx={{ width: '100%', mb: 2 }} variant='outlined'>
-            <InputLabel variant='outlined'>Transaction Type</InputLabel>
-            <Select name='transactionType' label='Transaction Type' labelId="transactionType" id="transactionType" defaultValue={prop.transactionType} onChange={handleTransactionType}>
+        <FormControl sx={{ width: '100%' }} variant='standard'>
+            <InputLabel variant='standard'>Transaction Type</InputLabel>
+            <Select InputProps={{ disableUnderline: true }} name='transactionType' label='Transaction Type' labelId="transactionType" id="transactionType" defaultValue={prop.transactionType} onChange={handleTransactionType}>
                 <MenuItem value={transaction.noValue}>
                     {transaction.noValue}
                 </MenuItem>
@@ -42,9 +42,9 @@ const TransactionType = ({ prop, id, setOpenUpdate, transaction, employee }) => 
             </Select>
         </FormControl>
         ) :
-        <FormControl sx={{ width: '100%', mb: 2 }} variant='outlined'>
-        <InputLabel variant='outlined'>Transaction Type</InputLabel>
-        <Select label='Transaction Type' disabled defaultValue={prop.transactionType} />
+        <FormControl sx={{ width: '100%' }} variant='standard'>
+        <InputLabel variant='standard'>Transaction Type</InputLabel>
+        <Select InputProps={{ disableUnderline: true }} label='Transaction Type' disabled defaultValue={prop.transactionType} />
         </FormControl>
   )
 }

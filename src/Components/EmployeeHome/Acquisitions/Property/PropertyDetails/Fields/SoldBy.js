@@ -22,7 +22,7 @@ const SoldBy = ({ prop, id, setOpenUpdate, employee }) => {
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? (
       <FormControl sx={{ width: '100%'}} variant='outlined'>
           <InputLabel variant='outlined'>Sold By</InputLabel>
-          <Select variant='standard' label='Sold By' labelId="Sold By" defualtValue={prop.soldBy} onChange={handleSoldBy}>
+          <Select variant='standard' label='Sold By' labelId="Sold By" defaultValue={prop.soldBy} onChange={handleSoldBy}>
           <MenuItem value=''>
               
           </MenuItem>

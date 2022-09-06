@@ -37,9 +37,16 @@ import { Authenticator, useTheme, View, Image, Text, Heading, useAuthenticator, 
 import { Box, TextField, Typography } from '@mui/material';
 
 
-
+import './App.css'
 import RequireAuth from './RequireAuth';
 import NewPassword from './Components/Login/NewPassword';
+import Cancellation from './Components/EmployeeHome/Acquisitions/Forms/Cancellation';
+import TC from './Components/EmployeeHome/Inventory/TC';
+import ToDetails from './Reroutes/ToDetails';
+import ToDealText from './Reroutes/ToDealText';
+import Sales from './Components/EmployeeHome/Inventory/Sales';
+import { SideMenu } from './Components/EmployeeHome/Inventory/SideMenu';
+// import ClosedProps from './Components/EmployeeHome/Inventory/ClosedProps';
 
 Amplify.configure(awsConfig);
 
@@ -143,6 +150,7 @@ const App = () => {
     return (
         <Router>
             <Account>
+                <SideMenu>
                 
             <Routes>
                 {/* Home */}
@@ -155,12 +163,18 @@ const App = () => {
                 <Route path='/newpassword/:user' element={<NewPassword />} />
                 
                 {/* <Route path='/dashboard' element={<Dashboard /> } /> */}
-                <Route path='/acquisitions' exact element={<Acquisitions />} />
+                {/* <Route path='/acquisitions' exact element={<Inventory />} /> */}
+                <Route path='/internal' exact element={<TC />} />
+                {/* <Route path='/closedproperties' exact element={<ClosedProps />} /> */}
+                <Route path='/sales' exact element={<Sales />} />
                 <Route path='/acquisitions/:id' exact element={<PropertyDetails />} />
                 <Route path='/emailblast/:id' exact element={<EmailBlast />} />
                 <Route path='/profile/:id' exact element={<Profile />} />
-                <Route path='/acquisitions/search' exact element={<Acquisitions />} />
+                {/* <Route path='/acquisitions/search' exact element={<Acquisitions />} /> */}
 
+                {/* Reroutes */}
+                <Route path='/routedetails/:address' element={<ToDetails />} />
+                <Route path='/routedealtext/:address' element={<ToDealText />} />
                 {/* Employee Reset Password */}
                 <Route path ='/resetpassword' exact element={<ChangePassword />} />
 
@@ -178,9 +192,11 @@ const App = () => {
                 <Route path='/acqoptions' exact element={<AcqOptions />} />
                 <Route path='/acqpaperwork' exact element={<AcqPaperwork />} />
                 <Route path='/dispopaperwork' exact element={<DispoPaperwork />} />
+                <Route path='/cancellationform' exact element={<Cancellation />} />
+
 
                 {/* Inventory */}
-                <Route path='/inventory' exact element={<Inventory />} />
+                {/* <Route path='/inventory' exact element={<Inventory />} /> */}
 
                 {/* Event Calendar */}
                 <Route path='/eventcalendar' exact element={<EventCalendar />} />
@@ -210,6 +226,7 @@ const App = () => {
                 <Route path='/notauthorized' exact element={<NotAuthorized />} />
             
                 </Routes>
+                </SideMenu>
             </Account>
         </Router>
     )

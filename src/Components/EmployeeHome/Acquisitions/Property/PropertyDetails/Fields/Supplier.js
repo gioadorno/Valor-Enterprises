@@ -1,13 +1,28 @@
-import { FormControl, Divider, TextField, FormLabel } from "@mui/material";
+import { TextField, FormControl } from "@mui/material";
+import { API } from 'aws-amplify';
 
-const Supplier = ({ prop }) => {
+const Supplier = ({ prop, setOpenUpdate }) => {
+      // Props API
+      const apiName = 'valproperties';
+      const path = `/properties/${prop.id}/suppliername`;
+      // 
+
+    const handleCommitRelation = (e) => {
+        API.put(apiName, path, {
+            body: {
+                id: prop.id,
+                supplierName: e.target.value
+            }
+          })
+          .then(() => {
+            setOpenUpdate(true)
+          })
+    };
+
   return (
-    <FormControl style={{ width: '100%', marginBottom: '1em' }}>
-      <FormLabel>Supplier</FormLabel>
-     <TextField style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} InputProps={{ readOnly: true }} label='Supplier' variant="outlined" rows={3} value={prop.supplierName}  />
-     <TextField style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} InputProps={{ readOnly: true }} label='Supplier Phone' variant="outlined" rows={3} value={prop.supplierPhone}  />
-     <TextField style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} InputProps={{ readOnly: true }} label='supplier Email' variant="outlined" rows={3} value={prop.supplierEmail}  />
-  </FormControl>
+    <FormControl style={{ width: '100%' }}>
+        <TextField InputProps={{ disableUnderline: true }} onChange={handleCommitRelation} id="standard-read-only-input" label="Supplier" defaultValue={prop.supplierName} variant="standard"/>
+    </FormControl>
   )
 }
 

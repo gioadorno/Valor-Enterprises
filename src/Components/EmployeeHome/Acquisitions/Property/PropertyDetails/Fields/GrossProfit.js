@@ -8,10 +8,10 @@ const GrossProfit = ({ grossProfit }) => {
 
   return (
         <FormControl style={{ width: '100%' }}>
-            <TextField label='Gross Profit' variant='standard' InputProps={{
+            <TextField variant='standard' InputProps={{
             readOnly: true,
             disableUnderline: true
-        }} value={grossProfit > 0 ? grossProfit : null} />
+        }} value={grossProfit} />
         </FormControl>
   )
 }

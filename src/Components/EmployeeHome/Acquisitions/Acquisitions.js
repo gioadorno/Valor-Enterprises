@@ -22,6 +22,7 @@ import Properties from './Properties';
 import MobileNav from '../MobileNav';
 import CloseIcon from '@mui/icons-material/Close';
 import { API } from 'aws-amplify';
+import DoDisturbOffIcon from '@mui/icons-material/DoDisturbOff';
 
 
 const mdTheme = createTheme();
@@ -58,6 +59,7 @@ const Acquisitions = (anchor) => {
         { icon: <FileCopyIcon onClick={() => navigate('/acqpaperwork')} />, name: 'Acq Paperwork'},
         { icon: <ArticleIcon onClick={() => navigate('/acqoptions')} />, name: 'Acq Options' },
         { icon: <AodIcon onClick={() => navigate('/dispopaperwork')} />, name: 'Dispo Paperwork' },
+        { icon: <DoDisturbOffIcon onClick={() => navigate('/cancellationform')} />, name: 'Cancellation Form' },
       ];
 
     const query = useQuery();

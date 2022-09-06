@@ -21,9 +21,9 @@ const FileType = ({ prop, setOpenUpdate, employee }) => {
 
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? (
-        <FormControl sx={{ width: '100%', mb: 2 }} variant='outlined'>
+        <FormControl sx={{ width: '100%' }} variant='standard'>
             <InputLabel>File Type</InputLabel>
-            <Select label='File Type'  defaultValue={prop.fileType === '' ? '' : prop.fileType} onChange={handleFileType} >
+            <Select InputProps={{ disableUnderline: true }} label='File Type'  defaultValue={prop.fileType === '' ? '' : prop.fileType} onChange={handleFileType} >
                 <MenuItem value='Directly Under Contract Traditional Wholesale'>Directly Under Contract Traditional Wholesale</MenuItem>
                 <MenuItem value='Exclusive Option Traditional Wholesale'>Exclusive Option Traditional Wholesale</MenuItem>
                 <MenuItem value='Directly Under Contract Traditional Wholesale'>Directly Under Contract Traditional Wholesale</MenuItem>
@@ -31,8 +31,8 @@ const FileType = ({ prop, setOpenUpdate, employee }) => {
             </Select>
         </FormControl>
         ) :
-        <FormControl sx={{ width: '100%', mb: 2 }} variant='outlined'>
-        <Select label='File Type' disabled defaultValue={prop.fileType} />
+        <FormControl sx={{ width: '100%' }} variant='standard'>
+        <Select InputProps={{ disableUnderline: true }} label='File Type' disabled defaultValue={prop.fileType} />
         </FormControl>
         
   )

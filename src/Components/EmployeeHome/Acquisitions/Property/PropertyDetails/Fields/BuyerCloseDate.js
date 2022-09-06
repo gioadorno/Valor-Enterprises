@@ -32,7 +32,7 @@ const BuyerCloseDate = ({ prop, setOpenUpdate, employee }) => {
     {employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0  ? 
     <DatePicker
       label="Buyer's Closing Date"
-      value={newDate}
+      value={newDate || ''}
       onChange={handleBuyerCloseDate}
       renderInput={(params) => <TextField variant='standard' style={{ width: '100%' }} {...params} />}
     />

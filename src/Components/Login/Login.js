@@ -18,7 +18,7 @@ const Login = () => {
 ;    const location = useLocation();
     const navigate = useNavigate();
 
-    const { authenticate, userChangePassword, setUserChangePassword, setUserName, invalid } = useContext(AccountContext);
+    const { authenticate, userChangePassword, setUserChangePassword, setUserName, invalid, employee } = useContext(AccountContext);
 
   //   let from = location.state?.from?.pathname || '/';
   // useEffect(() => {
@@ -33,6 +33,19 @@ const Login = () => {
     authenticate(email, password);
   };
 
+  const getSession = () => {
+    Auth.currentAuthenticatedUser().then((user) => {
+        navigate('/internal');
+    })
+    .catch((err) => {
+        console.log(err)
+    });
+};
+
+useEffect(() => {
+  if (employee != '') return
+  getSession();
+},[])
 
 
 

@@ -15,16 +15,45 @@ const Status = ({ prop, id, setOpenUpdate, employee }) => {
     const newDate = parseInt(today.getMonth()+1) + '-' + today.getDate() + "-" + today.getFullYear();
     const [ completionDate, setCompletionDate ] = useState({ completionDate: newDate })
     const handleStatus = (e) => {
+
             API.put(apiName, path, {
                 body: {
                     id: prop.id,
                     propStatus: e.target.value
                 }
                 })
-                .then(() => {
+                .then(async () => {
                 setOpenUpdate(true)
                 setStatus(e.target.value)
                 if (e.target.value === 'Closed') { 
+                    const response = await fetch(process.env.REACT_APP_DISPOSITIONS, {
+                        method: 'post',
+                        body: JSON.stringify(
+                            {
+                                blocks: [
+                                    {
+                                        type: 'header',
+                                        text: {
+                                            type: 'plain_text',
+                                            text: `Property closed! Deals!?`,
+                                            emoji: true
+                                        }
+                                    },
+                                    {
+                                        type: 'section',
+                                        text: {
+                                                type: 'mrkdwn',
+                                                text: `*Property Address:*${prop.address.replace(', USA', '')}${prop.buyerContact != undefined && prop.buyerContact != '' ? `\n*Buyer:*${prop.buyerContact}\n` : ''}${prop.whoSold != undefined && prop.whoSold != '' ? `\n*Who sold this property?*\n${prop.whoSold}` : ''}`
+                                            },
+                                        
+                                    },
+                                    {
+                                        "type": "divider"
+                                    }
+                                ]
+                            }
+                        )
+                    });
                     API.put(apiName, completionPath, {
                     body: {
                         id: prop.id,
@@ -67,7 +96,7 @@ const Status = ({ prop, id, setOpenUpdate, employee }) => {
     
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? (
-        <ToggleButtonGroup aria-label="Property Status" color='success' exclusive onChange={handleStatus} fullWidth value={status} sx={{ mb: 2, alignItems: 'center' }} variant='outlined'>
+        <ToggleButtonGroup aria-label="Property Status" color='success' exclusive onChange={handleStatus} fullWidth value={status} sx={{ width: '100%',alignItems: 'center' }} variant='outlined'>
             <ToggleButton value='Active'>
                 Active
             </ToggleButton>
@@ -85,10 +114,13 @@ const Status = ({ prop, id, setOpenUpdate, employee }) => {
             </ToggleButton>
             <ToggleButton value='Dead'>
             Dead
+            </ToggleButton>
+            <ToggleButton value='In Progress'>
+            In Progress
             </ToggleButton>
         </ToggleButtonGroup>
         ) :
-        <ToggleButtonGroup color='error' disabled exclusive fullWidth value={prop.status} sx={{ mb: 2 }} variant='outlined'>
+        <ToggleButtonGroup color='error' disabled exclusive fullWidth value={prop.status} variant='outlined'>
             <ToggleButton value='Active'>
                 Active
             </ToggleButton>
@@ -106,6 +138,9 @@ const Status = ({ prop, id, setOpenUpdate, employee }) => {
             </ToggleButton>
             <ToggleButton value='Dead'>
             Dead
+            </ToggleButton>
+            <ToggleButton value='In Progress'>
+            In Progress
             </ToggleButton>
         </ToggleButtonGroup>
   )

@@ -31,7 +31,7 @@ const BuyerAcqDate = ({ prop, setOpenUpdate, employee }) => {
     {employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? 
     <DatePicker
       label="Buyer's Acquisition Date"
-      value={newDate}
+      value={newDate || ''}
       onChange={handleBuyerAcqDate}
       className='datePicker'
       renderInput={(params) => <TextField variant="standard" sx={{ width: '100%', color: '#2285ffde' }} {...params} />}

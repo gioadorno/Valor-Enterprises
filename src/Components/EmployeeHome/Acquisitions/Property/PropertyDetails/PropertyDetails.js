@@ -5,8 +5,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { ThemeProvider } from "@material-ui/core";
 import FileBase64 from 'react-file-base64';
 import { GoogleMap, Marker, LoadScript, InfoWindow, StreetViewPanorama, useLoadScript } from '@react-google-maps/api';
-import { GoogleAPI } from "../../../Map/keys";
+import { usePlacesWidget } from 'react-google-autocomplete';
 
+import Beds from './Fields/Beds';
 import Company from "./Fields/Company";
 import Territory from "./Fields/Territory";
 import FileType from "./Fields/FileType";
@@ -71,6 +72,7 @@ import SoldGP from './Fields/SoldGP';
 import PricingDate from './Fields/PricingDate';
 import CommitRelation from "./Fields/CommitRelation";
 import Files from './Fields/Files';
+import Autocomplete from 'react-google-autocomplete';
 
 import Moment from 'react-moment';
 import { useParams, useNavigate } from "react-router-dom";
@@ -86,6 +88,20 @@ import { Auth, API, Storage } from 'aws-amplify';
 
 import './Fields/styles.css';
 import PictureLink from "./Fields/PictureLink";
+import Baths from "./Fields/Baths";
+import Parking from "./Fields/Parking";
+import LivingArea from "./Fields/LivingArea";
+import LotSize from "./Fields/LotSize";
+import ARV from "./Fields/ARV";
+import SupplierPhone from "./Fields/SupplierPhone";
+import SupplierEmail from "./Fields/SupplierEmail";
+import EscrowPhone from "./Fields/EscrowPhone";
+import EscrowEmail from "./Fields/EscrowEmail";
+import YearBuild from "./Fields/YearBuild";
+import BuyerPhone from "./Fields/BuyerPhone";
+import BuyerEmail from "./Fields/BuyerEmail";
+import AcqName from "./Fields/AcqName";
+import TitleCompany from "./Fields/TitleCompany";
 
 const Field = ({ field, title, hidden }) => (
     <div className="flex w-full h-auto items-center border-[1px]  bg-slate-300 border-gray-400">
@@ -98,7 +114,7 @@ const Field = ({ field, title, hidden }) => (
     </div>
 );
 
-
+const GoogleAPI = "AIzaSyBat1MaRl7stoHN62WZ7f9aGYWYOqHnBtU";
 
 const PropertyDetails = () => {
     const { id } = useParams();
@@ -107,6 +123,19 @@ const PropertyDetails = () => {
     const [ prop, setProp ] = useState('');
     const [ propertyImage, setPropertyImage ] = useState('');
     const [ loaded, setIsLoaded ] = useState('');
+
+// Address Input
+const { ref } = usePlacesWidget({
+    apiKey: GoogleAPI,
+    onPlaceSelected: (place) => {
+        
+    },
+    options: {
+        types: ["address"],
+        componentRestrictions: { country: "us" },
+    },
+    });
+            
 
     // const { isLoaded, loadError } = useLoadScript({
     //     googleMapsApiKey: GoogleAPI // ,
@@ -210,26 +239,10 @@ const PropertyDetails = () => {
         } else (setPropertyImage(emptyPhoto))
 },[prop, propertyImage])
 
-console.log(prop)
-
 
     const [showHidden, setShowHidden] = useState(false);
     const [ deleteModal, setDeleteModal ] = useState(null);
 
-    // Audited API
-    const auditPath = `/properties/${prop.id}/audited`;
-    // 
-    const handleAudited = (e) => {
-        API.put(apiName, auditPath, {
-            body: {
-                id: prop.id,
-                audited: e.target.value
-            }
-            })
-            .then(() => {
-            setOpenUpdate(true)
-            })
-    };
     
     const handleHidden = (e) => {
         setShowHidden(e.target.checked);
@@ -271,7 +284,7 @@ console.log(prop)
     
     const currencyFormat = new Intl.NumberFormat('en-US', {maximumFractionDigits: 2});
     // Acq Final Price
-    const one = prop?.salePrice?.replace('$', '');
+    const one = prop?.netPrice?.replace('$', '');
     const two = prop?.acqDrop?.replace('$', '');
     const six = prop?.acqIncrease?.replace('$', '');
     const three = one?.replace(',', '');
@@ -296,6 +309,8 @@ console.log(prop)
     const parseDispoPrice = currencyFormat.format(parseFloat(dispoPriceNumber)); //uses the Intl.NumberFormat to format the number according to US number standards to only 2 decimal places.
     const dispoFinal = "$" + parseDispoPrice; //simply concatenates the $ to the front of the number
 
+
+
     // Revenue
     
     const revenueNumber = (dispoPriceNumber - acqFinalContract);
@@ -306,7 +321,10 @@ console.log(prop)
     const goodsRemoveDollar = prop?.goodsSold?.replace('$', '');
     const goodsPrice = goodsRemoveDollar?.replace(',', '');
 
-    const grossProfitNumber = (revenueNumber + Number(goodsPrice));
+    const soldRemoveDollar = prop?.soldGP?.replace('$', '');
+    const soldGPPrice = soldRemoveDollar?.replace(',', '')
+
+    const grossProfitNumber = (Number(soldGPPrice) - Number(goodsPrice));
     const parseGrossProfit = currencyFormat.format(parseFloat(grossProfitNumber));
     const positiveGP = parseGrossProfit > 0 ? parseGrossProfit : 0;
     const grossProfit = '$' + parseGrossProfit;
@@ -315,6 +333,23 @@ console.log(prop)
     const splitFifty = (grossProfitNumber / 2);
     const parseSplitFifty = currencyFormat.format(parseFloat(splitFifty));
     const acqGPFifty = '$' + parseSplitFifty;
+    const [audited, setAudited] = useState(prop.audited);
+    
+    // Audited API
+    const auditPath = `/properties/${prop.id}/audited`;
+    // 
+    const handleAudited = (e) => {
+        API.put(apiName, auditPath, {
+            body: {
+                id: prop.id,
+                audited: e.target.value
+            }
+            })
+            .then(() => {
+            setAudited(e.target.value)
+            setOpenUpdate(true)
+            })
+    };
 
     const [tc, setTC] = useState(prop.tc);
     const tcPath = `/properties/${prop.id}/tc`;
@@ -335,7 +370,40 @@ console.log(prop)
         setTC(prop.tc)
     },[prop])
 
-    console.log(prop.tc)
+
+    // Address Change
+    const [address, setAddress] = useState(prop.address);
+    const addressPath = `/properties/${prop.id}/address`;
+    const handleAddress = (e) => {
+        API.put(apiName, addressPath, {
+            body: {
+                id: prop.id,
+                address: e.target.value
+            }
+            })
+            .then(() => {
+            setAddress(e.target.value)
+            setOpenUpdate(true)
+            })
+    };
+
+    useEffect(() => {
+        setAddress(prop.address)
+    },[prop])
+
+    const namePath = `/properties/${prop.id}/name`;
+    const handleCreatedBy = (e) => {
+        API.put(apiName, namePath, {
+            body: {
+                id: prop.id,
+                name: e.target.value
+            }
+            })
+            .then(() => {
+            setOpenUpdate(true)
+            })
+    };
+
 
     if (isLoadingProp) {
         return <Modal sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}} open={isLoadingProp} onClose={() => setIsLoadingProp(false)}>
@@ -400,7 +468,7 @@ console.log(prop)
 
   return (
       <div className='flex flex-col h-full w-full pb-28 sm:pb-2'>
-        <div className="fixed right-0 bottom-0 hidden sm:flex bg-white w-auto h-20 items-center justify-center px-5 py-2 z-50 shadow-lg rounded-lg">
+        <div className="fixed right-0 bottom-0 hidden sm:flex w-auto h-20 items-center justify-center px-5 py-2 z-50 shadow-lg rounded-lg">
         <FormGroup>
             <FormControlLabel control={<Switch checked={showHidden} onChange={handleHidden} inputProps={{ 'aria-label': 'controlled' }} />} label='Show Hidden Fields' />
         </FormGroup>
@@ -436,9 +504,9 @@ console.log(prop)
                         </div>
                     </Box>
                 </Modal>
-                <div className='flex w-full h-[600px]'>
-                    <div style={{ backgroundColor: '#135772', backgroundOrigin: 'content-box' }} className="relative h-[350px] md:h-[600px] w-full bg-no-repeat bg-center">
-                        <img className='w-full h-full' src={propertyImage || emptyPhoto} />
+                {/* <div className='flex w-full h-[600px]'>
+                    <div style={{ backgroundColor: '#135772', backgroundOrigin: 'content-box' }} className="relative h-[350px] xl:h-[600px] w-full bg-no-repeat bg-center flex items-center justify-center">
+                        <img className='w-1/2 h-full' src={propertyImage || emptyPhoto} />
                             <div className="flex h-full w-full opacity-0 hover:opacity-100 hover:cursor-pointer items-center justify-center absolute z-50 top-0" onClick={() => setPhotoModal(true)} >
                                     <h1 className='text-white font-semibold text-2xl' variant='h4'>
                                         Upload Property Photo
@@ -446,75 +514,101 @@ console.log(prop)
                             </div>
                     </div>
                     <div className='hidden md:inline-block w-full h-full relative'>
-                        {/* streetView={true} */}
                                 {loaded && 
                                 <GoogleMap options={{ mapTypeId: 'hybrid', tilt: 45, heading: 90 }} mapContainerStyle={{ width: '100%', height: '600px' }} zoom={19} center={{ lat: prop.lat, lng: prop.lng }}>
                                     <Marker title={prop?.address?.replace(', USA', '')} icon={valorIcon} center={{ lat: prop.lat, lng: prop.lng }} position={{ lat: prop.lat, lng: prop.lng }} />
-                                    {/* {prop && 
+                                    {prop && 
                                         <StreetViewPanorama
                                         position={{ lat: prop.lat, lng: prop.lng }}
                                         visible={true}
                                         options={{ pov: { pitch: 0, heading: 90 }, zoom: 0  }}
                                         
                                         />
-                                    } */}
+                                    } 
                                 </GoogleMap>
                                 }
-                    </div>
-                </div>
-                <div className='flex w-full flex-wrap px-5 py-1'>
-                    <div className='flex flex-col flex-1 px-6'>
-                        <Typography variant="h4" component="h2">{prop?.address?.replace(', USA', '')}</Typography>
-                        <Typography variant="h6" color="textSecondary" component="h2">Created by: {prop.name}  </Typography>
-                        <Typography gutterBottom variant="body3"><Moment style={{ color: '#00000099' }} fromNow>{prop.date}</Moment></Typography>
-                        <Grid container spacing={2}>
-                            {/* Hidden Fields */}
-                            <Box sx={{ display: 'flex', flexDirection: 'column', paddingTop: '1em' }}>
-                                <FormGroup sx={{ width: "auto" }}>
-                                    <FormControlLabel control={<Switch checked={showHidden} onChange={handleHidden} inputProps={{ 'aria-label': 'controlled' }} />} label='Show Hidden Fields' />
-                                </FormGroup>
-                                <FormGroup>
-                                    {employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Auditor') >= 0 ? (
-                                        <FormControlLabel control={<Switch defaultChecked={prop.audited} onChange={handleAudited} inputProps={{ 'aria-label': 'controlled' }} />} label='Property Audited' />
-                                    ) :
-                                    <FormControlLabel control={<Switch disabled checked={prop.audited} inputProps={{ 'aria-label': 'controlled' }} />} label='Property Audited' />
-                                    }
-                                </FormGroup>
-                                {employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? (
-                                    <Button onClick={() => setDeleteModal(true)} sx={{ marginTop: '1em', color: '#088affbf', borderColor: '#088affbf' }} variant="outlined">Delete Property</Button>
-                                ):
-                                <Button disabled style={{ marginTop: '1em' }} variant="outlined">Delete Property</Button>
-                                }
-                            </Box>
-                            {/* TC */}
+                    </div> 
+                </div> */}
+                <div style={{ backgroundColor: '#135772', position: 'relative', }} className='gap-y-4 py-10 w-full'>
+                        <Grid container>
                             <Grid item xs={12}>
-                                <FormControl sx={{ pb: 2 }} component="fieldset" variant="standard">
-                                    <FormLabel component="legend">Assign TC</FormLabel>
-                                    <FormGroup row>
-                                        {employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? (
-                                            <ToggleButtonGroup
-                                            color='primary'
-                                            value={tc}
-                                            exclusive
-                                            onChange={handleTC}
-                                            aria-label="Platform"
-                                            >
-                                                <ToggleButton value='Laura Humble'>
-                                                Laura Humble
-                                                </ToggleButton>
-                                                <ToggleButton value='Kristin Frabotta'>
-                                                Kristin Frabotta
-                                                </ToggleButton>
-                                                <ToggleButton value='Jacob Loch'>
-                                                Jacob Loch
-                                                </ToggleButton>
-                                            </ToggleButtonGroup>
+                                                    <div className='flex flex-col flex-1 px-6 pt-4 items-center justify-center'>
+                            <input
+                        className='border-none focus:border-bottom-[1px] bg-[#135772] text-white outline-none focus:outline-none focus:border-b-blue-300 w-full text-5xl font-semibold align-center items-center text-center transform duration-150 ease-in-out'
+                        defaultValue={address?.replace(', USA', '')}
+                                onChange={handleAddress}
+                                />
+
+                                <label className='text-white font-semibold text-xl flex items-center  whitespace-nowrap'>Created by: {prop.name}</label>
+                                <h1 className='text-slate-200 font-semibold text-center items-center text-md'><Moment fromNow>{prop.date}</Moment></h1>
+                                <p className='text-white pt-4 font-semibold'>Is this file finished?</p>
+                                <select className='block mt-0 px-0.5 border-0 border-b-2 focus:ring-0 focus:border-bottom-[1px] bg-[#135772] text-white outline-none focus:outline-none focus:border-b-blue-300 text-md font-semibold  transform duration-150 ease-in-out'>
+                                    <option value='No'>
+                                        No
+                                    </option>
+                                    <option value='Yes'>
+                                        Yes
+                                    </option>
+                                </select>
+                            </div>
+                            {employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 ? (
+                                    <button className="rounded-md absolute top-2 left-8 hover:drop-shadow-xl border-2 border-white text-white hover:scale-105 transform duration-200 ease-in px-2 py-1 hover:animate-pulse" onClick={() => setDeleteModal(true)}>Delete Property</button>
+                                ):
+                                <button disabled className="rounded-md absolute top-2 left-10 cursor-default border-2 border-white text-white px-2 py-1">Delete Property</button>
+                                }
+                                <div className='flex flex-col items-center w-full justify-center pt-4 px-5'>
+                                <div className='font-semibold text-3xl text-white pl-12 w-full bg-slate-500 py-2 border-2 flex justify-center items-center'>General Info</div>
+                                <Field title="Audited" field={
+                                <FormGroup sx={{ width: '100%' }}>
+                                {/* <FormLabel component="legend">Audited</FormLabel> */}
+                                    {employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Auditor') >= 0 ? (
+                                        <ToggleButtonGroup
+                                        color='primary'
+                                        value={audited}
+                                        exclusive
+                                        onChange={handleAudited}
+                                        aria-label="Platform"
+                                        >
+                                            <ToggleButton value='Yes'>
+                                            Yes
+                                            </ToggleButton>
+                                            <ToggleButton value='In Progress'>
+                                            In Progress
+                                            </ToggleButton>
+                                            <ToggleButton value='No'>
+                                            No
+                                            </ToggleButton>
+                                        </ToggleButtonGroup>
                                         ) :
                                         <ToggleButtonGroup
                                         color='primary'
-                                        value={prop.tc}
+                                        value={prop.audited}
                                         exclusive
                                         disabled
+                                        aria-label="Platform"
+                                        >
+                                            <ToggleButton value='Yes'>
+                                            Yes
+                                            </ToggleButton>
+                                            <ToggleButton value='In Progress'>
+                                            In Progress
+                                            </ToggleButton>
+                                            <ToggleButton value='No'>
+                                            No
+                                            </ToggleButton>
+                                        </ToggleButtonGroup>
+                                    }
+                                </FormGroup>
+                                } />
+                                <Field title="TC" field={
+                                <FormControl sx={{ width: "100%" }} component="fieldset" variant="standard">
+                                <FormGroup>
+                                    {employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? (
+                                        <ToggleButtonGroup
+                                        color='primary'
+                                        value={tc}
+                                        exclusive
+                                        onChange={handleTC}
                                         aria-label="Platform"
                                         >
                                             <ToggleButton value='Laura Humble'>
@@ -527,55 +621,171 @@ console.log(prop)
                                             Jacob Loch
                                             </ToggleButton>
                                         </ToggleButtonGroup>
-                                        }
-                                    </FormGroup>
-                                </FormControl>
+                                    ) :
+                                    <ToggleButtonGroup
+                                    color='primary'
+                                    value={prop.tc}
+                                    exclusive
+                                    disabled
+                                    aria-label="Platform"
+                                    >
+                                        <ToggleButton value='Laura Humble'>
+                                        Laura Humble
+                                        </ToggleButton>
+                                        <ToggleButton value='Kristin Frabotta'>
+                                        Kristin Frabotta
+                                        </ToggleButton>
+                                        <ToggleButton value='Jacob Loch'>
+                                        Jacob Loch
+                                        </ToggleButton>
+                                    </ToggleButtonGroup>
+                                    }
+                                </FormGroup>
+                            </FormControl>
+                                } />
+                                <Field title="Who Acquired" field={<AcqName setOpenUpdate={setOpenUpdate} prop={prop} id={id}   employee={employee} />} />
+                                <Field title="Company" field={<Company prop={prop} />} />
+                                <Field title="Outside Territory" field={<Territory setOpenUpdate={setOpenUpdate} prop={prop} id={id}   employee={employee} />} />
+                                <Field title="File Type" field={<FileType setOpenUpdate={setOpenUpdate} prop={prop} id={id}   employee={employee} />} />
+                                <Field title="Market" field={<Market setOpenUpdate={setOpenUpdate} prop={prop} id={id}   employee={employee} />} />
+                                <Field title="Status" field={<Status setOpenUpdate={setOpenUpdate}  prop={prop} id={id}   employee={employee}/>} />
+                                <Field title="Transaction Type" field={<TransactionType setOpenUpdate={setOpenUpdate} prop={prop} id={id}  employee={employee} />} />
+                                <Field title="Split" field={<Split prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />   
+
+                                </div>
                             </Grid>
                         </Grid>
-                        <div className="w-full h-auto py-1">
-                            <Divider />
-                            <Company prop={prop} />
-                            <Territory setOpenUpdate={setOpenUpdate} prop={prop} id={id}   employee={employee} />
-                            {/* File Type */}
-                            <FileType setOpenUpdate={setOpenUpdate} prop={prop} id={id}   employee={employee} />
-                            <Market setOpenUpdate={setOpenUpdate} prop={prop} id={id}   employee={employee} />
-                            <Typography gutterBottom variant="h6" color='light' component="h6">Property Status</Typography>
-                            <Status setOpenUpdate={setOpenUpdate}  prop={prop} id={id}   employee={employee}/>
-                            <TransactionType setOpenUpdate={setOpenUpdate} prop={prop} id={id}   employee={employee} />
-                            <PictureLink setOpenUpdate={setOpenUpdate} prop={prop} id={id}  />
-                        </div>
-                    </div>
-
-                </div>
-                            <Divider sx={{ width: '100%' }} />
-                <div style={{ backgroundColor: '#135772' }} className='gap-y-4 py-5 w-full'>
                         <Grid container>
                             <Grid item xs={12}>
-                                <div className='flex flex-col items-center w-full justify-center px-5'>
-                                <Field title='Supplier' field={<TextField style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: "100%", height: '100%', border: '1px' }} InputProps={{ readOnly: true, disableUnderline: true }} label='Supplier' variant="standard" value={prop.supplierName}  />} />
-                                <Field title="Supplier's Phone" field={<TextField style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: "100%", height: '100%', border: '1px' }} InputProps={{ readOnly: true, disableUnderline: true }} label="Supplier's Phone" variant="standard" value={prop.supplierPhone}  />} />
-                                <Field title="Supplier's Email" field={<TextField style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: "100%", height: '100%', border: '1px' }} InputProps={{ readOnly: true, disableUnderline: true }} label="Supplier's Email" variant="standard" value={prop.supplierEmail}  />} />
-
+                                <div className='flex flex-col flex-1 px-6 pt-4 items-center'>
+                                    <div className='flex flex-col items-center w-full justify-center pt-4 px-5'>
+                                <div className='font-semibold text-3xl text-white pl-12 w-full bg-slate-500 py-2 border-2 flex justify-center items-center'>Supplier/Acq Info</div>
+                                        <Field title="Source of Deal" field={<SourceOfDeal prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        <Field title='Supplier' field={<Supplier prop={prop} setOpenUpdate={setOpenUpdate} />} />
+                                        <Field title="Supplier's Phone" field={<SupplierPhone prop={prop} setOpenUpdate={setOpenUpdate}/>} />
+                                        <Field title="Supplier's Email" field={<SupplierEmail prop={prop} setOpenUpdate={setOpenUpdate}/>} />
+                                        <Field title="Acquisitions Date" field={<AcqDate prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee}  />} />
+                                        <Field title="Inspection Period" field={<InspectionPeriod prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        <Field title="Type of Access" field={<Access prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        <Field title="Estimated COE Date" field={<COE prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee}/>} />
+                                        <Field title="Our Earnest Amount" field={<EMD prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        <Field title="Earnest Deposit Status" field={<EarnestDeposit prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        <Field title="ARV" field={<ARV prop={prop} setOpenUpdate={setOpenUpdate} />} />
+                                        <Field title="Acq Contract Price" field={<AcqContractPrice prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        {showHidden &&
+                                        <>
+                                            <Field hidden={true} title="Acq Price Drops" field={<AcqPriceDrops prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                            <Field hidden={true} title="Acq Price Increase" field={<AcqPriceIncrease prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        </>
+                                        }
+                                        <Field title="Wholesale Price" field={<NetPrice prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        <Field title="Pricing Date" field={<PricingDate prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        <Field title="Status of Sellers Docs" field={<SellerDocs prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                    </div>
+                                </div>
+                            </Grid>
+                        </Grid>
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <div className='flex flex-col flex-1 px-6 pt-4 items-center'>
+                                    <div className='flex flex-col items-center w-full justify-center pt-4 px-5'>
+                                <div className='font-semibold text-3xl text-white pl-12 w-full bg-slate-500 py-2 border-2 flex justify-center items-center'>Buyer/Dispo Info</div>
+                                        <Field title="Sold By" field={<SoldBy prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        <Field title="Who Sold this Property" field={<WhoSold prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        <Field title="Buyer Contact" field={<BuyerContact prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        <Field title="Buyer's Phone" field={<BuyerPhone prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        <Field title="Buyer's Email" field={<BuyerEmail prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        <Field title="Buyer's Acquisition Date'" field={<BuyerAcqDate prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        <Field title="Date Buyer's EMD was Deposited" field={<BuyerEMDDate prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        <Field title="Buyer's Earnest Deposit" field={<BuyerEMD prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        <Field title="Status of Buyer's EMD" field={<BuyersEarnest prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        <Field title="Status of Cash Buyer's Docs" field={<BuyerDocs prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        <Field title="Dispo Contract Price" field={<DispoContractPrice prop={prop} id={id} parseDispoPrice={parseDispoPrice} setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        {showHidden && 
+                                        <>
+                                        <Field hidden={true} title="Dispo Price Drop" field={<DispoPriceDrop prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        <Field hidden={true} title="Dispo Price Increase" field={<DispoPriceIncrease prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        </>
+                                        }
+                                    </div>
+                                </div>
+                            </Grid>
+                        </Grid>
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <div className='flex flex-col flex-1 px-6 pt-4 items-center'>
+                                    <div className='flex flex-col items-center w-full justify-center pt-4 px-5'>
+                                <div className='font-semibold text-3xl text-white pl-12 w-full bg-slate-500 py-2 border-2 flex justify-center items-center'>Money Info</div>
+                                        {showHidden && (
+                                            <>
+                                            <Field hidden={true} title="Commissions" field={<Commissions prop={prop} id={id} setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                            <Field hidden={true} title="Payouts" field={<Payouts prop={prop} id={id} setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                            <Field hidden={true} title="Payout Recipient" field={<PayoutRecipient prop={prop} id={id} setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                            <Field hidden={true} title="Status of Payouts" field={<StatusPayouts prop={prop} id={id} setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                            </>
+                                        )}
+                                            <Field title="Acq Projected GP" field={<AcqGP acqGPFifty={acqGPFifty} grossProfit={grossProfit} prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                            <Field title="Sold GP" field={<SoldGP prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        {showHidden && (
+                                            <>
+                                            <Field hidden={true} title="Goods Sold" field={<GoodsSold prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                            <Field hidden={true} title="Gross Profit" field={<GrossProfit grossProfit={grossProfit} prop={prop} id={id} setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            </Grid>
+                        </Grid>
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <div className='flex flex-col flex-1 px-6 pt-4 items-center'>
+                                    <div className='flex flex-col items-center w-full justify-center pt-4 px-5'>
+                                <div className='font-semibold text-3xl text-white pl-12 w-full py-2 bg-slate-500 border-2 flex justify-center items-center'>Money Status Info</div>
+                                    {showHidden &&
+                                        <Field hidden={true} title="Status of Actual Gross Profit" field={<StatusGP prop={prop} id={id} setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        }
+                                        <Field title="Date of Completion" field={<CompletionDate prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee}  />} />
+                                        <Field title="Due to Us" field={<DueToUs prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                    </div>
+                                </div>
+                            </Grid>                 
+                        </Grid>
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <div className='flex flex-col flex-1 px-6 pt-4 items-center'>
+                                    <div className='flex flex-col items-center w-full justify-center pt-4 px-5'>
+                                    <div className='font-semibold text-3xl text-white pl-12 py-2 w-full bg-slate-500 border-2 flex justify-center items-center'>Property Info</div>
+                                        <Field title="Beds" field={<Beds prop={prop} setOpenUpdate={setOpenUpdate} />} />
+                                        <Field title="Baths" field={<Baths prop={prop} setOpenUpdate={setOpenUpdate} />} />
+                                        <Field title="Parking" field={<Parking prop={prop} setOpenUpdate={setOpenUpdate} />} />
+                                        <Field title="Living Area" field={<LivingArea prop={prop} setOpenUpdate={setOpenUpdate} />} />
+                                        <Field title="Lot Size" field={<LotSize prop={prop} setOpenUpdate={setOpenUpdate} />} />
+                                        <Field title="Year" field={<YearBuild prop={prop} setOpenUpdate={setOpenUpdate} />} />
+                                        <Field title="Link to Photos" field={<PictureLink setOpenUpdate={setOpenUpdate} prop={prop} id={id}  />} />
+                                    </div>
+                                </div>
+                            </Grid>
+                        </Grid>
+                                
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <div className='flex flex-col flex-1 px-6 pt-4 items-center'>
+                                    <div className='flex flex-col items-center w-full justify-center pt-8'>
                                     {showHidden && (
                                         <Field hidden={true} title="File Notes" field={<FileNotes ThemeProvider={ThemeProvider} prop={prop} id={id}  employee={employee} />} />
                                     )}
 
-                                    <Field title="Acquisitions Date" field={<AcqDate prop={prop} />} />
-                                    <Field title="Inspection Period" field={<InspectionPeriod prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                    
+                                    
                                     <Field title="Post Possession" field={<PostPossession prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                    <Field title="Earnest Deposit Status" field={<EarnestDeposit prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                    
 
                                     {showHidden && 
                                         <Field hidden={true} title="EMD Check/Wire Transaction Number" field={<EMDCheck prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
                                     }
-
-                                    <Field title="Our Earnest Amount" field={<EMD prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                    <Field title="Acq Contract Price" field={<AcqContractPrice prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-
                                     {showHidden && 
                                     <>
-                                        <Field hidden={true} title="Acq Price Drops" field={<AcqPriceDrops prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                        <Field hidden={true} title="Acq Price Increase" field={<AcqPriceIncrease prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                        
                                         <Field hidden={true} title="Additional Cost" field={<AdditionalCost prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
                                     </>
                                     }
@@ -590,21 +800,17 @@ console.log(prop)
                                     }
 
                                     <Field title="Acq Final Cost" field={<AcqFinalCost prop={prop} acqFinalNumber={acqFinalNumber}/>} />
+                                    <Field title="Title Company" field={<TitleCompany prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
                                     <Field title="Escrow Officer" field={<EscrowOfficer prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-
+                                    <Field title="Escrow Phone" field={<EscrowPhone prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                    <Field title="Escrow Email" field={<EscrowEmail prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                    
                                     {showHidden && 
                                         <Field hidden={true} title="Escrow Officer (Second Leg)" field={<SecondEscrow prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
                                     }
-
-                                    <Field title="Who Sold this Property" field={<WhoSold prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                    <Field title="Who Assisted this Sale?" field={<WhoAssisted prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                    <Field title="Sold By" field={<SoldBy prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                    <Field title="Dispo Contract Price" field={<DispoContractPrice prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-
+                                    {/* <Field title="Who Assisted this Sale?" field={<WhoAssisted prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} /> */}
                                     {showHidden && 
                                     <>
-                                        <Field hidden={true} title="Dispo Price Drop" field={<DispoPriceDrop prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                        <Field hidden={true} title="Dispo Price Increase" field={<DispoPriceIncrease prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
                                         <Field hidden={true} title="Second Leg Credits" field={<SecondLegCredits prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
                                         <Field hidden={true} title="Second Leg Debits" field={<SecondLegDebits prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
                                         <Field hidden={true} title="Buyer Credits" field={<BuyerCredits prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
@@ -617,53 +823,24 @@ console.log(prop)
                                     {showHidden && 
                                     <>
                                         <Field hidden={true} title="Revenue" field={<Revenue prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                        <Field hidden={true} title="Goods Sold" field={<GoodsSold prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                        <Field hidden={true} title="Gross Profit" field={<GrossProfit grossProfit={grossProfit} prop={prop} id={id} setOpenUpdate={setOpenUpdate} employee={employee} />} />
                                     </>
                                     }
-
-                                    <Field title="Sold GP" field={<SoldGP prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                    <Field title="Pricing Date" field={<PricingDate prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
                                     <Field title="Commitments & Purchases Relationship" field={<CommitRelation prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                    <Field title="Source of Deal" field={<SourceOfDeal prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                    <Field title="Estimated COE Date" field={<COE prop={prop} />} />
-                                    <Field title="Type of Access" field={<Access prop={prop} />} />
-                                    <Field title="Status of Sellers Docs" field={<SellerDocs prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                    <Field title="Status of Cash Buyer's Docs" field={<BuyerDocs prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                    <Field title="Buyer's Earnest Deposit" field={<BuyerEMD prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                    <Field title="Status of Buyer's EMD" field={<BuyersEarnest prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                    <Field title="Date Buyer's EMD was Deposited" field={<BuyerEMDDate prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                    <Field title="Buyer Contact" field={<BuyerContact prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-
-                                        {showHidden && (
-                                            <>
-                                            <Field hidden={true} title="Commissions" field={<Commissions prop={prop} id={id} setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                            <Field hidden={true} title="Payouts" field={<Payouts prop={prop} id={id} setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                            <Field hidden={true} title="Payout Recipient" field={<PayoutRecipient prop={prop} id={id} setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                            <Field hidden={true} title="Status of Payouts" field={<StatusPayouts prop={prop} id={id} setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                            </>
-                                        )}
-
-                                        <Field title="Buyer's Acquisition Date'" field={<BuyerAcqDate prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
+                                    
                                         <Field title="Buyer's Close Date'" field={<BuyerCloseDate prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                        <Field title="Wholesale Price" field={<NetPrice prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                        
                                         {showHidden &&
                                             <Field hidden={true} title="Additional Compensation" field={<AddComp prop={prop} id={id} setOpenUpdate={setOpenUpdate} employee={employee} />} />
                                         }
-                                        <Field title="Date of Completion" field={<CompletionDate prop={prop} />} />
-                                        <Field title="Due to Us" field={<DueToUs prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
-
-                                        {showHidden &&
-                                        <Field hidden={true} title="Status of Actual Gross Profit" field={<StatusGP prop={prop} id={id} setOpenUpdate={setOpenUpdate} employee={employee} />} />
-                                        }
-
-                                        <Field title="Split" field={<Split prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />   
-                                        <Field title="Acq Projected GP" field={<AcqGP acqGPFifty={acqGPFifty} grossProfit={grossProfit} prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />
                                         <Field title="Files" field={<Files prop={prop} id={id}  setOpenUpdate={setOpenUpdate} employee={employee} />} />  
+                                    </div>
                                 </div>
                             </Grid>
                         </Grid>
+                                
+
+
+                                    
+
                 </div>
         </Box>
             <MobileNav />

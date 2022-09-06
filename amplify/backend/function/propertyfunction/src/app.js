@@ -1078,7 +1078,7 @@ app.post('/inventory', function(req, res) {
     Item: {
       id: `Acq-${id()}`,
       date: req.body.date,
-        status: req.body.status,
+        propStatus: req.body.propStatus,
         name: req.body.name,
         dispoName: req.body.dispoName,
         dispoPhone: req.body.dispoPhone,
@@ -1088,6 +1088,7 @@ app.post('/inventory', function(req, res) {
         dispoEmail2: req.body.dispoEmail2,
         dealulator: req.body.dealulator,
         exclusive: req.body.exclusive,
+        files: [req.body.files],
         supplier: req.body.supplier,
         supplierName: req.body.supplierName,
         supplierEmail: req.body.supplierEmail,
@@ -1306,6 +1307,247 @@ app.post('/payouts', (req, res) => {
 * Put method *
 ****************************/
 
+// Address
+app.put('/properties/:id/address', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    ExpressionAttributeValues: {
+      ':address': req.body.address
+    },
+    UpdateExpression: 'set address = :address',
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+});
+
+// Baths
+app.put('/properties/:id/baths', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    UpdateExpression: 'set baths = :baths',
+    ExpressionAttributeValues: {
+      ':baths': req.body.baths
+    },
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+
+});
+
+// Beds
+app.put('/properties/:id/beds', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    UpdateExpression: 'set beds = :beds',
+    ExpressionAttributeValues: {
+      ':beds': req.body.beds
+    },
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+
+});
+
+// Parking
+app.put('/properties/:id/parking', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    UpdateExpression: 'set parking = :parking',
+    ExpressionAttributeValues: {
+      ':parking': req.body.parking
+    },
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+
+});
+
+// ARV
+app.put('/properties/:id/arv', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    UpdateExpression: 'set arv = :arv',
+    ExpressionAttributeValues: {
+      ':arv': req.body.arv
+    },
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+
+});
+
+// Living Area
+app.put('/properties/:id/livingarea', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    UpdateExpression: 'set livingArea = :livingArea',
+    ExpressionAttributeValues: {
+      ':livingArea': req.body.livingArea
+    },
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+
+});
+
+// Lot Size
+app.put('/properties/:id/lotsize', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    UpdateExpression: 'set lotSize = :lotSize',
+    ExpressionAttributeValues: {
+      ':lotSize': req.body.lotSize
+    },
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+
+});
+
+// COE
+app.put('/properties/:id/coe', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    UpdateExpression: 'set coe = :coe',
+    ExpressionAttributeValues: {
+      ':coe': req.body.coe
+    },
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+
+});
+
+// COE
+app.put('/properties/:id/date', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    UpdateExpression: 'set date = :date',
+    ExpressionAttributeValues: {
+      ':date': req.body.date
+    },
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+
+});
+
+// Deal Split
+app.put('/properties/:id/dealsplit', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    UpdateExpression: 'set dealSplit = :dealSplit',
+    ExpressionAttributeValues: {
+      ':dealSplit': req.body.dealSplit
+    },
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+
+});
+
+// Access Type
+app.put('/properties/:id/typeaccess', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    UpdateExpression: 'set typeAccess = :typeAccess',
+    ExpressionAttributeValues: {
+      ':typeAccess': req.body.typeAccess
+    },
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+
+});
+
 // Acq Drop
 app.put('/properties/:id/acqdrop', function (req, res) {
 
@@ -1482,6 +1724,48 @@ app.put('/properties/:id/buyeracqdate', function (req, res) {
     });
 });
 
+// Acq Name
+app.put('/properties/:id/name', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    UpdateExpression: 'set name = :name',
+    ExpressionAttributeValues: {
+      ':name': req.body.name
+    },
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+});
+
+// Acq Name
+app.put('/properties/:id/acqname', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    UpdateExpression: 'set acqName = :acqName',
+    ExpressionAttributeValues: {
+      ':acqName': req.body.acqName
+    },
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+});
+
 // Buyer Close Date
 app.put('/properties/:id/buyerclosedate', function (req, res) {
 
@@ -1511,9 +1795,51 @@ app.put('/properties/:id/buyercontact', function (req, res) {
     Key: {
       id: req.body.id,
     },
-    UpdateExpression: 'set buyerContact = :buyerContact',
+    UpdateExpression: 'set signersName = :signersName',
     ExpressionAttributeValues: {
-      ':buyerContact': req.body.buyerContact
+      ':signersName': req.body.signersName
+    },
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+});
+
+// Buyer Phone
+app.put('/properties/:id/buyerphone', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    UpdateExpression: 'set buyerPhone = :buyerPhone',
+    ExpressionAttributeValues: {
+      ':buyerPhone': req.body.buyerPhone
+    },
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+});
+
+// Buyer Phone
+app.put('/properties/:id/buyeremail', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    UpdateExpression: 'set buyerEmail = :buyerEmail',
+    ExpressionAttributeValues: {
+      ':buyerEmail': req.body.buyerEmail
     },
     ReturnValues: 'ALL_NEW'
   }
@@ -1692,6 +2018,48 @@ app.put('/properties/:id/completiondate', function (req, res) {
     });
 });
 
+// Completion Date2
+app.put('/properties/:id/completiondate2', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    ExpressionAttributeValues: {
+      ':completionDate2': req.body.completionDate2
+    },
+    UpdateExpression: 'set completionDate2 = :completionDate2',
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+});
+
+// Dispo Final
+app.put('/properties/:id/dispofinal', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    ExpressionAttributeValues: {
+      ':dispoFinal': req.body.dispoFinal
+    },
+    UpdateExpression: 'set dispoFinal = :dispoFinal',
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+});
+
 // Dispo Contract Price
 app.put('/properties/:id/dispocontractprice', function (req, res) {
 
@@ -1850,6 +2218,69 @@ app.put('/properties/:id/escrowofficer', function (req, res) {
     UpdateExpression: 'set escrowOfficer = :escrowOfficer',
     ExpressionAttributeValues: {
       ':escrowOfficer': req.body.escrowOfficer
+    },
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+});
+
+// Title Company
+app.put('/properties/:id/titlecompany', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    UpdateExpression: 'set titlecompany = :titlecompany',
+    ExpressionAttributeValues: {
+      ':titlecompany': req.body.titlecompany
+    },
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+});
+
+// Escrow Phone
+app.put('/properties/:id/escrowphone', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    UpdateExpression: 'set escrowPhone = :escrowPhone',
+    ExpressionAttributeValues: {
+      ':escrowPhone': req.body.escrowPhone
+    },
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+});
+
+// Escrow Email
+app.put('/properties/:id/escrowemail', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    UpdateExpression: 'set escrowEmail = :escrowEmail',
+    ExpressionAttributeValues: {
+      ':escrowEmail': req.body.escrowEmail
     },
     ReturnValues: 'ALL_NEW'
   }
@@ -2402,6 +2833,69 @@ app.put('/properties/:id/supplier', function (req, res) {
       ':supplier': req.body.supplier
     },
     UpdateExpression: 'set supplier = :supplier',
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+});
+
+// Supplier's Name
+app.put('/properties/:id/suppliername', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    ExpressionAttributeValues: {
+      ':supplierName': req.body.supplierName
+    },
+    UpdateExpression: 'set supplierName = :supplierName',
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+});
+
+// Supplier's Phone
+app.put('/properties/:id/supplierphone', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    ExpressionAttributeValues: {
+      ':supplierPhone': req.body.supplierPhone
+    },
+    UpdateExpression: 'set supplierPhone = :supplierPhone',
+    ReturnValues: 'ALL_NEW'
+  }
+  
+    docClient.update(params, (err, data) => {
+      if (err) res.json({ err })
+      else res.json({ success: data })
+    });
+});
+
+// Supplier's Email
+app.put('/properties/:id/supplieremail', function (req, res) {
+
+  let params = {
+    TableName: 'inventory-dev',
+    Key: {
+      id: req.body.id,
+    },
+    ExpressionAttributeValues: {
+      ':supplierEmail': req.body.supplierEmail
+    },
+    UpdateExpression: 'set supplierEmail = :supplierEmail',
     ReturnValues: 'ALL_NEW'
   }
   

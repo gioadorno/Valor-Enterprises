@@ -59,7 +59,7 @@ const Header = ({ prop }) => {
             <div className='flex w-full'>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <ButtonGroup sx={{ display: 'flex', justifyContent: 'space-evenly', }}>
-                        <Button onClick={() => navigate('/acquisitions')} sx={{ fontSize: 13, letterSpacing: 1, px: 2, "&:hover": { transform: 'scale(1.05)' }, color: '#1976d2' }} variant='text'>
+                            <Button onClick={() => navigate('/internal')} sx={{ fontSize: 13, letterSpacing: 1, px: 2, "&:hover": { transform: 'scale(1.05)' }, color: '#1976d2' }} variant='text'>
                             Back to Properties
                         </Button>
                         <Button onClick={() => navigate(`/acquisitions/${prop?.id}`)} sx={{ fontSize: 13, letterSpacing: 1, px: 2, "&:hover": { transform: 'scale(1.05)' }, color: `${pathname === `/acquisitions/${prop?.id}` ? 'red' : '#1976d2'}`  }} variant='text'>
@@ -68,11 +68,11 @@ const Header = ({ prop }) => {
                         <Button onClick={() => navigate(`/dealtext/${prop?.id}`)} sx={{ fontSize: 13, letterSpacing: 1, px: 2, "&:hover": { transform: 'scale(1.05)' }, color: `${pathname === `/dealtext/${prop?.id}` ? 'red' : '#1976d2'}`  }} variant='text'>
                             Deal Text
                         </Button>
-                        {employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 &&
+                        {/* {employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 &&
                         <Button onClick={() => navigate(`/emailblast/${prop?.id}`)} sx={{ fontSize: 13, letterSpacing: 1, px: 2, "&:hover": { transform: 'scale(1.05)' }, color: `${pathname === `/emailblast/${prop?.id}` ? 'red' : '#1976d2'}` }} variant='text'>
                             Email Blast
                         </Button>
-                        }
+                        } */}
                     </ButtonGroup>
                 </Box>
                 <Box sx={{ display: { sm: 'none' , md: 'flex' }, justifyContent: 'center' }} flexGrow={1}>

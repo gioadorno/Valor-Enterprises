@@ -7,7 +7,7 @@ const BuyerContact = ({ prop, setOpenUpdate, employee }) => {
     const [ dispoProps, setDispoProps ] = useState([])
         // Props API
         const apiName = 'valproperties';
-        const path = `/properties/${prop.id}/buyerContact`;
+        const path = `/properties/${prop.id}/buyercontact`;
         // 
 
         // Dispo API
@@ -39,7 +39,7 @@ const BuyerContact = ({ prop, setOpenUpdate, employee }) => {
              API.put(apiName, path, {
                 body: {
                     id: prop.id,
-                    buyerContact: value
+                    signersName: value
                 }
             })
             .then(() => {

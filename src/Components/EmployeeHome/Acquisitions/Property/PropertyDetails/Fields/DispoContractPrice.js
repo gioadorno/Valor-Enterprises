@@ -3,11 +3,13 @@ import NumberFormat from 'react-number-format';
 import { TextField, FormControl, InputAdornment } from '@mui/material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
-const DispoContractPrice = ({ prop, setOpenUpdate, employee }) => {
+const DispoContractPrice = ({ prop, setOpenUpdate, employee, }) => {
         // Props API
         const apiName = 'valproperties';
         const path = `/properties/${prop.id}/dispocontractprice`;
         // 
+
+
 
   return (
     employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? 

@@ -20,8 +20,8 @@ const PictureLink = ({ prop, setOpenUpdate }) => {
     };
 
   return (
-    <FormControl sx={{ width: '100%', mb: 2 }}>
-        <TextField onChange={handlePictureLink} id="standard-read-only-input" label="Link to Photos" defaultValue={prop.pictureLink} variant="outlined"/>
+    <FormControl sx={{ width: '100%' }}>
+        <TextField InputProps={{ disableUnderline: true }} onChange={handlePictureLink} id="standard-read-only-input" label="Link to Photos" defaultValue={prop.pictureLink} variant="standard"/>
     </FormControl>
   )
 }

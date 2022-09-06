@@ -20,7 +20,7 @@
       "function": {
         "propertyfunction": {
           "deploymentBucketName": "amplify-valorant-dev-141128-deployment",
-          "s3Key": "amplify-builds/propertyfunction-687a41683149642b5950-build.zip",
+          "s3Key": "amplify-builds/propertyfunction-68344b36476b57514961-build.zip",
           "inventory": "properties-dev",
           "database": "properties-dev",
           "emailblast": "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",

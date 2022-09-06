@@ -4,10 +4,12 @@ import { Stack, Paper } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect, useState, useContext } from "react";
 import { API, Storage, Auth } from 'aws-amplify';
+import { useNavigate } from "react-router-dom";
 
 const createID = () => Math.random().toString(36).substring(2) + Date.now().toString(36);
 
 const Files = ({ prop, setOpenUpdate, id, employee }) => {
+    const navigate = useNavigate();
 
     const name = employee?.attributes?.name;
     // API
@@ -50,7 +52,7 @@ const Files = ({ prop, setOpenUpdate, id, employee }) => {
             .then((res) => {
             setOpenUpdate(true)
             setIsUpdating(false)
-            window.location.reload(true)
+            navigate(`/acquisitions/${prop.id}`)
             })
             .catch(error => console.log(error))
     };

@@ -1,12 +1,47 @@
-import { TextField, FormControl, Divider, FormLabel } from "@mui/material";
-import { Fragment } from "react";
+import { TextField } from "@mui/material";
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { API } from 'aws-amplify';
+import { useState } from 'react';
+import format from 'date-fns/format';
 
-const AcqDate = ({ prop }) => {
+const AcqDate = ({ prop, id, setOpenUpdate, employee }) => {
+          // Props API
+          const apiName = 'valproperties';
+          const path = `/properties/${prop.id}/date`;
+          // 
+          const [ newDate, setNewDate ] = useState(prop.date)
+      const handleAcqDate = (newValue) => {
+          API.put(apiName, path, {
+              body: {
+                  id: prop.id,
+                  date: newValue
+              }
+            })
+            .then(() => {
+              setNewDate(newValue)
+              setOpenUpdate(true)
+            })
+      };
   return (
-    <FormControl sx={{ width: '100%' }}>
-      <FormLabel >Acquisitions Date</FormLabel>
-            <TextField InputProps={{ disableUnderline: true }} sx={{ width: "100%" }} variant='standard' value={new Date(prop.date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })} />
-    </FormControl>
+<LocalizationProvider dateAdapter={AdapterDateFns} >
+    {employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Admin') >= 0 || employee?.signInUserSession?.accessToken?.payload['cognito:groups'].indexOf('Operations') >= 0 ? 
+    <DatePicker
+      label="Acq Date"
+      value={newDate || ''}
+      onChange={handleAcqDate}
+      renderInput={(params) => <TextField InputProps={{ disableUnderline: true }} variant='standard' style={{ width: '100%' }} {...params} />}
+    />
+    :
+    <DatePicker
+    label="Acq Date"
+    value={prop.date}
+    readOnly
+    renderInput={(params) => <TextField InputProps={{ disableUnderline: true }} variant='standard' style={{ width: '100%' }} {...params} />}
+  />
+}
+  </LocalizationProvider>
   )
 }
 

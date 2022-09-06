@@ -2,19 +2,20 @@ import React, { createContext, useEffect, useState } from 'react';
 import { CognitoUser, AuthenticationDetails, AmazonCognitoIdentity } from 'amazon-cognito-identity-js';
 import { useNavigate } from 'react-router-dom';
 import Pool from '../../UserPool';
-import { Auth } from 'aws-amplify';
+import { Auth, API } from 'aws-amplify';
 
 const AccountContext = createContext();
 
 const Account = ({ children }) => {
     const navigate = useNavigate();
 
-    
+
     const [ loggedIn, setLoggedIn ] = useState(false);
     const [ userName, setUserName ] = useState('');
     const [ employee, setEmployee ] = useState('');
     const [ userChangePassword, setUserChangePassword ] = useState(false);
     const [ invalid, setInvalid ] = useState(false);
+
     
     const getSession = async () => {
         await Auth.currentAuthenticatedUser().then((user) => {
@@ -42,7 +43,7 @@ const Account = ({ children }) => {
                 } else {
                     setLoggedIn(true);
                     setEmployee(user);
-                    navigate('/acquisitions');
+                    navigate('/internal');
                 }
             } catch (error) {
                 setInvalid(true)
@@ -63,7 +64,16 @@ const Account = ({ children }) => {
 
 
   return (
-    <AccountContext.Provider value={{ authenticate, getSession, logout, userChangePassword, setUserChangePassword, employee, setUserName, userName, invalid, loggedIn, setLoggedIn }}>
+    <AccountContext.Provider value={{ 
+        authenticate, 
+        getSession, 
+        logout, 
+        userChangePassword, setUserChangePassword, 
+        employee, 
+        setUserName, userName, 
+        invalid, 
+        loggedIn, setLoggedIn,
+        }}>
         {children}
     </AccountContext.Provider>
   )

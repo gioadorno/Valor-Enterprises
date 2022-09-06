@@ -5,10 +5,8 @@ import { getGeocode, getLatLng } from "use-places-autocomplete";
 import { useState, useEffect, forwardRef, Fragment, useContext } from "react";
 import { AccountContext } from '../../../Login/Account';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from "react-redux";
 import FileBase64 from 'react-file-base64';
 import { usePlacesWidget } from 'react-google-autocomplete';
-import { getDispoEmployees } from "../../../../actions/dispoemployees";
 import PropTypes from 'prop-types';
 import { IMaskInput } from 'react-imask';
 import NumberFormat from 'react-number-format';
@@ -46,6 +44,8 @@ const TextMaskCustom = forwardRef(function TextMaskCustom(props, ref) {
     onChange: PropTypes.func.isRequired,
   };
 
+  const createID = () => Math.random().toString(36).substring(2) + Date.now().toString(36);
+
 
 const NumberCommaFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
     const { onChange, ...other } = props;
@@ -80,6 +80,8 @@ const AcqOptions = ({ markets }) => {
     const [ dispoReps, setDispoReps ] = useState([]);
     const [ isCreating, setIsCreating ] = useState(false);
     const [ employee, setEmployee ] = useState('');
+    const [ propFile, setPropFile ] = useState('');
+    const [ fileName, setFileName ] = useState('');
 
     useEffect(() => {
         API.get(apiName, '/properties')
@@ -100,6 +102,8 @@ const AcqOptions = ({ markets }) => {
         setPropertyData({ ...propertyData, propPhoto: file.name });
     };
 
+
+
     // API
     const apiName = 'valproperties';
     const path = '/inventory';
@@ -107,12 +111,16 @@ const AcqOptions = ({ markets }) => {
     // 
 
 
+
+
         // Get current Date and format it to mm/dd/yyyy
         let today = new Date();
         let date = parseInt(today.getMonth()+1) + '-' + today.getDate() + "-" + today.getFullYear();
+        const placeholderDate = parseInt(today.getMonth()+1) + '-' + today.getDate() + "-" + today.getFullYear();
         // Input Values for properties
         const [propertyData, setPropertyData] = useState({
             date: today,
+            createDate: today,
             propStatus: 'Active',
             name: '',
             dispoName: '',
@@ -138,6 +146,8 @@ const AcqOptions = ({ markets }) => {
             underlyingContract: '',
             coe: '',
             titleCompany: '',
+            titlePhone: '',
+            titleEmail: '',
             typeAccess: '',
             postPossession: '',
             vacantCOE: '',
@@ -156,7 +166,7 @@ const AcqOptions = ({ markets }) => {
             market: '',
             propPhoto: '',
             uploadContract: '',
-            audited: false,
+            audited: 'No',
             acqDrop: '$0',
             acqIncrease: '$0',
             dispoContractPrice: '$0',
@@ -185,8 +195,22 @@ const AcqOptions = ({ markets }) => {
             line3: '',
             line4: '',
             line5: '',
-            dispo: ''
+            dispo: '',
+            status: 'Active'
         });
+
+
+        async function onFileChange(e) {
+            const file = e.target.files[0];
+            setPropFile(file);
+            setPropertyData({ ...propertyData, files: {
+                fileID: createID(),
+                address: propertyData.address,
+                fileName: file.name,
+                date: placeholderDate,
+                uploadBy: employee.attributes.name
+            }  })
+        };
 
         const getSession = async () => {
             await Auth.currentAuthenticatedUser().then((user) => {
@@ -214,6 +238,8 @@ const AcqOptions = ({ markets }) => {
         reader.readAsDataURL(e.target.files[0]);
     };
 
+    console.log(propertyData)
+
         // Address Input
     const { ref } = usePlacesWidget({
     apiKey: GoogleAPI,
@@ -231,6 +257,10 @@ const AcqOptions = ({ markets }) => {
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        if (propFile != '') {
+            await Storage.put(propertyData.files.name, propFile);
+        }
 
             if (photo != '') {
                 await Storage.put(photo.name, photo)
@@ -238,63 +268,6 @@ const AcqOptions = ({ markets }) => {
             if(propertyData.name === undefined){
                 propertyData.name === employee.attributes.name
             }
-
-        dispoReps.map((dispoRep) => {
-            if (propertyData.market == dispoRep.market[0]) {
-                propertyData.dispoName = dispoRep.name;
-                propertyData.dispoPhone = dispoRep.phone;
-                propertyData.dispoEmail = dispoRep.email;
-                propertyData.senderID = dispoRep.senderID;
-                propertyData.segmentID = dispoRep.segmentID;
-            }
-            if (propertyData.dispoName === '' && propertyData.market == dispoRep.market[1]) {
-                propertyData.dispoName = dispoRep.name;
-                propertyData.dispoPhone = dispoRep.phone;
-                propertyData.dispoEmail = dispoRep.email;
-                propertyData.senderID = dispoRep.senderID;
-                propertyData.segmentID = dispoRep.segmentID;
-            }
-            if (propertyData.market == dispoRep.market[1]) {
-                propertyData.dispoName2 = dispoRep.name;
-                propertyData.dispoPhone2 = dispoRep.phone;
-                propertyData.dispoEmail2 = dispoRep.email;
-                propertyData.senderID = dispoRep.senderID;
-                propertyData.segmentID = dispoRep.segmentID;
-            }
-            if (propertyData.dispoName2 === '' && propertyData.market == dispoRep.market[0]) {
-                propertyData.dispoName2 = dispoRep.name;
-                propertyData.dispoPhone2 = dispoRep.phone;
-                propertyData.dispoEmail2 = dispoRep.email;
-                propertyData.senderID = dispoRep.senderID;
-                propertyData.segmentID = dispoRep.segmentID;
-            }
-            if(propertyData.dispoName === propertyData.dispoName2) {
-                propertyData.dispoName2 = null;
-                propertyData.dispoPhone2 = null;
-                propertyData.dispoEmail2 = null;
-            }
-        });
-
-        try {
-            propertyData.line1 = `${propertyData.beds} Beds / ${propertyData.baths} Baths ${propertyData.parking != '' && propertyData.parking != 'No Parking' ? '/ ' + propertyData.parking : ''}`;
-            propertyData.line2 = `${propertyData.livingArea != '' ? propertyData.livingArea + 'sf Living Area' : ''}`;
-            propertyData.line3 = `${propertyData.lotSize != '' ? propertyData.lotSize + 'sf Lot Size' : ''}`;
-            propertyData.line4 = `${propertyData.year != '' ? propertyData.year + ' Year Build' : ''}`;
-            if (propertyData.dispoName != '' && propertyData.dispoName != 'Ilya Nabutovskiy' && propertyData.dispoName != 'Garner Becker') {
-                propertyData.dispo = `Call/Text ${propertyData.dispoName} at ${propertyData.dispoPhone}`;
-            }
-            if (propertyData.dispoName === 'Ilya Nabutovskiy') {
-                propertyData.dispo = `Call/Text Deals at (702) 728-3378`;
-            }
-            if (propertyData.dispoName === 'Garner Becker') {
-                propertyData.dispo = `Call/Text Properties at (725) 213-8448`;
-            }
-        } catch (error) {
-            console.log(error)
-        }
-
-        
-
 
         // Getting Lat and Lng for markers to be displayed on the map, along with other info
         getGeocode({address : propertyData.address})
@@ -322,7 +295,7 @@ const AcqOptions = ({ markets }) => {
                                 type: 'section',
                                 text: {
                                         type: 'mrkdwn',
-                                        text: `*Name of Supplier:*\n${propertyData.supplierName}\n*Supplier's Email:*\n${propertyData.supplierEmail}\n*Supplier's Phone Number:*\n${propertyData.supplierPhone}\n*Supplier is:*\n${propertyData.supplier}\n*Deal from Dealulator?*\n${propertyData.dealulator}\n*Exclusive?*\n${propertyData.exclusive}\n*Property Address:*\n${propertyData.address.replace(', USA', '')}\n*Property Type:*\n${propertyData.propType}\n*ARV:*\n${propertyData.arv}\n*Net Price:*\n${propertyData.netPrice}\n*Sale Price Expectation:*\n${propertyData.salePrice}\n*Earnest Money Deposit:*\n${propertyData.emd}\n*Option Fee:*\n${propertyData.optionFee}\n*How are we splitting deal with Supplier?*\n${propertyData.dealSplit}\n*When is COE?*\n${propertyData.coe}\n*Title Company/Attorney:*\n${propertyData.titleCompany}\n*Type of Access:*\n${propertyData.typeAccess}\n*Vacant at COE?*\n${propertyData.vacantCOE}\n*Tenant Occupied*\n${propertyData.tenantOccupied}\n*Lease Term*\n${propertyData.leaseTerm}\n*Additional Notes Supplier Mentioned:*\n${propertyData.notes}\n*Number of Bedrooms:*\n${propertyData.beds}\n*Number of Baths:*\n${propertyData.baths}\n*Parking:*\n${propertyData.parking}\n*Pool:*\n${propertyData.pool}\n*Living Area(SF):*\n${propertyData.livingArea}\n*Lot Size(SF):*\n${propertyData.lotSize}\n*Year Build:*\n${propertyData.year}\n*Link to Pictures:*\n${propertyData.pictureLink}\n*Email Blast:*\n${propertyData.emailBlast === true ? 'Blast' : "Don't Blast"}`
+                                        text: `*Name of Supplier:*\n${propertyData.supplierName}\n*Supplier's Email:*\n${propertyData.supplierEmail}\n*Supplier's Phone Number:*\n${propertyData.supplierPhone}\n*Supplier is:*\n${propertyData.supplier}\n*Deal from Dealulator?*\n${propertyData.dealulator}\n*Exclusive?*\n${propertyData.exclusive}\n*Property Address:*\n${propertyData.address.replace(', USA', '')}\n*Property Type:*\n${propertyData.propType}\n*ARV:*\n${propertyData.arv}\n*Net Price:*\n${propertyData.netPrice}\n*Sale Price Expectation:*\n${propertyData.salePrice}\n*Earnest Money Deposit:*\n${propertyData.emd}\n*Option Fee:*\n${propertyData.optionFee}\n*How are we splitting deal with Supplier?*\n${propertyData.dealSplit}\n*When is COE?*\n${propertyData.coe}\n*Title Company/Attorney:*\n${propertyData.titleCompany}\n*Title Phone:*\n${propertyData.titlePhone}\n*Title Email:*\n${propertyData.titleEmail}\n*Type of Access:*\n${propertyData.typeAccess}\n*Vacant at COE?*\n${propertyData.vacantCOE}\n*Tenant Occupied*\n${propertyData.tenantOccupied}\n*Lease Term*\n${propertyData.leaseTerm}\n*Additional Notes Supplier Mentioned:*\n${propertyData.notes}\n*Number of Bedrooms:*\n${propertyData.beds}\n*Number of Baths:*\n${propertyData.baths}\n*Parking:*\n${propertyData.parking}\n*Pool:*\n${propertyData.pool}\n*Living Area(SF):*\n${propertyData.livingArea}\n*Lot Size(SF):*\n${propertyData.lotSize}\n*Year Build:*\n${propertyData.year}\n*Link to Pictures:*\n${propertyData.pictureLink}\n*Email Blast:*\n${propertyData.emailBlast === true ? 'Blast' : "Don't Blast"}`
                                     },
                                 
                             },
@@ -464,6 +437,7 @@ const AcqOptions = ({ markets }) => {
                                     </Select>
                                 </FormControl>
                         </Grid>
+
                         <Grid item xs={12} sm={6} >
                                 <RadioGroup aria-describedby='dealulator' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} value={propertyData.dealulator} onChange={e => setPropertyData({ ...propertyData, dealulator: e.target.value })} row>
                                 <FormLabel style={{ marginBottom: '1em', color: '#607d8b', fontWeight: '550', textAlign: 'center', width: '100%' }}>Is this deal from a Dealulator?</FormLabel>
@@ -474,10 +448,10 @@ const AcqOptions = ({ markets }) => {
                         </Grid>
                         <Grid item xs={12} sm={6} >
                             
-                                <RadioGroup style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} onChange={e => setPropertyData({ ...propertyData, exclusive: e.target.value })} row>
+                                <RadioGroup style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} onChange={e => setPropertyData({ ...propertyData, fileType: e.target.value })} row>
                                 <FormLabel style={{ marginBottom: '1em', color: '#607d8b', fontWeight: '550', textAlign: 'center', width: '100%' }}>Exclusive?</FormLabel>
-                                    <FormControlLabel name="exclusive" value='Yes' control={<Radio />} label='Yes' />
-                                    <FormControlLabel name="exclusive" value='No' control={<Radio />} label='No' />
+                                    <FormControlLabel name="exclusive" value='Exclusive' control={<Radio />} label='Yes' />
+                                    <FormControlLabel name="exclusive" value='Non Exclusive' control={<Radio />} label='No' />
                                 </RadioGroup>
                                     
                         </Grid>
@@ -589,6 +563,22 @@ const AcqOptions = ({ markets }) => {
                                 <Autocomplete id='titleCompany' key='titleCompany' freeSolo={true} style={{ width: '90%' }}  options={titleCompanyList.map((prop) => prop.titleCompany)} renderInput={(params) => <TextField {...params} variant='outlined' label="Title Company" />} onInputChange={(e, value) => setPropertyData({ ...propertyData, titleCompany: value })} />
                             </Box>
                         </Grid>
+                        <Grid item xs={12} sm={6} >
+                            
+                            <FormControl style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
+                            <FormLabel style={{ marginBottom: '1em', color: '#607d8b', fontWeight: '550', textAlign: 'center', width: '100%' }}>Title Phone Number</FormLabel>
+                                <TextField style={{ width: '90%' }} variant='outlined' aria-describedby='titlePhone' label='Title Phone Number' onChange={(e) => setPropertyData({ ...propertyData, titlePhone: e.target.value })} />
+                            </FormControl>
+                        
+                    </Grid>
+                    <Grid item xs={12} sm={6} >
+                            
+                            <FormControl style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
+                            <FormLabel style={{ marginBottom: '1em', color: '#607d8b', fontWeight: '550', textAlign: 'center', width: '100%' }}>Title Email Address</FormLabel>
+                                <TextField style={{ width: '90%' }} variant='outlined' aria-describedby='titleEmail' label='Title Email Address' onChange={(e) => setPropertyData({ ...propertyData, titleEmail: e.target.value })} />
+                            </FormControl>
+                        
+                    </Grid>
                         <Grid item xs={12} sm={6} >
                             
                                 <RadioGroup style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} name='typeAccess' value={propertyData.typeAccess} onChange={handleChange} row>
@@ -730,6 +720,9 @@ const AcqOptions = ({ markets }) => {
                                     <MenuItem value={markets.sanAntonio}>
                                         {markets.sanAntonio}
                                     </MenuItem>
+                                    <MenuItem value='Phoenix, AZ'>
+                                        Phoenix, AZ
+                                    </MenuItem>
                                     <MenuItem value={markets.tucson}>
                                         {markets.tucson}
                                     </MenuItem>
@@ -768,9 +761,9 @@ const AcqOptions = ({ markets }) => {
                                 </FormControl>
                         </Grid>
                         <Grid item xs={12}>
-                                <Box width={'auto'} height='auto'>
+                                {/* <Box width={'auto'} height='auto'>
                                     <CardMedia component='img' src={propertyData.propPhoto} />
-                                </Box>
+                                </Box> */}
                                 <FormControl style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
                                     <FormLabel style={{ marginBottom: '1em', color: '#607d8b', fontWeight: '550' }}>Upload Property Photo</FormLabel>
                                     <input type='file' onChange={onChange} />
@@ -778,8 +771,8 @@ const AcqOptions = ({ markets }) => {
                         </Grid>
                         <Grid item xs={12}>
                                 <FormControl style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
-                                    <FormLabel style={{ marginBottom: '1em', color: '#607d8b', fontWeight: '550' }}>Upload Contract</FormLabel>
-                                    <FileBase64 type='file' onDone={({base64}) => setPropertyData({ ...propertyData, uploadContract: base64  })} onChange={fileHandler} multiple={false}  />
+                                    <FormLabel style={{ marginBottom: '1em', color: '#607d8b', fontWeight: '550' }}>Underlying Contract</FormLabel>
+                                    <input placeholder="Upload file" type='file' onChange={onFileChange} />
                                 </FormControl>
                         </Grid>
                         <Grid item xs={12}>
