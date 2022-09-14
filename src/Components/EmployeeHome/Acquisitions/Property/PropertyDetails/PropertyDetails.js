@@ -75,7 +75,7 @@ import Files from './Fields/Files';
 import Autocomplete from 'react-google-autocomplete';
 
 import Moment from 'react-moment';
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import useStyles from './styles';
 import emptyPhoto from '../Empty Photo.png';
 import MobileNav from "../../../MobileNav";
@@ -123,6 +123,7 @@ const PropertyDetails = () => {
     const [ prop, setProp ] = useState('');
     const [ propertyImage, setPropertyImage ] = useState('');
     const [ loaded, setIsLoaded ] = useState('');
+
 
 // Address Input
 const { ref } = usePlacesWidget({
@@ -435,7 +436,7 @@ const { ref } = usePlacesWidget({
         try {
             setDeleteModal(false);
             setIsDeleting(false);
-            navigate('/acquisitions');
+            navigate('/internal');
         } catch (error) {
             console.log(error)
         }

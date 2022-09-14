@@ -37,6 +37,7 @@ function useQuery() {
       // 
 
 const Acquisitions = (anchor) => {
+    const location = useLocation();
     const { getSession } = useContext(AccountContext);
     const [ closeSide, setCloseSide ] = useState(false);
     const [ addressFilter, setAddressFilter ] = useState('');
@@ -64,6 +65,7 @@ const Acquisitions = (anchor) => {
 
     const query = useQuery();
     const page = query.get('page') || 1;
+
 
     // Receiving properties from Database
 

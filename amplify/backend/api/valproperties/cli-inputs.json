@@ -57,13 +57,6 @@
         "setting": "open"
       }
     },
-    "/inventory": {
-      "name": "/inventory",
-      "lambdaFunction": "propertyfunction",
-      "permissions": {
-        "setting": "open"
-      }
-    },
     "/sendgrid": {
       "name": "/sendgrid",
       "lambdaFunction": "propertyfunction",
@@ -73,6 +66,13 @@
     },
     "/photos": {
       "name": "/photos",
+      "lambdaFunction": "propertyfunction",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/inventory": {
+      "name": "/inventory",
       "lambdaFunction": "propertyfunction",
       "permissions": {
         "setting": "open"

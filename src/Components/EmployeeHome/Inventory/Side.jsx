@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { FilterContext } from './SideMenu';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { MdOutlineCancel } from 'react-icons/md';
 import {marketList} from './Markets/markets';
 import 'react-date-range/dist/styles.css'; // main style file
@@ -29,6 +29,7 @@ const activeLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-ros
 const normalLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-md text-blue-900 hover:scale-105 transform duration-200 ease-in hover:bg-light-gray m-2';
 
 const Side = () => {
+    const location = useLocation();
     const { 
     activeMenu, setActiveMenu,
     screenSize
@@ -100,6 +101,7 @@ const Side = () => {
             <div className='flex items-center justify-center relative text-center'>
                 <p className='text-center italic text-md font-serif font-semibold py-5 px-1 flex-1 whitespace-nowrap'>Valor Enterprises</p>
             </div>
+            {location.pathname === '/internal' &&
             <div className='flex items-center justify-center mt-7 w-full'>
                 <div className='w-4/5 border-[1px] items-center justify-evenly border-cyan-900 rounded-lg flex'>
                     <button className={`${isClicked.navigation && 'animate-pulse text-rose-400 bg-slate-100'} rounded-lg border-r-[1px] border-cyan-900 w-1/2 hover:text-cyan-500 hover:animate-pulse hover:bg-slate-50`} onClick={() => setIsClicked({ ...isClicked, navigation: true, smartView: false })}>
@@ -110,6 +112,7 @@ const Side = () => {
                     </button>
                 </div>
             </div>
+            }
             {isClicked.navigation &&
             <div className='flex flex-col px-2 py-4'>
                 {links.map((item) => (

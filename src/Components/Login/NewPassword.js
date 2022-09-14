@@ -27,7 +27,7 @@ const NewPassword = () => {
             // }
         ).then(user => {
             setLoggedIn(true);
-            navigate('/acquisitions');
+            navigate('/internal');
         }).catch(e => {
             setRequire(true)
         });

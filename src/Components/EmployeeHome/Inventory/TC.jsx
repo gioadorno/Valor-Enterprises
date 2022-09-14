@@ -5,7 +5,7 @@ import { API } from 'aws-amplify';
 import { AccountContext } from "../../Login/Account";
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import Header from "./Header";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { DateRangePicker } from 'react-date-range';
 import { GridDetail } from "./Templates";
 import FileCopyIcon from '@mui/icons-material/FileCopy';
@@ -186,6 +186,9 @@ const TC = () => {
     const [ properties, setProperties ] = useState(propertiesSort);
     const [ startDate, setStartDate ] = useState(new Date(date.getFullYear(), date.getMonth() - 1, 1));
     const [ endDate, setEndDate ] = useState(new Date(date.getFullYear(), date.getMonth(), 0));
+
+    const location = useLocation();
+    console.log(location.pathname)
 
     const actions = [
       { icon: <FileCopyIcon onClick={() => navigate('/acqpaperwork')} />, name: 'Acq Paperwork'},

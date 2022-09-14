@@ -6,7 +6,7 @@ import { API } from 'aws-amplify';
 const WhoSold = ({ prop, id, setOpenUpdate, employee }) => {
 
     const [ employees, setEmployees ] = useState([])
-    const users = employees.sort((a,b) => a.name.localeCompare(b.name))
+    const users = employees?.sort((a,b) => a.name.localeCompare(b.name))
     // API
     const apiName = 'valproperties';
     const path = `/properties/${prop.id}/whoSold`;

@@ -711,6 +711,9 @@ select {
 .left-10 {
   left: 2.5rem;
 }
+.left-0 {
+  left: 0px;
+}
 .z-\[100\] {
   z-index: 100;
 }
@@ -864,6 +867,9 @@ select {
 .h-1\/4 {
   height: 25%;
 }
+.h-48 {
+  height: 12rem;
+}
 .min-h-screen {
   min-height: 100vh;
 }
@@ -911,6 +917,12 @@ select {
 }
 .w-1\/4 {
   width: 25%;
+}
+.w-3\/4 {
+  width: 75%;
+}
+.w-\[120px\] {
+  width: 120px;
 }
 .flex-1 {
   flex: 1 1 0%;
@@ -1072,6 +1084,9 @@ select {
 .border-r-2 {
   border-right-width: 2px;
 }
+.border-dashed {
+  border-style: dashed;
+}
 .border-none {
   border-style: none;
 }
@@ -1122,6 +1137,10 @@ select {
 .border-sky-500 {
   --tw-border-opacity: 1;
   border-color: rgb(14 165 233 / var(--tw-border-opacity));
+}
+.border-\[\#cbd5e1\] {
+  --tw-border-opacity: 1;
+  border-color: rgb(203 213 225 / var(--tw-border-opacity));
 }
 .bg-\[\#154a87b8\] {
   background-color: #154a87b8;
@@ -1186,6 +1205,13 @@ select {
 .bg-slate-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(100 116 139 / var(--tw-bg-opacity));
+}
+.bg-\[\#bde8fc78\] {
+  background-color: #bde8fc78;
+}
+.bg-\[\#f8fafc\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(248 250 252 / var(--tw-bg-opacity));
 }
 .bg-gradient-to-r {
   background-image: linear-gradient(to right, var(--tw-gradient-stops));
@@ -1576,6 +1602,14 @@ select {
   --tw-text-opacity: 1;
   color: rgb(13 148 136 / var(--tw-text-opacity));
 }
+.text-rose-700 {
+  --tw-text-opacity: 1;
+  color: rgb(190 18 60 / var(--tw-text-opacity));
+}
+.text-cyan-400 {
+  --tw-text-opacity: 1;
+  color: rgb(34 211 238 / var(--tw-text-opacity));
+}
 .underline {
   text-decoration-line: underline;
 }
@@ -1679,21 +1713,6 @@ select {
 .hover\:animate-pulse:hover {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
-@keyframes bounce {
-
-  0%, 100% {
-    transform: translateY(-25%);
-    animation-timing-function: cubic-bezier(0.8,0,1,1);
-  }
-
-  50% {
-    transform: none;
-    animation-timing-function: cubic-bezier(0,0,0.2,1);
-  }
-}
-.hover\:animate-bounce:hover {
-  animation: bounce 1s infinite;
-}
 .hover\:cursor-pointer:hover {
   cursor: pointer;
 }
@@ -1731,6 +1750,9 @@ select {
 .hover\:text-orange-500:hover {
   --tw-text-opacity: 1;
   color: rgb(249 115 22 / var(--tw-text-opacity));
+}
+.hover\:underline:hover {
+  text-decoration-line: underline;
 }
 .hover\:opacity-90:hover {
   opacity: 0.9;
